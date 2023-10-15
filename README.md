@@ -15,3 +15,5 @@ npx expo start 명령어를 터미널에 치신 후 expo 앱에서 확인해 주
 4. 작업중인 프로젝트 폴더로 이동
 
 5. npx expo start --tunnel
+
+프로젝트 진행 시 사용할 이미지 파일은 img 폴더에 정리해 주세요
