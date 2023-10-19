@@ -24,7 +24,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./img/findingLogo.png"
     }
   }
 }

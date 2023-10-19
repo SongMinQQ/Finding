@@ -1,13 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import StackNavigation from './menu/StackNavigation';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
-  return (
+
+    return (
     <SafeAreaProvider>
-        <View style={styles.container}>
-          <StatusBar style="auto" />
-        </View>
+        <NavigationContainer>
+            {/* <View style={styles.container}> */}
+              {/* <StatusBar style="auto" /> */}
+              <StackNavigation/>
+            {/* </View> */}
+        </NavigationContainer>
     </SafeAreaProvider>
   );
 }
