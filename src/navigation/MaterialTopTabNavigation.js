@@ -8,12 +8,12 @@ const Tab = createMaterialTopTabNavigator();
 
 const MaterialTopTabNavigation = () => {
     return (
-        
-            <Tab.Navigator>
-                <Tab.Screen name='Lost Board' component={LostBoard} />
-                <Tab.Screen name='Find Board' component={FindBoard} />
-            </Tab.Navigator>
-    
+
+        <Tab.Navigator>
+            <Tab.Screen name='Lost Board' component={LostBoard} />
+            <Tab.Screen name='Find Board' component={FindBoard} />
+        </Tab.Navigator>
+
     );
 
 };

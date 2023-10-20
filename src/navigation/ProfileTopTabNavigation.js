@@ -10,9 +10,7 @@ const Tab = createMaterialTopTabNavigator();
 const ProfileTopTabNavigation = () => {
     return (
         <View style={styles.container}>
-            <View style={styles.profileSection}>
-                <Text>프로필 영역</Text>
-            </View>
+            <ProfileMain />
             <Tab.Navigator>
                 <Tab.Screen name="find" component={ProfileFind} />
                 <Tab.Screen name="lost" component={ProfileLost} />
@@ -25,12 +23,6 @@ const ProfileTopTabNavigation = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1
-    },
-    profileSection: {
-        height: 100, // 예시로 높이 100사용
-        backgroundColor: 'lightblue',
-        justifyContent: 'center',
-        alignItems: 'center'
     }
 });
 
