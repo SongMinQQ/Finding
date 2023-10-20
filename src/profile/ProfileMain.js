@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import ProfileTopTabNavigation from '../navigation/ProfileTopTabNavigation';
 
 const ProfileMain = () => {
     return (
@@ -8,5 +9,6 @@ const ProfileMain = () => {
         </View>
     );
 };
+
 
 export default ProfileMain;
