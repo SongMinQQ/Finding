@@ -3,6 +3,7 @@ import React from 'react';
 import MaterialTopTabNavigation from './MaterialTopTabNavigation';
 import PoliceFind from '../police/PoliceFind';
 import ProfileMain from '../profile/ProfileMain';
+import ProfileTopTabNavigation from './ProfileTopTabNavigation';
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigation = () => {
@@ -14,7 +15,7 @@ const BottomTabNavigation = () => {
             <Tab.Screen name='PoliceFind' component={PoliceFind} options={{
                 headerShown: false
             }}/>
-            <Tab.Screen name="Profile" component={ProfileMain} options={{
+            <Tab.Screen name="Profile" component={ProfileTopTabNavigation} options={{
                 headerShown: false
             }}/>
         </Tab.Navigator>
