@@ -1,10 +1,10 @@
 # 프로젝트 시작 전 읽어주세요
 
-최초 clone시 npm install 명령어 실행해 주세요
+최초 clone시 ```npm install``` 명령어 실행해 주세요
 
 작업중인 환경과 테스트할 기기와 같은 네트워크에 연결되어 있어야 합니다.
 
-npx expo start 명령어를 터미널에 치신 후 expo 앱에서 확인해 주세요
+```npx expo start``` 명령어를 터미널에 치신 후 expo 앱에서 확인해 주세요
 
 만약 같은 네트워크에 연결되는 상황이 제한될 경우 해결 방법입니다.
 
@@ -19,3 +19,9 @@ npx expo start 명령어를 터미널에 치신 후 expo 앱에서 확인해 주
 5. npx expo start --tunnel
 
 프로젝트 진행 시 사용할 이미지 파일은 img 폴더에 정리해 주세요
+
+# git push시 주의사항
+
+push 전 ```git pull origin master``` 혹은 ```git pull``` 명령어를 실행해 주세요
+
+pull을 먼저 하지 않으면 충돌이 일어날 수 있습니다.
