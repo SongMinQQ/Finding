@@ -10,6 +10,7 @@ import FindPassword from '../Login/FindPassword';
 import MaterialTopTabNavigation from './MaterialTopTabNavigation';
 import PoliceFind from '../police/PoliceFind';
 import BottomTabNavigation from './BottomTabNavigation';
+import ProfileEdit from '../profile/ProfileEdit';
 
 
 const Stack = createStackNavigator();
@@ -39,16 +40,10 @@ const StackNavigation = () => {
                         </View>
                     )
                 }}/>
-                {/* <Stack.Screen name="PoliceFind" component={PoliceFind} options={{
-                    title: 'Finding',
-                    headerLeft:null, //뒤로가기 버튼을 없앰
-                    headerRight: () => (//헤더바 오른쪽에 배치할 놈들
-                        <View style={styles.headerRight}>
-                            <FontAwesome name="search" size={24} color="black" style={styles.icons}/>
-                            <FontAwesome5 name="bell" size={24} color="black" style={styles.icons}/>
-                        </View>
-                    )
-                }}/> */}
+                
+            </Stack.Group>
+            <Stack.Group>
+                <Stack.Screen name="ProfileEdit" component={ProfileEdit}/> 
             </Stack.Group>
         </Stack.Navigator>
     );
