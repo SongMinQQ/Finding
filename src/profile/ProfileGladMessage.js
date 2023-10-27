@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity, Modal, Button } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, Button } from 'react-native';
 import GladMessageDialog from './GladMessageDialog';
+import { Image } from 'expo-image';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
