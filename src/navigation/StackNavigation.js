@@ -11,7 +11,9 @@ import MaterialTopTabNavigation from './MaterialTopTabNavigation';
 import PoliceFind from '../police/PoliceFind';
 import BottomTabNavigation from './BottomTabNavigation';
 import ProfileEdit from '../profile/ProfileEdit';
-
+import FindBoardDetail from '../MessageBoard/FindBoardDetail';
+import LostBoardDetail from '../MessageBoard/LostBoardDetail';
+import PaymentLegalAgree from '../payment/PaymentLegalAgree';
 
 const Stack = createStackNavigator();
 
@@ -40,10 +42,16 @@ const StackNavigation = () => {
                         </View>
                     )
                 }}/>
-                
+                <Stack.Screen name="FindBoardDetail" component={FindBoardDetail} />
+                <Stack.Screen name="LostBoardDetail" component={LostBoardDetail} />
             </Stack.Group>
+            {/* 프로필 페이지 그룹 */}
             <Stack.Group>
                 <Stack.Screen name="ProfileEdit" component={ProfileEdit}/> 
+            </Stack.Group>
+            {/* 결제 페이지 그룹 */}
+            <Stack.Group>
+                <Stack.Screen name="PaymentLegalAgree" component={PaymentLegalAgree}/> 
             </Stack.Group>
         </Stack.Navigator>
     );
