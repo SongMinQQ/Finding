@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import CountySelect from './CountySelect';
 import CitySelect from './CitySelect';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { EvilIcons } from '@expo/vector-icons';
 
 const PoliceFind = () => {
     const [selectedCity, setSelectedCity] = useState('서울');
@@ -23,16 +25,22 @@ const PoliceFind = () => {
 
     return (
         <View style={styles.container}>
-            <Text>경찰청api 페이지</Text>
-            <View style={styles.row}>
-                <CitySelect changeFunction={cityChange} city={selectedCity} />
-                <CountySelect changeFunction={countyChange} county={selectedCounty} city={selectedCity} />
-                <TextInput 
-                    style={styles.searchInput}
-                    value={searchText}
-                    onChangeText={setSearchText}
-                    placeholder="검색..."
-                />
+            <View style={styles.search}>
+                <View style={styles.row}>
+                    <CitySelect changeFunction={cityChange} city={selectedCity} />
+                    <CountySelect changeFunction={countyChange} county={selectedCounty} city={selectedCity} />
+                </View>
+                <View style={styles.row}>
+                    <TextInput 
+                            style={styles.searchInput}
+                            value={searchText}
+                            onChangeText={setSearchText}
+                            placeholder="찾을 물건명을 입력하세요"
+                        />
+                    <TouchableOpacity>
+                        <EvilIcons name="search" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -41,18 +49,22 @@ const PoliceFind = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10
+        padding: 10,
+        backgroundColor: '#ffffff'
     },
     row: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     searchInput: {
-        flex: 1,
+        flex : 1,
         borderWidth: 1,
         borderColor: '#ccc',
         paddingLeft: 10,
         marginLeft: 10
+    },
+    search: {
+        //여기에 검색영역 디자인 속성 넣어야함
     }
 });
 
