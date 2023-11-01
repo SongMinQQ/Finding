@@ -7,19 +7,15 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 // 반응형 레이아웃을 위한 상대적 단위
 const ITEM_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.16;
 const ITEM_IMAGE_SIZE = ITEM_LAYOUT_HEIGHT * 0.8;
-const BORDER_RADIUS = WINDOW_HEIGHT * 0.01; // 예: 전체 높이의 0.5%
-const FONT_SIZE_HEADER = WINDOW_HEIGHT * 0.03; // 예: 전체 높이의 2.5%
-const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.025; // 예: 전체 높이의 1.8%
-const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.017; // 예: 전체 높이의 1.4%
+const BORDER_RADIUS = WINDOW_HEIGHT * 0.01; 
+const FONT_SIZE_HEADER = WINDOW_HEIGHT * 0.03; 
+const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.025; 
+const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.017; 
 
 // PaymentMain 컴포넌트
-const PaymentMain = ({ userName, imgURL, itemName, category, location, date }) => {
+const PaymentMain = ({ imgURL, itemName, category, location, date }) => {
   return (
     <View>
-      <Text style={styles.headerText}>
-        {userName}님의 물건이{'\n'}
-        <Text style={styles.highlightText}>정말 맞나요?</Text>
-      </Text>
       <View style={styles.itemLayout}>
         <Image source={{ uri: imgURL }} style={styles.itemImage} />
         <View style={styles.itemContent}>
@@ -35,15 +31,6 @@ const PaymentMain = ({ userName, imgURL, itemName, category, location, date }) =
 
 // 스타일 정의
 const styles = StyleSheet.create({
-  headerText: {
-    fontSize: FONT_SIZE_HEADER,
-    fontWeight: 'bold',
-    marginLeft: 15,
-    marginTop: 15,
-  },
-  highlightText: {
-    color: '#FF3B3B',
-  },
   itemLayout: {
     flexDirection: 'row',
     alignItems: 'stretch',

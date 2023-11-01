@@ -2,27 +2,26 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Checkbox from 'expo-checkbox';
 
-// 창의 높이를 사용하여 사이즈를 계산합니다.
 const WINDOW_HEIGHT = Dimensions.get('window').height;
-
-// 반응형 사이즈를 위한 상대적 단위
+// 체크박스 높이
 const MIN_HEIGHT = WINDOW_HEIGHT * 0.075; 
+// 폰트 사이즈
 const FONT_SIZE = WINDOW_HEIGHT * 0.02; 
 
-const LegalCheck = ({ label, value, onChange }) => {
+const LegalCheckBox = ({ label, value, onChange }) => {
   return (
     <View style={styles.checkboxContainer}>
       <Text style={[styles.checkboxLabel, { flex: 1 }]}>{label}</Text>
       <Checkbox
         value={value}
         onValueChange={onChange}
-        color={value ? '#007bff' : undefined} // 체크박스의 색상을 조정
+        color={value ? '#007bff' : undefined} 
       />
     </View>
   );
 };
 
-// 스타일 정의
+
 const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
@@ -39,4 +38,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LegalCheck;
+export default LegalCheckBox;
