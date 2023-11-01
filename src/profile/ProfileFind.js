@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
@@ -9,18 +10,21 @@ const ITEM_TEXT_SIZE_LARGE = ITEM_SIZE * 0.15;
 const ITEM_TEXT_SIZE_SMALL = ITEM_SIZE * 0.12;
 
 const ProfileFind = () => {
+    const navigation = useNavigation();
     return (
         <ScrollView>
             <View style={styles.container}>
                 {[...Array(30)].map((_, index) => (
-                    <View key={index} style={styles.item}>
-                        <Image 
-                            source={{ uri: `https://picsum.photos/id/${index}/200/200` }} 
-                            style={styles.itemImage}
-                        />
-                        <Text style={styles.itemName}>물건 {index + 1}</Text>
-                        <Text style={styles.itemLocation}>위치 {index + 1}</Text>
-                    </View>
+                    <TouchableOpacity key={index} onPress={() => navigation.navigate("FindBoardDetail")}>
+                        <View key={index} style={styles.item}>
+                            <Image
+                                source={{ uri: `https://picsum.photos/id/${index}/200/200` }}
+                                style={styles.itemImage}
+                            />
+                            <Text style={styles.itemName}>물건 {index + 1}</Text>
+                            <Text style={styles.itemLocation}>위치 {index + 1}</Text>
+                        </View>
+                    </TouchableOpacity>
                 ))}
             </View>
         </ScrollView>
