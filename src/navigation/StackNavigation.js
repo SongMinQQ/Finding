@@ -44,7 +44,21 @@ const StackNavigation = () => {
                         </View>
                     )
                 }} />
-                <Stack.Screen name="FindBoardDetail" component={FindBoardDetail} />
+                <Stack.Screen name="FindBoardDetail" component={FindBoardDetail} options={{
+                    headerTitle: '찾은 물건', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                    headerRight: () => (
+                        <View style={styles.headerRight}>
+                          <FontAwesome name="exclamation-triangle" size={24} color="black" style={styles.icons} />
+                        </View>
+                      ),
+                }} />
                 <Stack.Screen name="LostBoardDetail" component={LostBoardDetail} />
             </Stack.Group>
             {/* 프로필 페이지 그룹 */}
@@ -53,8 +67,26 @@ const StackNavigation = () => {
             </Stack.Group>
             {/* 결제 페이지 그룹 */}
             <Stack.Group>
-                <Stack.Screen name="PaymentLegalAgree" component={PaymentLegalAgree} />
-                <Stack.Screen name="PaymentCheck" component={PaymentCheck} />
+                <Stack.Screen name="PaymentLegalAgree" component={PaymentLegalAgree} options={{
+                    headerTitle: '법률 동의', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }} />
+                <Stack.Screen name="PaymentCheck" component={PaymentCheck} options={{
+                    headerTitle: '결제 확인', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }} />
                 <Stack.Screen name="PaymentFinish" component={PaymentFinish} options={{
                     headerShown: false
                 }} />
