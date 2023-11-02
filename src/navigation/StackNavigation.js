@@ -16,6 +16,8 @@ import LostBoardDetail from '../MessageBoard/LostBoardDetail';
 import PaymentLegalAgree from '../payment/PaymentLegalAgree';
 import PaymentCheck from '../payment/PaymentCheck';
 import PaymentFinish from '../payment/PaymentFinish';
+import WritePostScreen from '../MessageBoard/WritePostScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -59,6 +61,7 @@ const StackNavigation = () => {
                         </View>
                       ),
                 }} />
+                <Stack.Screen name="Write" component={WritePostScreen}/>
                 <Stack.Screen name="LostBoardDetail" component={LostBoardDetail} />
             </Stack.Group>
             {/* 프로필 페이지 그룹 */}
