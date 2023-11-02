@@ -10,7 +10,7 @@
 
 1. ```git init```
 
-2. ```git remote add origin https://github.com/SongMinQQ/Finding```
+2. ```git remote add origin https://github.com/SongMinQQ/Finding.git```
 
 3. ```git branch [사용할 브랜치명]```
 
