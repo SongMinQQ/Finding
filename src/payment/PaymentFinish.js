@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -22,7 +22,7 @@ const PaymentFinish = () => {
     return (
         <View style={styles.container}>
             <View style={styles.checkIconCircle}>
-                <Icon name="check-circle" size={ICON_CIRCLE_SIZE} color="#4CAF50" />
+                <FontAwesome name="check-circle" size={ICON_CIRCLE_SIZE} color="#4CAF50" />
             </View>
 
             <Text style={[styles.successMessage, { fontSize: MESSAGE_FONT_SIZE }]}>결제에 성공하였습니다!</Text>
@@ -31,7 +31,7 @@ const PaymentFinish = () => {
                 style={styles.backButton}
                 onPress={() => { navigation.navigate("Home"); }}
             >
-                <Icon name="chevron-left" size={BUTTON_TEXT_SIZE} color="#4CAF50" />
+                <FontAwesome name="chevron-left" size={BUTTON_TEXT_SIZE} color="#4CAF50" />
                 <Text style={styles.backButtonText}>돌아가기</Text>
             </TouchableOpacity>
         </View>

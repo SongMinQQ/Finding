@@ -4,19 +4,31 @@ import MaterialTopTabNavigation from './MaterialTopTabNavigation';
 import PoliceFind from '../police/PoliceFind';
 import ProfileMain from '../profile/ProfileMain';
 import ProfileTopTabNavigation from './ProfileTopTabNavigation';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigation = () => {
     return (
         <Tab.Navigator>
-            <Tab.Screen name='Board' component={MaterialTopTabNavigation} options={{
-                headerShown: false //이거 없으면 헤더바가 생김여;;
+            <Tab.Screen name='게시판' component={MaterialTopTabNavigation} options={{
+                headerShown: false, //이거 없으면 헤더바가 생김여;;
+                tabBarIcon: ( { color, size } ) => (
+                    <MaterialCommunityIcons name="file-find" size={size} color={color} />
+                  ),
             }}/>
-            <Tab.Screen name='PoliceFind' component={PoliceFind} options={{
-                headerShown: false
+            <Tab.Screen name='Lost112' component={PoliceFind} options={{
+                headerShown: false,
+                tabBarIcon: ( { color, size } ) => (
+                    <MaterialCommunityIcons name="police-badge" size={size} color={color} />
+                  ),
             }}/>
-            <Tab.Screen name="Profile" component={ProfileTopTabNavigation} options={{
-                headerShown: false
+            <Tab.Screen name="프로필" component={ProfileTopTabNavigation} options={{
+                headerShown: false,
+                tabBarIcon: ( { color, size } ) => (
+                    <FontAwesome5 name="user-alt" size={size} color={color} />
+                  ),
             }}/>
         </Tab.Navigator>
     );
