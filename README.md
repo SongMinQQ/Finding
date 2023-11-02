@@ -1,5 +1,7 @@
 # 프로젝트 시작 전 읽어주세요
 
+clone 명령어 ```gh repo clone SongMinQQ/Finding```
+
 최초 clone시 ```npm install``` 명령어 실행해 주세요
 
 작업중인 환경과 테스트할 기기와 같은 네트워크에 연결되어 있어야 합니다.
