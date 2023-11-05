@@ -8,7 +8,7 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const FONT_SIZE_HEADER = WINDOW_HEIGHT * 0.03;
 
-const PaymentLegalAgree = () => {
+const PaymentLegalAgree = ({navigation: {navigate}, route}) => {
     const navigation = useNavigation();
 
     const [isChecked1, setChecked1] = useState(false);
@@ -19,15 +19,15 @@ const PaymentLegalAgree = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.headerText}>
-                홍길동 님의 물건이{'\n'}
+                {route.params.userName} 님의 물건이{'\n'}
                 <Text style={styles.highlightText}>정말 맞나요?</Text>
             </Text>
             <PaymentMain
-                imgURL="https://picsum.photos/id/5/200/200"
-                itemName="노트북"
-                category="전자기기"
-                location="충남 천안시"
-                date="2023-10-10"
+                imgURL={route.params.imgURL}
+                itemName={route.params.itemName}
+                category={route.params.category}
+                location={route.params.location}
+                date={route.params.date}
             />
 
             <View style={styles.legalSectionContainer}>
@@ -54,7 +54,13 @@ const PaymentLegalAgree = () => {
             <TouchableOpacity
                 style={[styles.findButton, { backgroundColor: allChecked ? '#007bff' : '#cccccc' }]}
                 disabled={!allChecked}
-                onPress={() => { navigation.navigate("PaymentCheck"); }}
+                onPress={() => { navigation.navigate("PaymentCheck", {
+                    imgURL: route.params.imgURL,
+                    itemName: route.params.itemName,
+                    category: route.params.category,
+                    location: route.params.location,
+                    date: route.params.date,
+                }) }}
             >
                 <Text style={styles.findButtonText}>물건 찾기</Text>
             </TouchableOpacity>

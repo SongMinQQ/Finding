@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import PaymentMain from './PaymentMain';
 import PaymentInfo from './PaymentInfo';
@@ -19,16 +19,16 @@ const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.009;
 // 버튼 padding값
 const BUTTON_PADDING = WINDOW_HEIGHT * 0.01;
 
-const PaymentCheck = () => {
+const PaymentCheck = ({navigation: {navigate}, route}) => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <PaymentMain
-                imgURL="https://picsum.photos/id/5/200/200"
-                itemName="노트북"
-                category="전자기기"
-                location="충남 천안시"
-                date="2023-10-10"
+                imgURL={route.params.imgURL}
+                itemName={route.params.itemName}
+                category={route.params.category}
+                location={route.params.location}
+                date={route.params.date}
             />
             
             <PaymentInfo

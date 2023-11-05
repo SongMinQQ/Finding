@@ -11,18 +11,35 @@ const ITEM_TEXT_SIZE_SMALL = ITEM_SIZE * 0.12;
 
 const ProfileFind = () => {
     const navigation = useNavigation();
+
+
+    const findItemData = [...Array(21)].map((_, index) => ({
+        id: index,
+        imgURL: `https://picsum.photos/id/${index}/200/200`,
+        itemName: `물건 ${index + 1}`,
+        category: `전자기기`,
+        location: `위치 ${index + 1}`,
+        date: `2023-10-${index+1}` 
+    }));
+
     return (
         <ScrollView>
             <View style={styles.container}>
-                {[...Array(30)].map((_, index) => (
-                    <TouchableOpacity key={index} onPress={() => navigation.navigate("FindBoardDetail")}>
-                        <View key={index} style={styles.item}>
+                {findItemData.map((item) => (
+                    <TouchableOpacity key={item.id} onPress={() => navigation.navigate("FindBoardDetail", {
+                        imgURL: item.imgURL,
+                        itemName: item.itemName,
+                        category: item.category,
+                        location: item.location,
+                        date: item.date,
+                    })}>
+                        <View key={item.id} style={styles.item}>
                             <Image
-                                source={{ uri: `https://picsum.photos/id/${index}/200/200` }}
+                                source={{uri:item.imgURL}}
                                 style={styles.itemImage}
                             />
-                            <Text style={styles.itemName}>물건 {index + 1}</Text>
-                            <Text style={styles.itemLocation}>위치 {index + 1}</Text>
+                            <Text style={styles.itemName}>{item.itemName}</Text>
+                            <Text style={styles.itemLocation}>{item.location}</Text>
                         </View>
                     </TouchableOpacity>
                 ))}
