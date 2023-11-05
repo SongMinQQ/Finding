@@ -28,10 +28,7 @@ const ProfileFind = () => {
                 {findItemData.map((item) => (
                     <TouchableOpacity
                         key={item.id}
-                        style={[
-                            styles.item,
-                            { marginRight: (item.id % 3) !== 2 ? 0 : ITEM_PADDING_SIZE } // 세 번째 아이템에는 마진을 적용하지 않음
-                        ]}
+                        style={ styles.item }
                         onPress={() => navigation.navigate("FindBoardDetail", {
                             imgURL: item.imgURL,
                             itemName: item.itemName,
