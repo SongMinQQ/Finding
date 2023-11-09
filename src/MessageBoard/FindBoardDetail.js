@@ -4,23 +4,33 @@ import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
 
 
-const FindBoardDetail = () => {
+const FindBoardDetail = ({navigation: {navigate}, route}) => {
     const navigation = useNavigation();
 
+    const findOrLost = "find"
+    const userName = "홍길동"
+
     const handleFindPress = () => {
-        navigation.navigate("PaymentLegalAgree");
-      };
+        navigation.navigate("PaymentLegalAgree", {
+            imgURL: route.params.imgURL,
+            itemName: route.params.itemName,
+            category: route.params.category,
+            location: route.params.location,
+            date: route.params.date,
+            userName: userName,
+        });
+    };
 
     return (
         <View style={styles.container}>
             <DetailMain
-                imgURL="https://picsum.photos/id/5/200/200"
-                itemName="노트북"
-                category="전자기기"
-                location="충남 천안시"
-                date="2023-10-10"
-                onDetail = "true"
+                imgURL={route.params.imgURL}
+                itemName={route.params.itemName}
+                category={route.params.category}
+                location={route.params.location}
+                date={route.params.date}
                 onPress={handleFindPress}
+                findOrLost={findOrLost}
             />
         </View>
     );
@@ -33,7 +43,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-   
+
 });
 
 

@@ -3,13 +3,12 @@ import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal
 import GladMessageDialog from './GladMessageDialog';
 import { Image } from 'expo-image';
 
-const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-const CARD_WIDTH = WINDOW_WIDTH * 0.9;
-const PROFILE_IMAGE_SIZE = CARD_WIDTH * 0.2;
-const CARD_BORDER_RADIUS = 10;
-const TEXT_SIZE_MEDIUM = CARD_WIDTH * 0.04;
-const TEXT_SIZE_SMALL = CARD_WIDTH * 0.03;
+const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.09;
+const CARD_BORDER_RADIUS = WINDOW_HEIGHT * 0.01;
+const TEXT_SIZE_MEDIUM = WINDOW_HEIGHT * 0.022;
+const TEXT_SIZE_SMALL = WINDOW_HEIGHT * 0.012;
 
 
 const ProfileGladMessage = () => {
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     card: {
-        width: CARD_WIDTH,
+        width: '90%',
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: 5,

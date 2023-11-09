@@ -14,18 +14,20 @@ const BUTTON_PADDING = WINDOW_HEIGHT * 0.01; // 예: 전체 높이의 1%
 const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; // 예: 전체 높이의 0.5%
 
 // DetailMain 컴포넌트
-const DetailMain = ({ imgURL, itemName, category, location, date, onPress }) => {
+const DetailMain = ({ imgURL, itemName, category, location, date, onPress, findOrLost }) => {
   return (
     <View style={styles.itemLayout}>
       <Image source={{ uri: imgURL }} style={styles.itemImage} />
       <View style={styles.itemContent}>
         <Text style={styles.itemName}>{itemName}</Text>
         <Text style={styles.itemDetail}>{`카테고리: ${category}`}</Text>
-        <Text style={styles.itemDetail}>{`획득지역: ${location}`}</Text>
-        <Text style={styles.itemDetail}>{`획득날짜: ${date}`}</Text>
-        <TouchableOpacity style={styles.findButton} onPress={onPress}>
-          <Text style={styles.findButtonText}>물건 찾기</Text>
-        </TouchableOpacity>
+        <Text style={styles.itemDetail}>{findOrLost === 'find' ? '획득지역: ' : '분실지역: '}{location}</Text>
+        <Text style={styles.itemDetail}>{findOrLost === 'find' ? '획득날짜: ' : '분실날짜: '}{date}</Text>
+        {findOrLost === 'find' && (
+          <TouchableOpacity style={styles.findButton} onPress={onPress}>
+            <Text style={styles.findButtonText}>물건 찾기</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   itemContent: {
     flex: 1,
     paddingHorizontal: 10,
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   itemName: {
     fontSize: FONT_SIZE_LARGE,
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
   findButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: FONT_SIZE_SMALL, 
+    fontSize: FONT_SIZE_SMALL,
   },
 });
 

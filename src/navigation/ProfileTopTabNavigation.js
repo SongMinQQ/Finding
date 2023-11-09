@@ -12,9 +12,9 @@ const ProfileTopTabNavigation = () => {
         <View style={styles.container}>
             <ProfileMain />
             <Tab.Navigator>
-                <Tab.Screen name="find" component={ProfileFind} />
-                <Tab.Screen name="lost" component={ProfileLost} />
-                <Tab.Screen name="gladmessage" component={ProfileGladMessage} />
+                <Tab.Screen name="찾은 물건" component={ProfileFind} />
+                <Tab.Screen name="분실 물건" component={ProfileLost} />
+                <Tab.Screen name="감사 편지" component={ProfileGladMessage} />
             </Tab.Navigator>
         </View>
     );
