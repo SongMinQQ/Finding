@@ -15,7 +15,7 @@ const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.017;
 // PaymentMain 컴포넌트
 const PaymentMain = ({ imgURL, itemName, category, location, date }) => {
   return (
-    <View>
+    <View style={{alignSelf: 'flex-start'}}>
       <View style={styles.itemLayout}>
         <Image source={{ uri: imgURL }} style={styles.itemImage} />
         <View style={styles.itemContent}>

@@ -86,8 +86,9 @@ const styles = StyleSheet.create({
         color: '#FF3B3B',
     },
     legalSectionContainer: {
-        width: '95%',
+        width: '100%',
         height: WINDOW_HEIGHT * 0.22, // 고정 높이를 설정
+        paddingHorizontal: 15,
         marginBottom: 10, // 필요에 따라 추가
     },
     legalSection: {

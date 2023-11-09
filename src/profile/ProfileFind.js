@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity
 import { useNavigation } from '@react-navigation/native';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-const ITEM_SIZE = WINDOW_WIDTH * 0.3;
-const ITEM_PADDING_SIZE = WINDOW_WIDTH * 0.1 / 4;
+const ITEM_SIZE = WINDOW_HEIGHT * 0.14;
+const numOfItem = Math.floor(WINDOW_WIDTH / ITEM_SIZE);
+const ITEM_PADDING_SIZE = (WINDOW_WIDTH - (ITEM_SIZE * numOfItem)) / (numOfItem + 1);
 const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 const ITEM_TEXT_SIZE_LARGE = ITEM_SIZE * 0.15;
 const ITEM_TEXT_SIZE_SMALL = ITEM_SIZE * 0.12;
@@ -28,7 +30,7 @@ const ProfileFind = () => {
                 {findItemData.map((item) => (
                     <TouchableOpacity
                         key={item.id}
-                        style={ styles.item }
+                        style={styles.item}
                         onPress={() => navigation.navigate("FindBoardDetail", {
                             imgURL: item.imgURL,
                             itemName: item.itemName,
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     item: {
         width: ITEM_SIZE,
         height: ITEM_SIZE * 1.4,
+        marginLeft: ITEM_PADDING_SIZE,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
