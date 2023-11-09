@@ -10,8 +10,8 @@ const MaterialTopTabNavigation = () => {
     return (
 
         <Tab.Navigator>
-            <Tab.Screen name='Lost Board' component={LostBoard} />
-            <Tab.Screen name='Find Board' component={FindBoard} />
+            <Tab.Screen name='찾은 물건' component={FindBoard} />
+            <Tab.Screen name='분실 물건' component={LostBoard} />
         </Tab.Navigator>
 
     );

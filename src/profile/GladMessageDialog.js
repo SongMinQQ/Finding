@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, Modal, Button } from 'react-native';
 import { Image } from 'expo-image';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-const CARD_WIDTH = WINDOW_WIDTH * 0.9;
-const PROFILE_IMAGE_SIZE = CARD_WIDTH * 0.2;
-const TEXT_SIZE_LARGE = CARD_WIDTH * 0.05;
-const TEXT_SIZE_MEDIUM = CARD_WIDTH * 0.04;
-
 const DIALOG_WIDTH = WINDOW_WIDTH * 0.8;
 const DIALOG_HEIGHT = WINDOW_HEIGHT * 0.6;
+
+const PROFILE_IMAGE_SIZE = DIALOG_HEIGHT * 0.15;
+const TEXT_SIZE_LARGE = DIALOG_HEIGHT * 0.042;
+const TEXT_SIZE_MEDIUM = DIALOG_HEIGHT * 0.032;
 
 const GladMessageDialog = ({ visible, onClose, message, userName, lostArticle, profileImage }) => {
     return (
@@ -31,7 +31,7 @@ const GladMessageDialog = ({ visible, onClose, message, userName, lostArticle, p
                                 />
                                 <Text style={styles.dialogUsername}>{userName}</Text>
                             </View>
-                            <Button title="X" onPress={() => onClose()} color={'#000000'} />
+                            <Ionicons name="close" size={TEXT_SIZE_LARGE} onPress={() => onClose()} color={'#000000'} />
                         </View>
                         <View style={styles.dialogContent}>
                             <ScrollView>
