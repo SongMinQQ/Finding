@@ -17,7 +17,10 @@ import PaymentLegalAgree from '../payment/PaymentLegalAgree';
 import PaymentCheck from '../payment/PaymentCheck';
 import PaymentFinish from '../payment/PaymentFinish';
 import WritePostScreen from '../MessageBoard/WritePostScreen';
-
+import FindIdEmail from '../Login/FindIdEmail';
+import FindIdPhoneNumber from '../Login/FindIdPhoneNumber';
+import FindPasswordEmail from '../Login/FindPasswordEmail';
+import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
 
 const Stack = createStackNavigator();
 
@@ -32,7 +35,11 @@ const StackNavigation = () => {
                 }} />
                 <Stack.Screen name="Join Membership" component={JoinMembership} />
                 <Stack.Screen name="Find Id" component={FindId} />
+                <Stack.Screen name="Find Id Email" component={FindIdEmail} />
+                <Stack.Screen name="Find Id PhoneNumber" component={FindIdPhoneNumber} />
                 <Stack.Screen name="Find Password" component={FindPassword} />
+                <Stack.Screen name="Find Password Email" component={FindPasswordEmail} />
+                <Stack.Screen name="Find Password PhoneNumber" component={FindPasswordPhoneNumber} />
             </Stack.Group>
             {/* 메인 페이지 그룹 */}
             <Stack.Group>
