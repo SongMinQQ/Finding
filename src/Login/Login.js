@@ -1,4 +1,3 @@
-// import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, Button, Dimensions, StyleSheet } from 'react-native';
@@ -10,15 +9,17 @@ import { TextInput } from 'react-native-paper';
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const Login = ({ navigation }) => {
+  // TextInput 클릭 시 테두리 색 변경하는 코드
   const theme = {
     ...DefaultTheme,
     myOwnProperty: true,
     colors: {
       ...DefaultTheme.colors,
-      primary: '#007bff',
+      primary: '#007bff', // 이거 바꾸면 됨
     },
   };
 
+  // 유저 아이디 및 비번 state
   const [userID, setUserID] = useState('');
   const [userPW, setUserPW] = useState('');
 
@@ -28,29 +29,21 @@ const Login = ({ navigation }) => {
   const _handleUserPWChange = text => {
     setUserPW(text);
   }
+
+  // 비밀번호 보이게 하기 or 안 보이게 하기 설정값
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const handleToggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
   };
 
-  // const navigation = useNavigation();
   return (
     <View style={styles.flexbox}>
       <Image style={styles.image} source={require('../../img/loginIcon.png')} />
+      {/* 임시 로고(이미지로 만들 경우 교체해야 함) */}
       <Text style={styles.logoText}>Finding</Text>
       <Text style={[styles.logoText,{fontSize: WINDOW_HEIGHT * 0.017, marginBottom: WINDOW_HEIGHT * 0.1}]}>나의 분실물을 찾아라!</Text>
-      {/* <TextInput style={styles.inputView}
-        placeholder="Username"
-        placeholderTextColor="#003f5c"
-        value={this.state.username}
-        onChangeText={(text) => this.setState({ username: text })} />
-      <TextInput style={styles.inputView}
-        placeholder="Password"
-        placeholderTextColor="#003f5c"
-        value={this.state.password}
-        onChangeText={(text) => this.setState({ password: text })}
-        secureTextEntry={true} /> */}
+
       <TextInput style={styles.inputView}
         mode="outlined"
         placeholder='아이디'
@@ -74,8 +67,6 @@ const Login = ({ navigation }) => {
 
 
       <View style={styles.buttonContainer}>
-        {/* <SafeAreaView> */}
-        {/* <TouchableOpacity style={styles.forgot_button} onPress={() => navigation.navigate("Find Id")}><Text> 자동로그인</Text></TouchableOpacity> */}
         <View style={styles.forgotBox}>
           <TouchableOpacity style={styles.forgot_button}
             onPress={() => navigation.navigate("Find Id")}>
@@ -90,7 +81,7 @@ const Login = ({ navigation }) => {
           onPress={() => {
             navigation.navigate("Home")
             console.log(`userID: ${userID}`);
-            console.log(`userPW: ${userPW}`)
+            console.log(`userPW: ${userPW}`);
           }}
         ><Text style={{fontWeight:'bold', color:'white'}}>로그인</Text>
         </TouchableOpacity>
@@ -98,8 +89,6 @@ const Login = ({ navigation }) => {
           onPress={() => navigation.navigate("Join Membership")}>
           <Text style={{fontWeight:'bold'}}>회원가입</Text>
         </TouchableOpacity>
-        {/* </SafeAreaView> */}
-
       </View>
     </View>
 
@@ -136,9 +125,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  icon: {
-    marginRight: 10,
-  },
   inputView: {
     backgroundColor: "#fff",
     width: "90%",
@@ -150,7 +136,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   forgot_button: {
-    height: 20,
     margin: WINDOW_HEIGHT * 0.02, 
   },
   signupBtn: {
