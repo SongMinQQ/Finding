@@ -4,6 +4,7 @@ import CountySelect from './CountySelect';
 import CitySelect from './CitySelect';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { EvilIcons } from '@expo/vector-icons';
+import axios from 'axios';
 
 const PoliceFind = () => {
     const [selectedCity, setSelectedCity] = useState('서울');
@@ -23,6 +24,25 @@ const PoliceFind = () => {
         console.log(selectedCounty);
     }, [selectedCounty]);
 
+    const search =async () => {
+        const reqUrl = "https://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccTpNmCstdyPlace";
+        const key = "AyubNIaSXmtsRH6lOKHbuLlh8x6KqA4zoQfyNVcQ1lRTV8IMnkd7MCaUDNGYgEwlAciphXq1EWORmpQkOISXSg%3D%3D";
+        const param = {
+            LST_PLACE : `${selectedCity} ${selectedCounty}`,
+            LST_PRDT_NM : searchText,
+            pageNo : 1,
+            numOfRows : 10
+        };
+    const searchUrl = reqUrl + '?serviceKey='+ key + '&' + new URLSearchParams(param);
+    console.log(searchUrl);
+        try{
+            const response = await axios.get(searchUrl)
+            console.log(JSON.stringify(response.data)) ;
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={styles.search}>
@@ -37,7 +57,7 @@ const PoliceFind = () => {
                             onChangeText={setSearchText}
                             placeholder="찾을 물건명을 입력하세요"
                         />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={search}>
                         <EvilIcons name="search" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
