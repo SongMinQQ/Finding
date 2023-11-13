@@ -33,8 +33,8 @@ const PoliceFind = () => {
             pageNo : 1,
             numOfRows : 10
         };
-    const searchUrl = reqUrl + '?serviceKey='+ key + '&' + new URLSearchParams(param);
-    console.log(searchUrl);
+        const searchUrl = reqUrl + '?serviceKey='+ key + '&' + new URLSearchParams(param);
+        console.log(searchUrl);
         try{
             const response = await axios.get(searchUrl)
             console.log(JSON.stringify(response.data)) ;
