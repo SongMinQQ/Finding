@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import CountySelect from './CountySelect';
 import CitySelect from './CitySelect';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios';
 
@@ -24,7 +24,7 @@ const PoliceFind = () => {
         console.log(selectedCounty);
     }, [selectedCounty]);
 
-    const search =async () => {
+    const search = async () => {
         const reqUrl = "https://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccTpNmCstdyPlace";
         const key = "AyubNIaSXmtsRH6lOKHbuLlh8x6KqA4zoQfyNVcQ1lRTV8IMnkd7MCaUDNGYgEwlAciphXq1EWORmpQkOISXSg%3D%3D";
         const param = {
@@ -37,7 +37,7 @@ const PoliceFind = () => {
         console.log(searchUrl);
         try{
             const response = await axios.get(searchUrl)
-            console.log(JSON.stringify(response.data)) ;
+            console.log(JSON.stringify(response.data));
         }
         catch(error){
             console.log(error);
@@ -62,6 +62,11 @@ const PoliceFind = () => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <ScrollView>
+                <View>
+                    <Text>검색 결과는 상위 10개의 항목만 제공됩니다.</Text>
+                </View>
+            </ScrollView>
         </View>
     );
 };
