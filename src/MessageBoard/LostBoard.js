@@ -23,7 +23,7 @@ const LostBoard = () => {
     }));
 
     return (
-        <View>
+        <>
             <ScrollView>
                 <View style={styles.container}>
                     {lostItemData.map((item) => (
@@ -55,7 +55,7 @@ const LostBoard = () => {
                 </View>
             </ScrollView>
             <WriteButton />
-        </View>
+        </>
     );
 };
 

@@ -2,6 +2,7 @@
   "expo": {
     "name": "finding",
     "slug": "finding",
+    "scheme": "finding",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +26,15 @@
     },
     "web": {
       "favicon": "./img/findingLogo.png"
-    }
+    },
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "finding.dev",
+          "enableGooglePay": true
+        }
+      ]
+    ]
   }
 }

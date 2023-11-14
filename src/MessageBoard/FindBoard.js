@@ -24,7 +24,7 @@ const FindBoard = () => {
     }));
 
     return (
-        <View>
+        <>
             <ScrollView>
                 <View style={styles.container}>
                     {findItemData.map((item) => (
@@ -56,7 +56,7 @@ const FindBoard = () => {
                 </View>
             </ScrollView>
             <WriteButton />
-        </View>
+        </>
     );
 };
 

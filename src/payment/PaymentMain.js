@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
   itemDetail: {
     fontSize: FONT_SIZE_SMALL,
   },
-  // findButton 및 findButtonText 스타일은 위 코드에서 제거되었습니다. 필요하다면 이전 코드를 참조하여 추가할 수 있습니다.
 });
 
 export default PaymentMain;
