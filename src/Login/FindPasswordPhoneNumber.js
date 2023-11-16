@@ -25,23 +25,56 @@ export default FindPasswordPhoneNumber;
 
 const styles = StyleSheet.create({
 
-    inputView: {
-        backgroundColor: "#EFFBEF",
-        textShadowColor: "#FBFBEF",
-        borderRadius: 30,
-        width: "100%",
-        height: 45,
-        marginBottom: 10,
+    flexbox: {
+        backgroundColor: "#fff",
         alignItems: "center",
+        justifyContent: "flex-start",
+        paddingVertical: WINDOW_HEIGHT * 0.07,
       },
-correctBtn: {
-    width: "100%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    backgroundColor: "#F5A9E1",
-},
+    
+      container: {
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+    
+      image: {
+        width: WINDOW_HEIGHT * 0.1,
+        height: WINDOW_HEIGHT * 0.1,
+        margin: WINDOW_HEIGHT * 0.02,
+      },
+    
+     logoText: {
+        fontWeight: 'bold',
+        fontSize: WINDOW_HEIGHT * 0.06,
+      },
+      buttonContainer: {
+        width: '60%',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+      },
+      inputView: {
+        backgroundColor: "#fff",
+        width: "90%",
+        marginBottom: WINDOW_HEIGHT * 0.02,
+      },
+      correctBtnBtn: {
+        width: "100%",
+        borderRadius: 25,
+        height: WINDOW_HEIGHT * 0.06,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: WINDOW_HEIGHT * 0.01,
+        backgroundColor: "#007bff",
+      },
+    
+      forgotBox: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+      },
+      forgot_button: {
+        margin: WINDOW_HEIGHT * 0.02,
+      },
+     
 
 });
