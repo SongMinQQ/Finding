@@ -1,6 +1,9 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const FindIdEmail = ({ navigation }) => {
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
     marginBottom: WINDOW_HEIGHT * 0.02,
   },
 
-  correctBtnBtn: {
+  correctBtn: {
     width: "100%",
     borderRadius: 25,
     height: WINDOW_HEIGHT * 0.06,

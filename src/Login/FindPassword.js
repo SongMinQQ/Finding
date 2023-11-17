@@ -1,6 +1,9 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
-
+import { View, Text, Button, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
