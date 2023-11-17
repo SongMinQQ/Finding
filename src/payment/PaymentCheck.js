@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import PaymentMain from './PaymentMain';
 import PaymentInfo from './PaymentInfo';
 import { useNavigation } from '@react-navigation/native';
@@ -45,6 +45,7 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                 console.log('결제 시트 초기화 시작');
                 const initResult = await initPaymentSheet({
                     paymentIntentClientSecret: data.clientSecret,
+                    merchantDisplayName: 'finding',
                 });
                 console.log('결제 시트 초기화 결과:', initResult);
                 const { error } = await presentPaymentSheet();
@@ -75,31 +76,33 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
 
     const navigation = useNavigation();
     return (
-        <View style={styles.container}>
-            <PaymentMain
-                imgURL={route.params.imgURL}
-                itemName={route.params.itemName}
-                category={route.params.category}
-                location={route.params.location}
-                date={route.params.date}
-            />
+        <ScrollView>
+            <View style={styles.container}>
+                <PaymentMain
+                    imgURL={route.params.imgURL}
+                    itemName={route.params.itemName}
+                    category={route.params.category}
+                    location={route.params.location}
+                    date={route.params.date}
+                />
 
-            <PaymentInfo
-                userName="홍길동"
-                userPhoneNum="010-1234-5678"
-                userAdress="충남 천안시 동남구 안서동"
-                thankCost="50000"
-                deliveryCost="2200"
-            />
-            <TouchableOpacity
-                style={styles.paymentButton}
-                onPress={handlePayment}
-            >
-                <Text style={styles.paymentButtonText}>결제하기</Text>
-            </TouchableOpacity>
+                <PaymentInfo
+                    userName="홍길동"
+                    userPhoneNum="010-1234-5678"
+                    userAdress="충남 천안시 동남구 안서동"
+                    thankCost="50000"
+                    deliveryCost="2200"
+                />
+                <TouchableOpacity
+                    style={styles.paymentButton}
+                    onPress={handlePayment}
+                >
+                    <Text style={styles.paymentButtonText}>결제하기</Text>
+                </TouchableOpacity>
 
 
-        </View>
+            </View>
+        </ScrollView>
     );
 };
 
