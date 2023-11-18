@@ -34,12 +34,26 @@ const StackNavigation = () => {
                     headerMode: 'none'//헤더바를 숨김
                 }} />
                 <Stack.Screen name="Join Membership" component={JoinMembership} />
-                <Stack.Screen name="Find Id" component={FindId} />
-                <Stack.Screen name="Find Id Email" component={FindIdEmail} />
-                <Stack.Screen name="Find Id PhoneNumber" component={FindIdPhoneNumber} />
-                <Stack.Screen name="Find Password" component={FindPassword} />
-                <Stack.Screen name="Find Password Email" component={FindPasswordEmail} />
-                <Stack.Screen name="Find Password PhoneNumber" component={FindPasswordPhoneNumber} />
+                <Stack.Screen name="Find Id" component={FindId} options={{
+                    headerTitle: '아이디 찾기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }} />
+                <Stack.Screen name="Find Password" component={FindPassword} options={{
+                    headerTitle: '비밀번호 찾기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }}/>
             </Stack.Group>
             {/* 메인 페이지 그룹 */}
             <Stack.Group>

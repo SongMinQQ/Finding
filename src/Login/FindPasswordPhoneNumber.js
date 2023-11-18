@@ -1,47 +1,85 @@
-import React from 'react';
-import { View, Text, TextInput, Button , StyleSheet} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Dimensions, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
-const FindPasswordPhoneNumber = ({navigation}) => {
-    <View>
-    <Text style = {styles.title}>비밀번호 번호로 찾기 페이지</Text>
-    <TextInput style = {styles.inputView}
-            placeholder="Username"
-            placeholderTextColor="#003f5c"
-            value={this.state.username}
-            onChangeText={(text) => this.setState({ username: text })} />
-    <TextInput style = {styles.inputView}
-    placeholder="Enter your PhoneNumber"
-    value={this.state.phonenumber}
-    onChangeText={(text) => this.setState({ phonenumber: text })}
-    />
-<TouchableOpacity style={styles.correctBtn} onPress={() => navigation.navigate("Home")}><Text>확인</Text></TouchableOpacity>
-    </View> 
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+
+const FindPasswordPhoneNumber = ({ navigation }) => {
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff', // 이거 바꾸면 됨
+    },
+  };
+  // 유저 아이디 및 비번 state
+  const [userID, setUserID] = useState('');
+  const [userPhoneNum, setUserPhoneNum] = useState('');
+
+  const _handleUserIDChange = text => {
+    setUserID(text);
+  }
+  const _handleUserPhoneNumChange = text => {
+    setUserPhoneNum(text);
+  }
+  return (
+    <View style={styles.flexbox}>
+      <TextInput style={styles.inputView}
+        mode="outlined"
+        placeholder='아이디'
+        onChangeText={_handleUserIDChange}
+        theme={theme}
+      />
+      <TextInput style={styles.inputView}
+        mode="outlined"
+        placeholder='핸드폰번호'
+        onChangeText={_handleUserPhoneNumChange}
+        keyboardType={'phone-pad'}
+        theme={theme}
+      />
+
+      <TouchableOpacity style={styles.correctBtn}
+        onPress={() => {
+          navigation.navigate("Home");
+          console.log(`userPhonNumber: ${userPhonNumber}`);
+        }}
+      ><Text style={{ fontWeight: 'bold', color: 'white' }}>인증번호 받기</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+
 }
-
-
 
 export default FindPasswordPhoneNumber;
 
 
 const styles = StyleSheet.create({
+  flexbox: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingVertical: WINDOW_HEIGHT * 0.04,
+  },
 
-    inputView: {
-        backgroundColor: "#EFFBEF",
-        textShadowColor: "#FBFBEF",
-        borderRadius: 30,
-        width: "100%",
-        height: 45,
-        marginBottom: 10,
-        alignItems: "center",
-      },
-correctBtn: {
-    width: "100%",
+  inputView: {
+    backgroundColor: "#fff",
+    width: "90%",
+    marginBottom: WINDOW_HEIGHT * 0.01,
+  },
+  correctBtn: {
+    width: "90%",
     borderRadius: 25,
-    height: 50,
+    height: WINDOW_HEIGHT * 0.06,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
-    backgroundColor: "#F5A9E1",
-},
+    marginTop: WINDOW_HEIGHT * 0.02,
+    backgroundColor: "#007bff",
+  },
+
 
 });

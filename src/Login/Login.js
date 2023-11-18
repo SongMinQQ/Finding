@@ -150,4 +150,5 @@ const styles = StyleSheet.create({
     marginTop: WINDOW_HEIGHT * 0.01,
     backgroundColor: "#007bff",
   },
+  
 });
