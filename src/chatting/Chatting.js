@@ -1,11 +1,15 @@
 import React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { FlatList } from 'react-native-gesture-handler';
 
 const Chatting = () => {
     return (
         <View style={styles.main}>
             <View style={styles.textArea}>
+                <FlatList inverted={true}>
+
+                </FlatList>
                 <TextInput style={styles.input}/>
                 <TouchableOpacity>
                     <MaterialIcons name="add-a-photo" size={24} color="black" />
