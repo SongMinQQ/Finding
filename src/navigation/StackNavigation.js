@@ -21,6 +21,7 @@ import FindIdEmail from '../Login/FindIdEmail';
 import FindIdPhoneNumber from '../Login/FindIdPhoneNumber';
 import FindPasswordEmail from '../Login/FindPasswordEmail';
 import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
+import ItemInfo from '../police/ItemInfo';
 
 const Stack = createStackNavigator();
 
@@ -128,7 +129,12 @@ const StackNavigation = () => {
                 <Stack.Screen name="PaymentFinish" component={PaymentFinish} options={{
                     headerShown: false
                 }} />
-
+            </Stack.Group>
+            {/* 분실물 자세히보기 페이지 */}
+            <Stack.Group>
+                <Stack.Screen name="ItemInformation" component={ItemInfo} options={{
+                    title: "자세히 보기"
+                }}/>
             </Stack.Group>
         </Stack.Navigator>
     );
