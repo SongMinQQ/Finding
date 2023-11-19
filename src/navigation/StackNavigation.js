@@ -83,7 +83,16 @@ const StackNavigation = () => {
                         </View>
                       ),
                 }} />
-                <Stack.Screen name="Write" component={WritePostScreen}/>
+                <Stack.Screen name="Write" component={WritePostScreen} options={{
+                    headerTitle: '글쓰기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }}/>
                 <Stack.Screen name="LostBoardDetail" component={LostBoardDetail} options={{
                     headerTitle: '분실한 물건', 
                     headerTintColor: 'black',

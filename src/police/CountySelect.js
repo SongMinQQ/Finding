@@ -1,96 +1,97 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import PickerSelect from 'react-native-picker-select';
 
 const CountySelect = (props) => {
-    const counties= {
+    const counties = {
         서울: [
-            {label: '강남구', value: '강남구'},
-            {label: '강동구', value: '강동구'},
-            {label: '강북구', value: '강북구'},
-            {label: '강서구', value: '강서구'},
-            {label: '관악구', value: '관악구'},
-            {label: '광진구', value: '광진구'},
-            {label: '구로구', value: '구로구'},
-            {label: '금천구', value: '금천구'},
-            {label: '노원구', value: '노원구'},
-            {label: '도봉구', value: '도봉구'},
-            {label: '동대문구', value: '동대문구'},
-            {label: '동작구', value: '동작구'},
-            {label: '마포구', value: '마포구'},
-            {label: '서대문구', value: '서대문구'},
-            {label: '서초구', value: '서초구'},
-            {label: '성동구', value: '성동구'},
-            {label: '성북구', value: '성북구'},
-            {label: '송파구', value: '송파구'},
-            {label: '양천구', value: '양천구'},
-            {label: '영등포구', value: '영등포구'},
-            {label: '용산구', value: '용산구'},
-            {label: '은평구', value: '은평구'},
-            {label: '종로구', value: '종로구'},
-            {label: '중구', value: '중구'},
-            {label: '중랑구', value: '중랑구'},
+            { label: '강남구', value: '강남구' },
+            { label: '강동구', value: '강동구' },
+            { label: '강북구', value: '강북구' },
+            { label: '강서구', value: '강서구' },
+            { label: '관악구', value: '관악구' },
+            { label: '광진구', value: '광진구' },
+            { label: '구로구', value: '구로구' },
+            { label: '금천구', value: '금천구' },
+            { label: '노원구', value: '노원구' },
+            { label: '도봉구', value: '도봉구' },
+            { label: '동대문구', value: '동대문구' },
+            { label: '동작구', value: '동작구' },
+            { label: '마포구', value: '마포구' },
+            { label: '서대문구', value: '서대문구' },
+            { label: '서초구', value: '서초구' },
+            { label: '성동구', value: '성동구' },
+            { label: '성북구', value: '성북구' },
+            { label: '송파구', value: '송파구' },
+            { label: '양천구', value: '양천구' },
+            { label: '영등포구', value: '영등포구' },
+            { label: '용산구', value: '용산구' },
+            { label: '은평구', value: '은평구' },
+            { label: '종로구', value: '종로구' },
+            { label: '중구', value: '중구' },
+            { label: '중랑구', value: '중랑구' },
         ],
-        인천:[
-            {label: "계양구", value: "계양구"},
-            {label: "미추홀구", value: "미추홀구"},
-            {label: "남동구", value: "남동구"},
-            {label: "동구", value: "동구"},
-            {label: "부평구", value: "부평구"},
-            {label: "서구", value: "서구"},
-            {label: "연수구", value: "연수구"},
-            {label: "중구", value: "중구"},
-            {label: "강화군", value: "강화군"},
-            {label: "옹진군", value: "옹진군"},
+        인천: [
+            { label: "계양구", value: "계양구" },
+            { label: "미추홀구", value: "미추홀구" },
+            { label: "남동구", value: "남동구" },
+            { label: "동구", value: "동구" },
+            { label: "부평구", value: "부평구" },
+            { label: "서구", value: "서구" },
+            { label: "연수구", value: "연수구" },
+            { label: "중구", value: "중구" },
+            { label: "강화군", value: "강화군" },
+            { label: "옹진군", value: "옹진군" },
         ],
-        대전:[
-            {label: "대덕구", value: "대덕구"},
-            {label: "동구", value: "동구"},
-            {label: "서구", value: "서구"},
-            {label: "유성구", value: "유성구"},
-            {label: "중구", value: "중구"},
+        대전: [
+            { label: "대덕구", value: "대덕구" },
+            { label: "동구", value: "동구" },
+            { label: "서구", value: "서구" },
+            { label: "유성구", value: "유성구" },
+            { label: "중구", value: "중구" },
         ],
-        광주:[
-            {label: "광산구", value: "광산구"},
-            {label: "남구", value: "남구"},
-            {label: "동구", value: "동구"},
-            {label: "북구", value: "북구"},
-            {label: "서구", value: "서구"},
+        광주: [
+            { label: "광산구", value: "광산구" },
+            { label: "남구", value: "남구" },
+            { label: "동구", value: "동구" },
+            { label: "북구", value: "북구" },
+            { label: "서구", value: "서구" },
         ],
-        대구:[
-            {label: "남구", value: "남구"},
-            {label: "달서구", value: "달서구"},
-            {label: "동구", value: "동구"},
-            {label: "북구", value: "북구"},
-            {label: "서구", value: "서구"},
-            {label: "수성구", value: "수성구"},
-            {label: "중구", value: "중구"},
-            {label: "달성군", value: "달성군"},
+        대구: [
+            { label: "남구", value: "남구" },
+            { label: "달서구", value: "달서구" },
+            { label: "동구", value: "동구" },
+            { label: "북구", value: "북구" },
+            { label: "서구", value: "서구" },
+            { label: "수성구", value: "수성구" },
+            { label: "중구", value: "중구" },
+            { label: "달성군", value: "달성군" },
         ],
-        울산:[
-            {label: "남구", value: "남구"},
-            {label: "동구", value: "동구"},
-            {label: "북구", value: "북구"},
-            {label: "중구", value: "중구"},
-            {label: "울주군", value: "울주군"},
+        울산: [
+            { label: "남구", value: "남구" },
+            { label: "동구", value: "동구" },
+            { label: "북구", value: "북구" },
+            { label: "중구", value: "중구" },
+            { label: "울주군", value: "울주군" },
         ],
-        부산:[
-            {label: "강서구", value: "강서구"},
-            {label: "금정구", value: "금정구"},
-            {label: "남구", value: "남구"},
-            {label: "동구", value: "동구"},
-            {label: "동래구", value: "동래구"},
-            {label: "부산진구", value: "부산진구"},
-            {label: "북구", value: "북구"},
-            {label: "사상구", value: "사상구"},
-            {label: "사하구", value: "사하구"},
-            {label: "서구", value: "서구"},
-            {label: "수영구", value: "수영구"},
-            {label: "연제구", value: "연제구"},
-            {label: "영도구", value: "영도구"},
-            {label: "중구", value: "중구"},
-            {label: "해운대구", value: "해운대구"},
-            {label: "기장군", value: "기장군"},
+        부산: [
+            { label: "강서구", value: "강서구" },
+            { label: "금정구", value: "금정구" },
+            { label: "남구", value: "남구" },
+            { label: "동구", value: "동구" },
+            { label: "동래구", value: "동래구" },
+            { label: "부산진구", value: "부산진구" },
+            { label: "북구", value: "북구" },
+            { label: "사상구", value: "사상구" },
+            { label: "사하구", value: "사하구" },
+            { label: "서구", value: "서구" },
+            { label: "수영구", value: "수영구" },
+            { label: "연제구", value: "연제구" },
+            { label: "영도구", value: "영도구" },
+            { label: "중구", value: "중구" },
+            { label: "해운대구", value: "해운대구" },
+            { label: "기장군", value: "기장군" },
         ],
         경기도: [
             { label: "수원시", value: "수원시" },
@@ -274,21 +275,44 @@ const CountySelect = (props) => {
 
     return (
         <View style={styles.container}>
-            <Picker
-                selectedValue={props.county}
+            <PickerSelect
                 onValueChange={(itemValue) => props.changeFunction(itemValue)}
-            >
-                {selectedCounties.map((county) => (
-                    <Picker.Item key={county.value} label={county.label} value={county.value} />
-                ))}
-            </Picker>
+                items={selectedCounties}
+                value={props.county}
+                style={pickerSelectStyles}
+                useNativeAndroidPickerStyle={false}
+                placeholder={{ label: "도시를 선택하세요", value: null }} 
+                
+            />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        width: 150
+        width: 150,
     }
-})
+});
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, 
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, 
+    },
+});
 export default CountySelect;
