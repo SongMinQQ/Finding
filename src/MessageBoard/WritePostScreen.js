@@ -5,25 +5,44 @@ import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import PickerSelect from 'react-native-picker-select';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const MAIN_SELECT_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.18;
+const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
 const WritePostScreen = ({ navigation }) => {
     const theme = {
         ...DefaultTheme,
         myOwnProperty: true,
         colors: {
             ...DefaultTheme.colors,
+            text: '#FF0000',
             primary: '#007bff', // 이거 바꾸면 됨
         },
     };
 
     const [title, setTitle] = useState('');
 
-    const [location, setLocation] = useState('');
+    const [findLocation, setFindLocation] = useState('');
+    const [tradeLocation, setTradeLocation] = useState('');
 
     const [description, setDescription] = useState('');
+
+    const moneyList = [
+        { label: '필요없음', value: 'noMoney' },
+        { label: '1만원 이하', value: 'money1' },
+        { label: '1~3만원', value: 'money1to3' },
+        { label: '3~5만원', value: 'money3to5' },
+        { label: '5만원 이상', value: 'money5over' },
+    ];
+
+    const tradeList = [
+        { label: '직거래', value: 'meetTrade' },
+        { label: '택배', value: 'deliveryTrade' },
+    ];
 
     //image  address
     const [imageUrl, setImageUrl] = useState('');
@@ -92,74 +111,93 @@ const WritePostScreen = ({ navigation }) => {
                             placeholder="분실물 이름"
                             value={title}
                             onChangeText={text => setTitle(text)}
-                            theme={theme}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            activeUnderlineColor="#000"
                         />
                         <TextInput
                             mode="flat"
                             style={styles.textInput}
                             placeholder="찾은 곳"
-                            value={location}
-                            onChangeText={text => setLocation(text)}
-                            theme={theme}
+                            value={findLocation}
+                            onChangeText={text => setFindLocation(text)}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            activeUnderlineColor="#000"
                         />
                         <TextInput
                             mode="flat"
                             style={styles.textInput}
                             placeholder="획득 일"
                             value={date ? date.toLocaleDateString('ko-KR') : "획득 일"}
-                            onFocus={showDatePicker} // TextInput에 포커스되면 날짜 선택기 표시
-                            theme={theme}
+                            onFocus={showDatePicker}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            activeUnderlineColor="#000"
                         />
                     </View>
                 </View>
                 <View style={styles.requireSelectLayout}>
                     <View style={styles.requireInfoBox}>
-                        <FontAwesome5 name="comment-dollar" size={60} color={'#585858'}/>
-                        <TextInput
-                            mode="outlined"
-                            style={styles.textInput}
-                            placeholder="사례금"
-                            value={location}
-                            onChangeText={text => setLocation(text)}
-                            theme={theme}
+                        <View style={styles.iconArea}>
+                            <FontAwesome name="dollar" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
+
+                        </View>
+
+                        <PickerSelect
+                            onValueChange={(value) => console.log(value)}
+                            items={moneyList}
+                            style={pickerSelectStyles}
+                            useNativeAndroidPickerStyle={false}
+                            placeholder={{
+                                label: '사례금 선택',
+                                value: null,
+                            }}
                         />
                     </View>
                     <View style={styles.requireInfoBox}>
-                        <FontAwesome5 name="comment-dollar" size={60} color={'#585858'}/>
-                        <TextInput
-                            mode="outlined"
-                            style={styles.textInput}
-                            placeholder="거래 방법"
-                            value={location}
-                            onChangeText={text => setLocation(text)}
-                            theme={theme}
+                        <View style={styles.iconArea}>
+                            <FontAwesome5 name="handshake" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
+
+                        </View>
+                        <PickerSelect
+                            onValueChange={(value) => console.log(value)}
+                            items={tradeList}
+                            style={pickerSelectStyles}
+                            useNativeAndroidPickerStyle={false}
+                            placeholder={{
+                                label: '거래 방법 선택',
+                                value: null,
+                            }}
                         />
                     </View>
                     <View style={styles.requireInfoBox}>
-                        <FontAwesome5 name="comment-dollar" size={60} color={'#585858'}/>
+                        <View style={styles.iconArea}>
+                            <Ionicons name="location" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
+
+                        </View>
                         <TextInput
                             mode="outlined"
                             style={styles.textInput}
                             placeholder="거래 장소"
-                            value={location}
-                            onChangeText={text => setLocation(text)}
-                            theme={theme}
+                            value={tradeLocation}
+                            onChangeText={text => setTradeLocation(text)}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            activeOutlineColor="#000"
                         />
                     </View>
                 </View>
                 <TextInput
-                    style={[styles.textInput, { height: 150 }]}
+                    style={[styles.textInput, { height: WINDOW_HEIGHT * 0.25 }]}
                     mode='outlined'
                     multiline
                     placeholder="자세한 설명"
                     value={description}
                     onChangeText={text => setDescription(text)}
-                    theme={theme}
+                    theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                    activeOutlineColor="#000"
                 />
 
-                <Button
-                    title="글 작성 완료" onPress={handleSubmit}
-                />
+                <TouchableOpacity style={styles.completeButton} onPress={handleSubmit}>
+                    <Text style={{fontWeight:'bold', color:"#fff", fontSize: WINDOW_HEIGHT * 0.017}}>글 작성 완료</Text>
+                </TouchableOpacity>
 
             </ScrollView >
             <DateTimePickerModal
@@ -169,6 +207,7 @@ const WritePostScreen = ({ navigation }) => {
                 onCancel={hideDatePicker}
                 locale="ko-KR"
             />
+
 
         </>
     );
@@ -188,6 +227,16 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 10,
     },
+    iconArea: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: ICON_AREA_LAYOUT_HEIGHT,
+        height: ICON_AREA_LAYOUT_HEIGHT,
+        borderRadius: ICON_AREA_LAYOUT_HEIGHT / 2,
+        borderWidth: 5,
+        borderColor: '#000',
+        marginBottom: 10,
+    },
     requireSelectLayout: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -195,12 +244,22 @@ const styles = StyleSheet.create({
         height: MAIN_SELECT_LAYOUT_HEIGHT,
         width: '100%',
         marginBottom: 10,
+        gap: 5,
     },
     requireInfoBox: {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
 
+    },
+    completeButton: {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:"#007bff",
+        height: WINDOW_HEIGHT * 0.05,
+        borderRadius: WINDOW_HEIGHT * 0.008,
+        marginTop: 10,
     },
     mainImage: {
         width: MAIN_SELECT_LAYOUT_HEIGHT,
@@ -219,6 +278,7 @@ const styles = StyleSheet.create({
     textInput: {
         width: '100%',
         backgroundColor: '#fff',
+        height: WINDOW_HEIGHT* 0.055,
     },
     label: {
         fontSize: 18,
@@ -230,6 +290,34 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         marginBottom: 16,
+    },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        height: WINDOW_HEIGHT* 0.055,
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // iOS에서 화살표 아이콘 영역을 확보
+    },
+    placeholder: {
+        color: '#BDBDBD',
+      },
+    inputAndroid: {
+        height: WINDOW_HEIGHT* 0.055,
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // 안드로이드에서 화살표 아이콘 영역을 확보
     },
 });
 

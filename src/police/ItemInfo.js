@@ -16,7 +16,7 @@ const ItemInfo = ({route}) => {
         try{
             const response = await axios.get(searchUrl);
             let detailJson = JSON.stringify(response.data.response.body.item);
-            console.log(detailJson);
+            console.log("detailJson: "+detailJson);
             setDetailInfo(JSON.parse(detailJson));
         }
         catch(err){
@@ -24,9 +24,9 @@ const ItemInfo = ({route}) => {
         }
     }
     useEffect(() => {
-        console.log(route.params);
+        console.log("route.params: "+route.params);
         getDetailInfo();
-        console.log(detailInfo.lstFilePathImg);
+        console.log("lstFilePathImg: "+detailInfo.lstFilePathImg);
     },[]);
     return (
         <View>
