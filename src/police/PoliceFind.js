@@ -6,7 +6,7 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios';
 
-const PoliceFind = () => {
+const PoliceFind = ({navigation}) => {
     const [selectedCity, setSelectedCity] = useState('서울');
     const [selectedCounty, setSelectedCounty] = useState('강남');
     const [searchText, setSearchText] = useState(''); // 검색창의 상태
@@ -98,6 +98,9 @@ const PoliceFind = () => {
                     <Text>분실물 : {data.lstPrdtNm}</Text>
                     <Text>습득 장소 : {data.lstPlace}</Text>
                     <Text>등록 일자 : {data.lstYmd}</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("ItemInformation", {atcId : data.atcId})}>
+                        <Text>자세히 보기</Text>
+                    </TouchableOpacity>
                 </View>)) 
                 : <View><Text>검색 결과가 없습니다.</Text></View>}
             </ScrollView>
