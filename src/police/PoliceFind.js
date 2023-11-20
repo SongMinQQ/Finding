@@ -83,6 +83,7 @@ const PoliceFind = ({ navigation }) => {
                         value={searchText}
                         onChangeText={setSearchText}
                         placeholder="찾을 물건명을 입력하세요"
+                        placeholderTextColor={'#585858'}
                     />
                     <TouchableOpacity onPress={search}>
                         <EvilIcons name="search" size={WINDOW_HEIGHT * 0.05} color="black" />

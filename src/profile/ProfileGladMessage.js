@@ -32,7 +32,7 @@ const ProfileGladMessage = () => {
     };
 
     return (
-        <ScrollView>
+        <ScrollView style={{backgroundColor: '#fff'}}>
             <View style={styles.container}>
                 {messagesData.map((message) => (
                     <TouchableOpacity key={message.id} onPress={() => handleCardPress(message)}>

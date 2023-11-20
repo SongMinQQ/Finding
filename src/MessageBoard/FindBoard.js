@@ -25,7 +25,7 @@ const FindBoard = () => {
 
     return (
         <>
-            <ScrollView>
+            <ScrollView style={{backgroundColor: '#fff'}}>
                 <View style={styles.container}>
                     {findItemData.map((item) => (
                         <TouchableOpacity key={item.id} style={styles.item} onPress={() => navigation.navigate("FindBoardDetail", {

@@ -25,7 +25,7 @@ const ProfileFind = () => {
     }));
 
     return (
-        <ScrollView>
+        <ScrollView style={{backgroundColor: '#fff'}}>
             <View style={styles.container}>
                 {findItemData.map((item) => (
                     <TouchableOpacity

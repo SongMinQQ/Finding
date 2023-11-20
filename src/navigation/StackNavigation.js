@@ -142,7 +142,14 @@ const StackNavigation = () => {
             {/* 분실물 자세히보기 페이지 */}
             <Stack.Group>
                 <Stack.Screen name="ItemInformation" component={ItemInfo} options={{
-                    title: "자세히 보기"
+                    headerTitle: '자세히 보기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
                 }}/>
             </Stack.Group>
         </Stack.Navigator>
