@@ -24,7 +24,7 @@ const ProfileLost = () => {
         date: `2023-10-${index + 1}`
     }));
     return (
-        <ScrollView>
+        <ScrollView style={{backgroundColor: '#fff'}}>
             <View style={styles.container}>
                 {lostItemData.map((item) => (
                     <TouchableOpacity

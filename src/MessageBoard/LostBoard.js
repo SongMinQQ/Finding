@@ -24,7 +24,7 @@ const LostBoard = () => {
 
     return (
         <>
-            <ScrollView>
+            <ScrollView style={{backgroundColor: '#fff'}}>
                 <View style={styles.container}>
                     {lostItemData.map((item) => (
                         <TouchableOpacity key={item.id} style={styles.item} onPress={() => navigation.navigate("LostBoardDetail", {
