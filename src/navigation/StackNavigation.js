@@ -21,6 +21,7 @@ import FindIdEmail from '../Login/FindIdEmail';
 import FindIdPhoneNumber from '../Login/FindIdPhoneNumber';
 import FindPasswordEmail from '../Login/FindPasswordEmail';
 import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
+import ItemInfo from '../police/ItemInfo';
 
 const Stack = createStackNavigator();
 
@@ -34,12 +35,26 @@ const StackNavigation = () => {
                     headerMode: 'none'//헤더바를 숨김
                 }} />
                 <Stack.Screen name="Join Membership" component={JoinMembership} />
-                <Stack.Screen name="Find Id" component={FindId} />
-                <Stack.Screen name="Find Id Email" component={FindIdEmail} />
-                <Stack.Screen name="Find Id PhoneNumber" component={FindIdPhoneNumber} />
-                <Stack.Screen name="Find Password" component={FindPassword} />
-                <Stack.Screen name="Find Password Email" component={FindPasswordEmail} />
-                <Stack.Screen name="Find Password PhoneNumber" component={FindPasswordPhoneNumber} />
+                <Stack.Screen name="Find Id" component={FindId} options={{
+                    headerTitle: '아이디 찾기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }} />
+                <Stack.Screen name="Find Password" component={FindPassword} options={{
+                    headerTitle: '비밀번호 찾기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }}/>
             </Stack.Group>
             {/* 메인 페이지 그룹 */}
             <Stack.Group>
@@ -68,7 +83,16 @@ const StackNavigation = () => {
                         </View>
                       ),
                 }} />
-                <Stack.Screen name="Write" component={WritePostScreen}/>
+                <Stack.Screen name="Write" component={WritePostScreen} options={{
+                    headerTitle: '글쓰기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }}/>
                 <Stack.Screen name="LostBoardDetail" component={LostBoardDetail} options={{
                     headerTitle: '분실한 물건', 
                     headerTintColor: 'black',
@@ -114,7 +138,19 @@ const StackNavigation = () => {
                 <Stack.Screen name="PaymentFinish" component={PaymentFinish} options={{
                     headerShown: false
                 }} />
-
+            </Stack.Group>
+            {/* 분실물 자세히보기 페이지 */}
+            <Stack.Group>
+                <Stack.Screen name="ItemInformation" component={ItemInfo} options={{
+                    headerTitle: '자세히 보기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }}/>
             </Stack.Group>
         </Stack.Navigator>
     );

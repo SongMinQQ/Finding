@@ -1,53 +1,75 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-const FindIdEmail = ({navigation}) => {
-    return (
-        <View>
-            <Text style = {styles.title}>아이디 이메일로 찾기 페이지</Text>
-        
-        <TextInput style = {styles.inputView}
-          placeholder="Enter your email"
-          value={this.state.email}
-          onChangeText={(text) => this.setState({ email: text })}
-        />
-<TouchableOpacity style={styles.correctBtn} onPress={() => navigation.navigate("Home")}><Text>확인</Text></TouchableOpacity>
-          </View> 
-        
-    );
+const FindIdEmail = ({ navigation }) => {
+  // TextInput 클릭 시 테두리 색 변경하는 코드
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff', // 이거 바꾸면 됨
+    },
+  }
+  // 유저 이메일 state
+  const [userEmail, setUserEmail] = useState('');
+  const _handleUserEmailChange = text => {
+    setUserEmail(text);
+  }
+  return (
+    <View style={styles.flexbox}>
+      <TextInput style={styles.inputView}
+        mode="outlined"
+        placeholder='이메일'
+        keyboardType="email-address"
+        onChangeText={_handleUserEmailChange}
+        theme={theme}
+      />
+
+        <TouchableOpacity style={styles.correctBtn}
+          onPress={() => {
+            navigation.navigate("Home");
+            console.log(`userEmail: ${userEmail}`);
+          }}
+        ><Text style={{ fontWeight: 'bold', color: 'white' }}>인증번호 받기</Text>
+        </TouchableOpacity>
+     
+    </View>
+
+  );
 };
-
 export default FindIdEmail;
 
 const styles = StyleSheet.create({
-    Flexbox: {
-      backgroundColor: "#FBFBEF",
-      flex: 1,
-      flexDirection: "row",
-      justifyContent : "space-between",
+  flexbox: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingVertical: WINDOW_HEIGHT * 0.04,
+  },
 
-    },
+  inputView: {
+    backgroundColor: "#fff",
+    width: "90%",
+  },
 
-    inputView: {
-      backgroundColor: "#EFFBEF",
-      textShadowColor: "#FBFBEF",
-      borderRadius: 30,
-      width: "100%",
-      height: 45,
-      marginBottom: 10,
-      alignItems: "center",
-    },
-  
-correctBtn : {
- width: "100%",
+  correctBtn: {
+    width: "90%",
     borderRadius: 25,
-    height: 50,
+    height: WINDOW_HEIGHT * 0.06,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
-    backgroundColor: "#F5A9E1",
+    marginTop: WINDOW_HEIGHT * 0.02,
+    backgroundColor: "#007bff",
+  },
 
-},
 
 
 });

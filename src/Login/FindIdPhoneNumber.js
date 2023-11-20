@@ -1,18 +1,47 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 
-const FindIdPhoneNumber = ({navigation}) => {
-    return(
-        <View>
-        <Text style = {styles.title}>아이디 번호로 찾기 페이지</Text>
-    <TextInput style = {styles.inputView}
-      placeholder="Enter your PhoneNumber"
-      value={this.state.phoneNumber}
-      onChangeText={(text) => this.setState({ phoneNumber: text })}
-    />
-<TouchableOpacity style={styles.correctBtn} onPress={() => navigation.navigate("Home")}><Text>확인</Text></TouchableOpacity>
-      </View> 
-    );
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+
+const FindIdPhoneNumber = ({ navigation }) => {
+
+  const [userPhonNumber, setUserPhonNumber] = useState('');
+  const _handleUserPhonNumberChange = text => {
+    setUserPhonNumber(text);
+  }
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff', // 이거 바꾸면 됨
+    },
+  };
+  return (
+    
+      <View style={styles.flexbox}>
+        <TextInput style={styles.inputView}
+          mode="outlined"
+          placeholder='핸드폰번호'
+          onChangeText={_handleUserPhonNumberChange}
+          keyboardType={'phone-pad'}
+          theme={theme}
+        />
+
+          <TouchableOpacity style={styles.correctBtn}
+            onPress={() => {
+              navigation.navigate("Home")
+              console.log(`userPhonNumber: ${userPhonNumber}`);
+            }}
+          ><Text style={{ fontWeight: 'bold', color: 'white' }}>인증번호 받기</Text>
+          </TouchableOpacity>
+
+      </View>
+  );
 };
 
 
@@ -20,26 +49,27 @@ export default FindIdPhoneNumber;
 
 const styles = StyleSheet.create({
 
-    inputView: {
-        backgroundColor: "#EFFBEF",
-        textShadowColor: "#FBFBEF",
-        borderRadius: 30,
-        width: "100%",
-        height: 45,
-        marginBottom: 10,
-        alignItems: "center",
-      },
+  flexbox: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingVertical: WINDOW_HEIGHT * 0.04,
+  },
 
-correctBtn : {
- width: "100%",
+  inputView: {
+    backgroundColor: "#fff",
+    width: "90%",
+  },
+  correctBtn: {
+    width: "90%",
     borderRadius: 25,
-    height: 50,
+    height: WINDOW_HEIGHT * 0.06,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
-    backgroundColor: "#F5A9E1",
-
-},
-
+    marginTop: WINDOW_HEIGHT * 0.02,
+    backgroundColor: "#007bff",
+  },
 
 });
