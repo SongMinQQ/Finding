@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Appearance } from 'react-native';
+import { View, Text, Button, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Appearance, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -94,6 +94,17 @@ const WritePostScreen = ({ navigation }) => {
         navigation.navigate('Home');
     };
 
+    //모달 관련 함수, 상태변수
+    const [modal, setModal] = useState(false);
+
+    const openModal = () => {
+        setModal(true);
+    }
+
+    const closeModal = () => {
+        setModal(false);
+    }
+
     return (
         <>
             <ScrollView style={styles.container}>
@@ -109,6 +120,7 @@ const WritePostScreen = ({ navigation }) => {
                             mode="flat"
                             style={styles.textInput}
                             placeholder="분실물 이름"
+                            textColor='#000'
                             value={title}
                             onChangeText={text => setTitle(text)}
                             theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
@@ -118,6 +130,7 @@ const WritePostScreen = ({ navigation }) => {
                             mode="flat"
                             style={styles.textInput}
                             placeholder="찾은 곳"
+                            textColor='#000'
                             value={findLocation}
                             onChangeText={text => setFindLocation(text)}
                             theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
@@ -127,10 +140,12 @@ const WritePostScreen = ({ navigation }) => {
                             mode="flat"
                             style={styles.textInput}
                             placeholder="획득 일"
-                            value={date ? date.toLocaleDateString('ko-KR') : "획득 일"}
+                            textColor='#000'
+                            value={date ? date.toLocaleDateString('ko-KR') : ""}
                             onFocus={showDatePicker}
                             theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
                             activeUnderlineColor="#000"
+                            onPressIn={openModal}
                         />
                     </View>
                 </View>
@@ -198,15 +213,26 @@ const WritePostScreen = ({ navigation }) => {
                 <TouchableOpacity style={styles.completeButton} onPress={handleSubmit}>
                     <Text style={{fontWeight:'bold', color:"#fff", fontSize: WINDOW_HEIGHT * 0.017}}>글 작성 완료</Text>
                 </TouchableOpacity>
-
-            </ScrollView >
-            <DateTimePickerModal
+                {Platform.OS === 'ios' ? <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
                 locale="ko-KR"
-            />
+            /> :
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date" // 또는 "time", "datetime"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+                locale="ko-KR"
+                // display = "calendar"
+                // value={new Date()}
+                // display="default"
+            />}
+            </ScrollView >
+            {/* {modal && <DatePicker visible={modal} hideModal={closeModal}/>} */}
+            
 
 
         </>
