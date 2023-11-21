@@ -12,8 +12,8 @@ const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
 const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
 const PoliceFind = ({ navigation }) => {
-    const [selectedCity, setSelectedCity] = useState('서울');
-    const [selectedCounty, setSelectedCounty] = useState('강남');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedCounty, setSelectedCounty] = useState('');
     const [searchText, setSearchText] = useState(''); // 검색창의 상태
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -122,7 +122,9 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        gap: 5,
+        marginBottom: 10,
     },
     searchInput: {
         flex: 1,
