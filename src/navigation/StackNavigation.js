@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Chatting from '../chatting/Chatting';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
@@ -22,10 +22,13 @@ import FindIdPhoneNumber from '../Login/FindIdPhoneNumber';
 import FindPasswordEmail from '../Login/FindPasswordEmail';
 import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
 import ItemInfo from '../police/ItemInfo';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 const Stack = createStackNavigator();
 
 const StackNavigation = () => {
+    const { loading } = useContext(LoadingContext);
     const ref = useRef(null);
     return (
         <Stack.Navigator>

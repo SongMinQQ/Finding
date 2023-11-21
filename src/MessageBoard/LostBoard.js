@@ -19,7 +19,11 @@ const LostBoard = () => {
         itemName: `물건 ${index + 22}`,
         category: `전자기기`,
         location: `위치 ${index + 22}`,
-        date: `2023-10-${index + 1}`
+        date: `2023-10-${index + 1}`,
+        money: `${index+1}만원`,
+        tradeType: `직거래`,
+        tradeLocation: `천안`,
+        articleExplain: `물건 ${index + 22}을 천안에서 잃어버렸습니다. 찾은분 연락주세요.`
     }));
 
     return (
@@ -33,6 +37,10 @@ const LostBoard = () => {
                             category: item.category,
                             location: item.location,
                             date: item.date,
+                            money: item.money,
+                            tradeType: item.tradeType,
+                            tradeLocation: item.tradeLocation,
+                            articleExplain: item.articleExplain,
                         })}>
                             <Image
                                 source={{ uri: item.imgURL }}

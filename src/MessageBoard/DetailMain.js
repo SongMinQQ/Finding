@@ -37,14 +37,12 @@ const DetailMain = ({ imgURL, itemName, category, location, date, onPress, findO
 const styles = StyleSheet.create({
   itemLayout: {
     flexDirection: 'row',
-    alignItems: 'stretch',
+    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: ITEM_LAYOUT_HEIGHT,
-    padding: 15,
-    marginBottom: 20,
     backgroundColor: '#fff',
     overflow: 'hidden',
+    marginBottom: 15,
   },
   itemImage: {
     width: ITEM_IMAGE_SIZE,
@@ -54,7 +52,9 @@ const styles = StyleSheet.create({
   itemContent: {
     flex: 1,
     paddingHorizontal: 10,
-    justifyContent: 'space-around',
+    height: ITEM_IMAGE_SIZE,
+    justifyContent: 'space-between',
+
   },
   itemName: {
     fontSize: FONT_SIZE_LARGE,

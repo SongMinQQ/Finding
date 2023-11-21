@@ -11,7 +11,7 @@
   "dependencies": {
     "@expo/match-media": "^0.4.0",
     "@expo/webpack-config": "^19.0.0",
-    "@react-native-community/datetimepicker": "^7.6.1",
+    "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-picker/picker": "^2.5.1",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/material-top-tabs": "^6.6.4",
@@ -30,6 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.5",
+    "react-native-gifted-chat": "^2.4.0",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-paper": "^5.11.1",
     "react-native-picker-select": "^9.0.0",

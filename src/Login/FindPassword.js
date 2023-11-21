@@ -12,7 +12,7 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const FindIdBox = styled.TouchableOpacity`
   flex: 1;
-  align-itmes: center;
+  align-items: center;
   justify-content: center;
   background-color: ${props => props.findPW};
   border-color: #EEEEEE;
