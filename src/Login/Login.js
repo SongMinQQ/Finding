@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, Button, Dimensions, StyleSheet } from 'react-native';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,6 +7,7 @@ import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper';
 import { auth } from '../../FireBase/DB';
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { LoadingContext } from '../Loading/LoadingContext';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -21,8 +22,12 @@ const Login = ({ navigation }) => {
     },
   };
 
+  //로딩화면 구현을 위한 context 가져오기
+  const { spinner } = useContext(LoadingContext);
+
   const handleLogin = async () => {
     try {
+      spinner.start();
       await signInWithEmailAndPassword(auth, userID, userPW);
       console.log('로그인 성공');
       navigation.navigate("Home");
@@ -31,6 +36,8 @@ const Login = ({ navigation }) => {
       // 로그인 실패 처리
       setLoginFail(true);
       console.log('로그인 실패');
+    } finally {
+      spinner.stop();
     }
   };
 
