@@ -5,6 +5,8 @@ import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper';
+import { auth } from '../../FireBase/DB';
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -19,14 +21,29 @@ const Login = ({ navigation }) => {
     },
   };
 
+  const handleLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, userID, userPW);
+      console.log('로그인 성공');
+      navigation.navigate("Home");
+      // 로그인 성공 처리
+    } catch (error) {
+      // 로그인 실패 처리
+      setLoginFail(true);
+      console.log('로그인 실패');
+    }
+  };
+
   // 유저 아이디 및 비번 state
   const [userID, setUserID] = useState('');
   const [userPW, setUserPW] = useState('');
 
   const _handleUserIDChange = text => {
+    setLoginFail(false);
     setUserID(text);
   }
   const _handleUserPWChange = text => {
+    setLoginFail(false);
     setUserPW(text);
   }
 
@@ -36,6 +53,8 @@ const Login = ({ navigation }) => {
   const handleToggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
   };
+
+  const [loginFail, setLoginFail] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -65,7 +84,7 @@ const Login = ({ navigation }) => {
             />
           }
         />
-
+        {loginFail && <Text style={{color:'#ff0000'}}>아이디 혹은 비밀번호가 잘못되었습니다.</Text>}
 
         <View style={styles.buttonContainer}>
           <View style={styles.forgotBox}>
@@ -79,15 +98,11 @@ const Login = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.loginBtn}
-            onPress={() => {
-              navigation.navigate("Home")
-              console.log(`userID: ${userID}`);
-              console.log(`userPW: ${userPW}`);
-            }}
+            onPress={handleLogin}
           ><Text style={{ fontWeight: 'bold', color: 'white' }}>로그인</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.signupBtn}
-            onPress={() => navigation.navigate("Join Membership")}>
+            onPress={()=>{navigation.navigate("Join Membership")}}>
             <Text style={{ fontWeight: 'bold' }}>회원가입</Text>
           </TouchableOpacity>
         </View>

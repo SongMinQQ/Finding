@@ -59,7 +59,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           onPress={handleFindPress}
           findOrLost={findOrLost}
         />
-        <Text style={styles.requireHeader}> 요구 사항 </Text>
+        <Text style={styles.requireHeader}>요구 사항</Text>
 
         <View style={styles.requireSelectLayout}>
           <View style={styles.requireInfoBox}>
