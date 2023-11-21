@@ -43,6 +43,8 @@ const PoliceFind = ({ navigation }) => {
         const searchUrl = reqUrl + '?serviceKey=' + key + '&' + new URLSearchParams(param);
         console.log(searchUrl);
         try {
+            setLoading(true);//데이터 받아오는 중엔 로딩
+
             let responseData = "";
             const response = await axios.get(searchUrl)
             console.log(JSON.stringify(response.data.response.body.items.item));
@@ -58,7 +60,6 @@ const PoliceFind = ({ navigation }) => {
             else {
                 setSearchResult([]);
             }
-            setLoading(true);//데이터 받아오는 중엔 로딩
         }
         catch (error) {
             console.log(error);
@@ -108,7 +109,10 @@ const PoliceFind = ({ navigation }) => {
                             <Text>등록 일자 : {data.lstYmd}</Text>
                         </View>
                     </TouchableOpacity>))
-                    : <View><Text>검색 결과가 없습니다.</Text></View>}
+                    : 
+                    <View>
+                        <Text>검색 결과가 없습니다.</Text>
+                    </View>}
             </ScrollView>
         </View>
     );
@@ -162,6 +166,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         justifyContent: 'center',
         alignItems: 'center',
+        zIndex: 5,
     },
     resultView: {
         width: '100%',
