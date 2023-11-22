@@ -62,18 +62,18 @@ const FindBoard = () => {
     useEffect(() => {
         fetchDocs();
     },[])
-    const findItemData = [...Array(21)].map((_, index) => ({
-        id: index,
-        imgURL: `https://picsum.photos/id/${index}/200/200`,
-        itemName: `물건 ${index + 1}`,
-        category: `전자기기`,
-        location: `위치 ${index + 1}`,
-        date: `2023-10-${index + 1}`,
-        money: `${index + 1}만원`,
-        tradeType: `직거래`,
-        tradeLocation: `천안`,
-        articleExplain: `물건 ${index + 1}을 천안에서 찾았습니다. 연락주세요.`
-    }));
+    // const findItemData = [...Array(21)].map((_, index) => ({
+    //     id: index,
+    //     imgURL: `https://picsum.photos/id/${index}/200/200`,
+    //     itemName: `물건 ${index + 1}`,
+    //     category: `전자기기`,
+    //     location: `위치 ${index + 1}`,
+    //     date: `2023-10-${index + 1}`,
+    //     money: `${index + 1}만원`,
+    //     tradeType: `직거래`,
+    //     tradeLocation: `천안`,
+    //     articleExplain: `물건 ${index + 1}을 천안에서 찾았습니다. 연락주세요.`
+    // }));
 
     return (
         <>
