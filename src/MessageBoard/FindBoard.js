@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, Image, TouchableOpacity } from 'react-native';
 import WriteButton from './WriteButton';
 import { useNavigation } from '@react-navigation/native';
+import { fireStoreDB } from '../../FireBase/DB';
+import { collection, getDocs } from "firebase/firestore";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -11,8 +13,23 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 const FONT_SIZE_TITLE = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_TEXT = WINDOW_HEIGHT * 0.019;
 
+
+const fetchDocs = async () => {
+    try {
+        const querySnapshot = await getDocs(collection(fireStoreDB, "findBoard"));
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+        });
+    } catch (error) {
+        console.error("Error fetching documents: ", error);
+    }
+};
+
+
+
 const FindBoard = () => {
     const navigation = useNavigation();
+
 
     const findItemData = [...Array(21)].map((_, index) => ({
         id: index,
@@ -21,7 +38,7 @@ const FindBoard = () => {
         category: `전자기기`,
         location: `위치 ${index + 1}`,
         date: `2023-10-${index + 1}`,
-        money: `${index+1}만원`,
+        money: `${index + 1}만원`,
         tradeType: `직거래`,
         tradeLocation: `천안`,
         articleExplain: `물건 ${index + 1}을 천안에서 찾았습니다. 연락주세요.`
@@ -29,7 +46,7 @@ const FindBoard = () => {
 
     return (
         <>
-            <ScrollView style={{backgroundColor: '#fff'}}>
+            <ScrollView style={{ backgroundColor: '#fff' }}>
                 <View style={styles.container}>
                     {findItemData.map((item) => (
                         <TouchableOpacity key={item.id} style={styles.item} onPress={() => navigation.navigate("FindBoardDetail", {
@@ -51,9 +68,14 @@ const FindBoard = () => {
                                 <Text style={styles.itemName}>{item.itemName}</Text>
                                 <Text style={styles.itemText}>{item.location}</Text>
                                 <Text style={styles.itemText}>{item.date}</Text>
-                                <TouchableOpacity style={styles.itemUser} onPress={() => navigation.navigate('Home', {
-                                    screen: '프로필',
-                                })}>
+                                <TouchableOpacity style={styles.itemUser}
+                                    onPress={() => {
+                                        // navigation.navigate('Home', {
+                                        // screen: '프로필',})
+
+                                        fetchDocs();
+
+                                    }}>
                                     {/* 😎자리에 프로필 이미지 들어오도록 구현해야함.*/}
                                     {/* 채팅하기 버튼은 게시글 상세보기에 넣는게 좋을거 같아서 일단 뺌 */}
                                     <Text>😎홍길동</Text>
