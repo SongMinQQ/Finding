@@ -2,10 +2,19 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, View, Platform } from 'react-native';
 
-const WriteButton = () => {
+const WriteButton = ({ type }) => {
     const navigation = useNavigation();
+
+    const handlePress = () => {
+        if (type === 'find') {
+            navigation.navigate("WritePostFindScreen");
+        } else if (type === 'lost') {
+            navigation.navigate("WritePostLostScreen");
+        }
+    };
+
     return (
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("Write")} >
+        <TouchableOpacity style={styles.addButton} onPress={handlePress} >
             <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
     );

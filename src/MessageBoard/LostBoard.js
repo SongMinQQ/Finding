@@ -62,7 +62,7 @@ const LostBoard = () => {
                     ))}
                 </View>
             </ScrollView>
-            <WriteButton />
+            <WriteButton type="lost"/>
         </>
     );
 };

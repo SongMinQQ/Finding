@@ -16,7 +16,8 @@ import LostBoardDetail from '../MessageBoard/LostBoardDetail';
 import PaymentLegalAgree from '../payment/PaymentLegalAgree';
 import PaymentCheck from '../payment/PaymentCheck';
 import PaymentFinish from '../payment/PaymentFinish';
-import WritePostScreen from '../MessageBoard/WritePostScreen';
+import WritePostFindScreen from '../MessageBoard/WritePostFindScreen';
+import WritePostLostScreen from '../MessageBoard/WritePostLostScreen';
 import FindIdEmail from '../Login/FindIdEmail';
 import FindIdPhoneNumber from '../Login/FindIdPhoneNumber';
 import FindPasswordEmail from '../Login/FindPasswordEmail';
@@ -86,7 +87,17 @@ const StackNavigation = () => {
                         </View>
                       ),
                 }} />
-                <Stack.Screen name="Write" component={WritePostScreen} options={{
+                <Stack.Screen name="WritePostFindScreen" component={WritePostFindScreen} options={{
+                    headerTitle: '글쓰기', 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      },
+                }}/>
+                <Stack.Screen name="WritePostLostScreen" component={WritePostLostScreen} options={{
                     headerTitle: '글쓰기', 
                     headerTintColor: 'black',
                     headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
