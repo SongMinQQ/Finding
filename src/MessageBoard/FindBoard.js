@@ -13,23 +13,51 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 const FONT_SIZE_TITLE = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_TEXT = WINDOW_HEIGHT * 0.019;
 
+// 게시글 10개씩 가져오기 코드
+//   const fetchMoreDocs = async (lastVisible) => {
+//     try {
+//       const next = query(
+//         collection(fireStoreDB, "findBoard"),
+//         orderBy("createdAt"),
+//         startAfter(lastVisible),
+//         limit(10)
+//       );
 
-const fetchDocs = async () => {
-    try {
-        const querySnapshot = await getDocs(collection(fireStoreDB, "findBoard"));
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-        });
-    } catch (error) {
-        console.error("Error fetching documents: ", error);
-    }
-};
+//       const documentSnapshots = await getDocs(next);
+//       setPosts(prevState => {
+//         const fetchedPosts = documentSnapshots.docs.map(doc => ({
+//           id: doc.id,
+//           ...doc.data()
+//         }));
+//         return [...prevState, ...fetchedPosts];
+//       });
+//     } catch (error) {
+//       console.error("Error fetching additional documents: ", error);
+//     }
+//   };
+
 
 
 
 const FindBoard = () => {
     const navigation = useNavigation();
 
+    const [posts, setPosts] = useState([]);
+
+    const fetchDocs = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(fireStoreDB, "findBoard"));
+            setPosts(prevState => {
+                const fetchedPosts = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                return [...prevState, ...fetchedPosts];
+            });
+        } catch (error) {
+            console.error("Error fetching documents: ", error);
+        }
+    };
 
     const findItemData = [...Array(21)].map((_, index) => ({
         id: index,
@@ -74,6 +102,7 @@ const FindBoard = () => {
                                         // screen: '프로필',})
 
                                         fetchDocs();
+                                        console.log(posts);
 
                                     }}>
                                     {/* 😎자리에 프로필 이미지 들어오도록 구현해야함.*/}
