@@ -13,7 +13,7 @@ import PickerSelect from 'react-native-picker-select';
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const MAIN_SELECT_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.18;
 const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
-const WritePostScreen = ({ navigation }) => {
+const WritePostLostScreen = ({ navigation }) => {
     const theme = {
         ...DefaultTheme,
         myOwnProperty: true,
@@ -129,7 +129,7 @@ const WritePostScreen = ({ navigation }) => {
                         <TextInput
                             mode="flat"
                             style={styles.textInput}
-                            placeholder="찾은 곳"
+                            placeholder="잃어버린 곳"
                             textColor='#000'
                             value={findLocation}
                             onChangeText={text => setFindLocation(text)}
@@ -139,7 +139,7 @@ const WritePostScreen = ({ navigation }) => {
                         <TextInput
                             mode="flat"
                             style={styles.textInput}
-                            placeholder="획득 일"
+                            placeholder="분실 일"
                             textColor='#000'
                             value={date ? date.toLocaleDateString('ko-KR') : ""}
                             onFocus={showDatePicker}
@@ -347,4 +347,4 @@ const pickerSelectStyles = StyleSheet.create({
     },
 });
 
-export default WritePostScreen;
+export default WritePostLostScreen;

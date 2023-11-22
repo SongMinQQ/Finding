@@ -63,7 +63,7 @@ const FindBoard = () => {
                     ))}
                 </View>
             </ScrollView>
-            <WriteButton />
+            <WriteButton type="find" />
         </>
     );
 };
