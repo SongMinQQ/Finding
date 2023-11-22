@@ -66,7 +66,7 @@ const WritePostFindScreen = ({ navigation }) => {
     ];
 
     //image  address
-    const [imageUrl, setImageUrl] = useState('');
+    const [selectImageUrl, setImageUrl] = useState('');
     //권한 요청
     const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
@@ -136,7 +136,7 @@ const WritePostFindScreen = ({ navigation }) => {
 
     const handleSubmit = async () => {
         try {
-            const firebaseImageUrl = await uploadImageToFirebase(imageUrl);
+            const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
 
             const docRef = await addDoc(collection(fireStoreDB, "findBoard"), {
                 ...postContent,
@@ -169,7 +169,7 @@ const WritePostFindScreen = ({ navigation }) => {
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>
                         <Image
-                            source={imageUrl ? { uri: imageUrl } : require('../../img/imageSelectDefault.png')}
+                            source={selectImageUrl ? { uri: selectImageUrl } : require('../../img/imageSelectDefault.png')}
                             style={styles.mainImage}
                         />
                     </TouchableOpacity>
