@@ -136,7 +136,7 @@ const WritePostFindScreen = ({ navigation }) => {
 
     const handleSubmit = async () => {
         try {
-            const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
+            const firebaseImageUrl = await uploadImageToFirebase(imageUrl);
 
             const docRef = await addDoc(collection(fireStoreDB, "findBoard"), {
                 ...postContent,
@@ -169,7 +169,7 @@ const WritePostFindScreen = ({ navigation }) => {
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>
                         <Image
-                            source={selectImageUrl ? { uri: selectImageUrl } : require('../../img/imageSelectDefault.png')}
+                            source={imageUrl ? { uri: imageUrl } : require('../../img/imageSelectDefault.png')}
                             style={styles.mainImage}
                         />
                     </TouchableOpacity>

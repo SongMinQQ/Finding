@@ -59,49 +59,52 @@ const FindBoard = () => {
         }
     };
 
-    const findItemData = [...Array(21)].map((_, index) => ({
-        id: index,
-        imgURL: `https://picsum.photos/id/${index}/200/200`,
-        itemName: `물건 ${index + 1}`,
-        category: `전자기기`,
-        location: `위치 ${index + 1}`,
-        date: `2023-10-${index + 1}`,
-        money: `${index + 1}만원`,
-        tradeType: `직거래`,
-        tradeLocation: `천안`,
-        articleExplain: `물건 ${index + 1}을 천안에서 찾았습니다. 연락주세요.`
-    }));
+    useEffect(() => {
+        fetchDocs();
+    },[])
+    // const findItemData = [...Array(21)].map((_, index) => ({
+    //     id: index,
+    //     imgURL: `https://picsum.photos/id/${index}/200/200`,
+    //     itemName: `물건 ${index + 1}`,
+    //     category: `전자기기`,
+    //     location: `위치 ${index + 1}`,
+    //     date: `2023-10-${index + 1}`,
+    //     money: `${index + 1}만원`,
+    //     tradeType: `직거래`,
+    //     tradeLocation: `천안`,
+    //     articleExplain: `물건 ${index + 1}을 천안에서 찾았습니다. 연락주세요.`
+    // }));
 
     return (
         <>
             <ScrollView style={{ backgroundColor: '#fff' }}>
                 <View style={styles.container}>
-                    {findItemData.map((item) => (
+                    {posts.map((item) => (
                         <TouchableOpacity key={item.id} style={styles.item} onPress={() => navigation.navigate("FindBoardDetail", {
-                            imgURL: item.imgURL,
-                            itemName: item.itemName,
-                            category: item.category,
-                            location: item.location,
-                            date: item.date,
-                            money: item.money,
+                            imgURL: item.imgUrl,
+                            itemName: item.title,
+                            // category: item.category,
+                            location: item.findLocation,
+                            // date: item.date,
+                            money: item.thankMoney,
                             tradeType: item.tradeType,
                             tradeLocation: item.tradeLocation,
-                            articleExplain: item.articleExplain,
+                            articleExplain: item.description,
                         })}>
                             <Image
-                                source={{ uri: item.imgURL }}
+                                source={{ uri: item.imgUrl }}
                                 style={styles.itemImage}
                             />
                             <View style={styles.textContainer}>
-                                <Text style={styles.itemName}>{item.itemName}</Text>
-                                <Text style={styles.itemText}>{item.location}</Text>
-                                <Text style={styles.itemText}>{item.date}</Text>
+                                <Text style={styles.itemName}>{item.title}</Text>
+                                <Text style={styles.itemText}>{item.findLocation}</Text>
+                                {/* <Text style={styles.itemText}>{item.date}</Text> */}
                                 <TouchableOpacity style={styles.itemUser}
                                     onPress={() => {
                                         // navigation.navigate('Home', {
                                         // screen: '프로필',})
 
-                                        fetchDocs();
+                                        // fetchDocs();
                                         console.log(posts);
 
                                     }}>
