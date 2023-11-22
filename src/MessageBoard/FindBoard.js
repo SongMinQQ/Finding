@@ -79,9 +79,9 @@ const FindBoard = () => {
         <>
             <ScrollView style={{ backgroundColor: '#fff' }}>
                 <View style={styles.container}>
-                    {posts.map((item) => (
-                        <TouchableOpacity key={item.id} style={styles.item} onPress={() => navigation.navigate("FindBoardDetail", {
-                            imgURL: item.imgUrl,
+                    {posts.map((item, index) => (
+                        <TouchableOpacity key={index} style={styles.item} onPress={() => navigation.navigate("FindBoardDetail", {
+                            imgURL: item.imageUrl,
                             itemName: item.title,
                             // category: item.category,
                             location: item.findLocation,
@@ -92,7 +92,7 @@ const FindBoard = () => {
                             articleExplain: item.description,
                         })}>
                             <Image
-                                source={{ uri: item.imgUrl }}
+                                source={{ uri: item.imageUrl }}
                                 style={styles.itemImage}
                             />
                             <View style={styles.textContainer}>
