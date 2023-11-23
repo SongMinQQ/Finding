@@ -1,263 +1,230 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   Button,
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Dimensions,
 } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import PickerSelect from 'react-native-picker-select';
 
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+
+
 export default function JoinMembership({ navigation }) {
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff',
+    },
+  };
+
   // 사용자 입력값
   const [id, setID] = useState('');   // 아이디                        
   const [password, setPassword] = useState('');   // 비밀번호
   const [confirmPassword, setConfirmPassword] = useState('');   // 비밀번호 확인
   const [name, setName] = useState('');   // 이름
-  const [birthday, setBirthday] = useState('');   // 생일
+  const [birthday, setBirthday] = useState(null);   // 출생연도
   const [email, setEmail] = useState('');   // 이메일
   const [phoneNumber, setPhoneNumber] = useState('');   // 전화번호
-  const [error, setError] = useState('');   // 에러 메시지 
+  const [error, setError] = useState(null);   // 에러 메시지 
   const [status, setStatus] = useState(false);   // 상태
   const [verificationCode, setVerificationCode] = useState('');   // 인증 코드 
-  const [selectedYear, setSelectedYear] = useState(null);   //년도
-  const [selectedMonth, setSelectedMonth] = useState(null);   // 월
-  const [selectedDay, setSelectedDay] = useState(null);   //일
-  
-  // const birth = () => {
-  //   const years = Array.from({ length: 83 }, (_, index) => 1940 + index);// 1940부터 2022까지 년도
-  //   const months = Array.from({ length: 12 }, (_, index) => index + 1);// 1부터 12까지의 월
-  //   const days = Array.from({ length: 31 }, (_, index) => index + 1);    // 1부터 31까지의 일
-  // }
- 
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (birthday) => {
+    setBirthday(birthday);
+    hideDatePicker();
+  };
+
+  //모달 관련 함수, 상태변수
+  const [modal, setModal] = useState(false);
+
+  const openModal = () => {
+    setModal(true);
+  }
+
+  const closeModal = () => {
+    setModal(false);
+  }
 
   const handleVerification = () => {
     // 본인 인증 기능 -> 전화번호로 인증번호 요청버튼 누르면 날라가는 기능 
   };
 
   const handleConfirmation = () => {
-    if (status) {
-      Alert.alert('가입 성공!');
-    } else {
-      Alert.alert('입력값을 확인하세요.');
-    }
+    Alert.alert('인증 번호 입력');
   };  // 인증번호 받고 값이 맞으면 가입 성공 아니면 다시 
 
   const handleSignup = () => {
-    if (!email || !id || !password || !confirmPassword || !birthday || !name) {
-      alert('모든 값을 입력해주세요.'); // 필수값이 비어있으면 알림을 띄움 
-      return;
-    }
-    // 회원가입 처리 기능 (firebase, api)
-  };
-
-  const hasError = () => {
     let newError = '';
-  
-    if (id.length < 8 || password.length < 8) {
+    if(!email || !password || !confirmPassword || !birthday || !name){
+      newError = '입력이 안된 값이 있습니다.';
+    }
+    else if (email.length < 8 || password.length < 8) {
       newError = '아이디와 비밀번호는 8자 이상이어야 합니다.';
     } else if (id.length > 20 || password.length > 20) {
       newError = '아이디와 비밀번호는 20자 이하여야 합니다.';
     } else if (password !== confirmPassword) {
-      newError = '비밀번호가 일치하지 않습니다.';
+      newError = '비밀번호와 비밀번호 확인이 일치하지 않습니다.';
     } else {
-      newError = '';
+      navigation.navigate("Login");
     }
 
     setError(newError);
   };
 
-  useEffect(() => {
-    hasError();
-
-    if (password === confirmPassword && password.length >= 8) {
-      setStatus(true);
-    } else {
-      setStatus(false);
-    }
-  }, [password, confirmPassword]);
-
-  const allFieldsFilled = id && password && confirmPassword && name && birthday && email;
-  const isSignupEnabled = allFieldsFilled && password === confirmPassword;
-  
   return (
     <View style={{
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
-      padding: 25,
+      padding: 10,
     }}>
-      <Text style={{ transform: [{ scale: 3 }], marginBottom: 100 , color: '#3498db' }}> Finding </Text>
-    
+      <Text style={{ fontSize: 30, alignSelf: 'flex-start', fontWeight: 'bold' }}> Finding </Text>
+
       {/* 아이디 입력 */}
-      <TextInput
-        style={{ ...styles.input, margintop: 10 }}
-        value={id}
-        placeholder="아이디 입력"
-        placeholderTextColor={'#ddd'}
-        returnKeyType="next"
-        autoCorrect={false}
-        keyboardType="default"
-        onChangeText={(text) => setID(text)}
-      />
-
-      {/* 비밀번호 입력 */}
-      <TextInput
-        style={styles.input}
-        value={password}
-        placeholder="비밀번호 입력"
-        placeholderTextColor={'#ddd'}
-        returnKeyType="next"
-        secureTextEntry={true}
-        autoCorrect={false}
-        keyboardType="visble-password"
-        onChangeText={(text) => setPassword(text)}
-      />
-
-      {/* 비밀번호 재확인 입력 */}
-      <TextInput
-        style={styles.input}
-        value={confirmPassword}
-        placeholder="비밀번호 확인"
-        placeholderTextColor={'#ddd'}
-        returnKeyType="next"
-        secureTextEntry={true}
-        autoCorrect={false}
-        keyboardType="visble-password"
-        onChangeText={(text) => setConfirmPassword(text)}
-      />
-
-      {/* 이름 입력 */}
-      <TextInput
-        style={styles.input}
-        value={name}
-        placeholder="이름 입력"
-        placeholderTextColor={'#ddd'}
-        returnKeyType="next"
-        autoCorrect={false}
-        keyboardType="default"
-        onChangeText={(text) => setName(text)}
-      />
-      
-      {/* 생일 입력 */}
-      {/* <TextInput
-        style={styles.input}
-        value={birthday}
-        placeholder="생일 설정"
-        placeholderTextColor={'#ddd'}
-        returnKeyType="next"
-        autoCorrect={false}
-        keyboardType="default"
-        onChangeText={(text) => setBirthday(text)}
-      /> */}
-
-      {/* 출생 연도 */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>출생 연도</Text>
-        <Picker
-          selectedValue={selectedYear}
-          onValueChange={(itemValue) => setSelectedYear(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="선택" value={null} />
-          {/* {years.map((year) => (
-            <Picker.Item key={year} label={year.toString()} value={year} />
-          ))} */}
-        </Picker>
-      </View>
-
-      {/* 월 */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>월</Text>
-        <Picker
-          selectedValue={selectedMonth}
-          onValueChange={(itemValue) => setSelectedMonth(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="선택" value={null} />
-          {/* {months.map((month) => (
-            <Picker.Item key={month} label={month.toString()} value={month} />
-          ))} */}
-        </Picker>
-      </View>
-
-      {/* 일 */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>일</Text>
-        <Picker
-          selectedValue={selectedDay}
-          onValueChange={(itemValue) => setSelectedDay(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="선택" value={null} />
-          {/* {days.map((day) => (
-            <Picker.Item key={day} label={day.toString()} value={day} />
-          ))} */}
-        </Picker>
-      </View>
-
-      {/* 이메일 입력 */}
-      <TextInput
-        style={styles.input}
+      <TextInput style={styles.input}
+        mode="outlined"
         value={email}
-        placeholder="이메일 주소 입력"
-        placeholderTextColor={'#ddd'}
-        returnKeyType="done"
+        placeholder="이메일 입력"
+        theme={theme}
+        placeholderTextColor={'#BDBDBD'}
         autoCorrect={false}
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
       />
-      
+
+      {/* 비밀번호 입력 */}
+      <TextInput style={styles.input}
+        mode="outlined"
+        value={password}
+        placeholder="비밀번호 입력"
+        theme={theme}
+        placeholderTextColor={'#BDBDBD'}
+        secureTextEntry={true}
+        autoCorrect={false}
+        onChangeText={(text) => setPassword(text)}
+      />
+
+      {/* 비밀번호 재확인 입력 */}
+      <TextInput style={styles.input}
+        mode="outlined"
+        value={confirmPassword}
+        placeholder="비밀번호 확인"
+        theme={theme}
+        placeholderTextColor={'#BDBDBD'}
+        secureTextEntry={true}
+        autoCorrect={false}
+        onChangeText={(text) => setConfirmPassword(text)}
+      />
+
+      {/* 이름 입력 */}
+      <TextInput style={styles.input}
+        mode="outlined"
+        value={name}
+        placeholder="이름 입력"
+        theme={theme}
+        placeholderTextColor={'#BDBDBD'}
+        autoCorrect={false}
+        onChangeText={(text) => setName(text)}
+      />
+
+      {/* 출생 연도 */}
+      <TextInput
+        mode="outlined"
+        style={styles.input}
+        placeholder="출생연도"
+        placeholderTextColor={'#BDBDBD'}
+        value={birthday ? birthday.toLocaleDateString('ko-KR') : ""}
+        onFocus={showDatePicker}
+        theme={theme}
+        onPressIn={openModal}
+      />
+
+
       {/* 휴대전화번호 입력란과 '인증' 버튼 */}
       <View style={styles.inlineContainer}>
         <TextInput
-          style={styles.inlineInput}
+          mode="outlined"
+          style={[styles.input,{width: '80%'}]}
           value={phoneNumber}
           placeholder="휴대전화번호 입력"
           placeholderTextColor={'#ddd'}
-          returnKeyType="done"
+          theme={theme}
           autoCorrect={false}
           keyboardType="phone-pad"
           onChangeText={(text) => setPhoneNumber(text)}
-      />
+        />
         <TouchableOpacity style={styles.Button} onPress={handleVerification}>
-        <Text style={{ color: 'white' }}>인증</Text>
+          <Text style={{ color: 'white' }}>인증</Text>
         </TouchableOpacity>
       </View>
 
       {/* 인증번호 입력란과 '확인' 버튼 */}
       <View style={styles.inlineContainer}>
         <TextInput
-          style={styles.inlineInput}
+          mode="outlined"
+          style={[styles.input,{width: '80%'}]}
           value={verificationCode}
           placeholder="인증번호 입력"
+          theme={theme}
           placeholderTextColor={'#ddd'}
-          returnKeyType="done"
           autoCorrect={false}
           keyboardType="phone-pad"
           onChangeText={(text) => setVerificationCode(text)}
         />
-          <TouchableOpacity style={styles.Button} onPress={handleConfirmation}>
+        <TouchableOpacity style={styles.Button} onPress={handleConfirmation}>
           <Text style={{ color: 'white' }}>확인</Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
       </View>
 
+      {error && <Text style={{ color: 'red' }}>{error}</Text> }
       {/* 회원가입 버튼 */}
       <TouchableOpacity
-        style={allFieldsFilled && isSignupEnabled ? styles.signupButton : styles.signupDisableButton}
-        onPress={allFieldsFilled && isSignupEnabled ? handleSignup : null}
-        disabled={!allFieldsFilled || !isSignupEnabled}>
+        style={styles.signupButton}
+        onPress={handleSignup}
+        >
         <Text style={styles.signupText}>회원가입</Text>
       </TouchableOpacity>
 
-      <Text style={{ color: 'red' }}>{error}</Text>
+      {Platform.OS === 'ios' ? <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+        locale="ko-KR"
+      /> :
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date" // 또는 "time", "datetime"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          locale="ko-KR"
+        // display = "calendar"
+        // value={new Date()}
+        // display="default"
+        />}
     </View>
   );
- }
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -274,12 +241,9 @@ const styles = StyleSheet.create({
 
   input: {
     width: '100%',
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 0,
-    padding: 10,
-    fontSize: 20,
+    backgroundColor: "#fff",
+    height: WINDOW_HEIGHT * 0.06,
+    marginBottom: 5,
   },
 
   inputWithMargin: {
@@ -304,6 +268,8 @@ const styles = StyleSheet.create({
   },
 
   Button: {
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#3498db',
     padding: 10,
     borderRadius: 5,
@@ -314,7 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3498db',
     padding: 15,
     borderRadius: 10,
-    marginTop: 50,
+    marginTop: 10,
   },
 
   signupText: {
