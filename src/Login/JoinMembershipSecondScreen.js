@@ -2,105 +2,121 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
+  Dimensions,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'expo-image';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
-export default function SecondScreen({ navigation }) {
-  // 사용자 입력값을 상태로 관리
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [name, setName] = useState('');
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+
+const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.18;
+
+export default function JoinMembershipSecondScreen({ navigation }) {
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff',
+    },
+  };
+
+  // 이름
+  const [name, setName] = useState('');   // 이름
+  const [error, setError] = useState(null);   // 에러 메시지 
+  //image  address
+  const [selectImageUrl, setImageUrl] = useState('');
+  //권한 요청
+  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  const uploadImage = async () => {
+    // 권한 확인 코드: 권한 없으면 물어보고, 승인하지 않으면 함수 종료
+    if (!status?.granted) {
+      const permission = await requestPermission();
+      if (!permission.granted) {
+        return null;
+      }
+    }
+    // 이미지 업로드 기능
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+      aspect: [1, 1]
+    });
+    if (result.cancelled) {
+      return null; // 이미지 업로드 취소한 경우
+    }
+    // 이미지 업로드 결과 및 이미지 경로 업데이트
+    console.log(result);
+    setImageUrl(result.assets[0].uri);
+  };
 
   // 회원가입 버튼을 눌렀을 때의 처리
   const handleSignup = () => {
     // 입력값이 비어있는지 확인
-    if (!email || !username || !password || !confirmPassword || !birthday || !name) {
-      alert('모든 값을 입력해주세요.');
-      return;
+    let newError = '';
+    if (!name) {
+      newError = '닉네임을 입력해주세요.';
+    } else if (name.length < 3) {
+      newError = '닉네임을 3글자 이상 입력해주세요.';
+    } else {
+      navigation.navigate("Join Membership Third");
     }
 
-    // 여기서 파이어베이스 또는 API를 이용하여 회원가입 처리를 할 수 있습니다.
-    // 이후 세 번째 창으로 네비게이션을 이용해 이동할 수 있습니다.
-
-    // navigation.navigate('ThirdScreen'); // 예시로 적어둔 세 번째 창으로 이동
+    setError(newError);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>당신의 정보를 입력해주세요</Text>
+      <View style={{ width: '100%', alignItems: 'center' }}>
+        <TouchableOpacity
+          style={{ marginBottom: 20, position: 'relative' }}
+          onPress={uploadImage}>
+          <Image
+            source={selectImageUrl ? { uri: selectImageUrl } : require('../../img/defaultProfile.png')}
+            style={styles.profileImage}
+          />
+          <View style={styles.cameraIcon}>
+            <Fontisto name="camera" size={PROFILE_IMAGE_SIZE * 0.13} color="#FFF" />
+          </View>
 
-      {/* 이메일 입력란 */}
-      <TextInput
-        style={styles.input}
-        placeholder="이메일 주소"
-        keyboardType="email-address"
-        autoCorrect={false}
-        returnKeyType="send"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-      />
+        </TouchableOpacity>
+        <View style={styles.textInputBox}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.textInputName}>닉네임</Text>
+            <Text style={{ color: '#ff0000', fontWeight: 'bold' }}>*</Text>
+          </View>
+          <TextInput style={styles.input}
+            mode="outlined"
+            value={name}
+            placeholder="닉네임 입력"
+            theme={theme}
+            placeholderTextColor={'#BDBDBD'}
+            autoCorrect={false}
+            onChangeText={(text) => setName(text)}
+          />
+        </View>
+      </View>
 
-      {/* 아이디 입력란 */}
-      <TextInput
-        style={styles.input}
-        placeholder="아이디"
-        autoCorrect={false}
-        returnKeyType="send"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-      />
 
-      {/* 비밀번호 입력란 */}
-      <TextInput
-        style={styles.input}
-        placeholder="비밀번호"
-        secureTextEntry={true}
-        autoCorrect={false}
-        returnKeyType="send"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-      />
 
-      {/* 비밀번호 확인 입력란 */}
-      <TextInput
-        style={styles.input}
-        placeholder="비밀번호 확인"
-        secureTextEntry={true}
-        autoCorrect={false}
-        returnKeyType="send"
-        value={confirmPassword}
-        onChangeText={(text) => setConfirmPassword(text)}
-      />
-
-      {/* 생일 입력란 */}
-      <TextInput
-        style={styles.input}
-        placeholder="생일"
-        autoCorrect={false}
-        returnKeyType="send"
-        value={birthday}
-        onChangeText={(text) => setBirthday(text)}
-      />
-
-      {/* 이름 입력란 */}
-      <TextInput
-        style={styles.input}
-        placeholder="이름"
-        autoCorrect={false}
-        returnKeyType="send"
-        value={name}
-        onChangeText={(text) => setName(text)}
-      />
-
-      {/* 회원가입 버튼 */}
-      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
-        <Text style={styles.signupText}>회원가입</Text>
-      </TouchableOpacity>
+      {/* 경고 메세지 및 회원가입 버튼 */}
+      <View style={{ width: '100%' }}>
+        {error && <Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text>}
+        <TouchableOpacity
+          style={styles.signupButton}
+          onPress={handleSignup}
+        >
+          <Text style={styles.signupText}>가입완료</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -108,29 +124,58 @@ export default function SecondScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 10,
+    paddingTop: 20,
+    paddingBottom: 50,
+  },
+  profileImage: {
+    width: PROFILE_IMAGE_SIZE,
+    height: PROFILE_IMAGE_SIZE,
+    borderRadius: PROFILE_IMAGE_SIZE / 2,
+  },
+  textInputBox: {
+    width: '100%',
+    marginBottom: 15,
+  },
+  textInputName: {
+    fontSize: WINDOW_HEIGHT * 0.022,
+    marginBottom: 10,
+  },
+  cameraIcon: {
+    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
+    bottom: 0, 
+    right: 0, 
+    width: PROFILE_IMAGE_SIZE * 0.31,
+    height: PROFILE_IMAGE_SIZE * 0.31,
+    borderWidth: 2,
+    borderColor: '#fff',
+    backgroundColor: '#444444', 
+    borderRadius:  PROFILE_IMAGE_SIZE * 0.31 / 2, 
+    padding: 5,
   },
   input: {
-    width: '80%',
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 15,
-    padding: 10,
+    width: '100%',
+    backgroundColor: "#fff",
+    height: WINDOW_HEIGHT * 0.06,
+    marginBottom: 5,
   },
   signupButton: {
-    backgroundColor: '#3498db',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#007bff',
     padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
+    borderRadius: 5,
+    marginTop: 5,
   },
   signupText: {
     color: 'white',
-    fontSize: 18,
+    fontWeight: 'bold',
+    fontSize: WINDOW_HEIGHT * 0.02,
   },
 });
