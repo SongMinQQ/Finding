@@ -1,48 +1,37 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function ThirdScreen({ navigation }) {
-  // 본인인증을 위한 상태 관리
-  const [verificationCode, setVerificationCode] = useState('');
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+const WINDOW_WIDTH = Dimensions.get('window').width;
 
-  // 본인인증 확인 버튼을 눌렀을 때의 처리
-  const handleVerification = () => {
-    // 여기서 API를 이용하여 본인인증 처리를 할 수 있습니다.
-    // 성공 시 다음 화면으로 네비게이션을 이용해 이동할 수 있습니다.
+// 아이콘 사이즈
+const ICON_CIRCLE_SIZE = WINDOW_HEIGHT * 0.15; 
+// 결제 완료 메세지 사이즈
+const MESSAGE_FONT_SIZE = WINDOW_HEIGHT * 0.03; 
+// 버튼 높이
+const BUTTON_HEIGHT = WINDOW_HEIGHT * 0.06; 
+// 버튼 너비
+const BUTTON_WIDTH = WINDOW_WIDTH * 0.35;
+// 버튼 텍스트 사이즈
+const BUTTON_TEXT_SIZE = WINDOW_HEIGHT * 0.02; 
 
-    // navigation.navigate('SuccessScreen'); // 예시로 적어둔 성공 화면으로 이동
-  };
+export default function JoinMembershipThirdScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>입력한 정보를 확인해주세요</Text>
+      <View style={styles.checkIconCircle}>
+        <FontAwesome name="check-circle" size={ICON_CIRCLE_SIZE} color="#007bff" />
+      </View>
 
-      {/* 이메일, 아이디, 비밀번호, 생일, 이름을 보여주는 부분 */}
-      <Text>Email: 입력한 이메일 주소</Text>
-      <Text>아이디: 입력한 아이디</Text>
-      <Text>비밀번호: *********</Text>
-      <Text>생일: 입력한 생일</Text>
-      <Text>이름: 입력한 이름</Text>
+      <Text style={[styles.successMessage, { fontSize: MESSAGE_FONT_SIZE }]}>회원가입에 성공하였습니다!</Text>
 
-      {/* 본인인증 코드 입력란 */}
-      <TextInput
-        style={styles.input}
-        placeholder="본인인증 코드"
-        autoCorrect={false}
-        returnKeyType="send"
-        value={verificationCode}
-        onChangeText={(text) => setVerificationCode(text)}
-      />
-
-      {/* 본인인증 확인 버튼 */}
-      <TouchableOpacity style={styles.verificationButton} onPress={handleVerification}>
-        <Text style={styles.verificationText}>본인인증 확인</Text>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => { navigation.navigate("Login"); }}
+      >
+        <FontAwesome name="chevron-left" size={BUTTON_TEXT_SIZE} color="#007bff" />
+        <Text style={styles.backButtonText}>돌아가기</Text>
       </TouchableOpacity>
     </View>
   );
@@ -51,29 +40,32 @@ export default function ThirdScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
+  checkIconCircle: {
+    marginBottom: WINDOW_HEIGHT * 0.02,
   },
-  input: {
-    width: '80%',
-    height: 40,
-    borderColor: 'gray',
+  successMessage: {
+    fontWeight: 'bold',
+    marginBottom: WINDOW_HEIGHT * 0.04,
+  },
+  backButton: {
+    backgroundColor: '#fff',
+    width: BUTTON_WIDTH,
+    height: BUTTON_HEIGHT,
+    flexDirection: 'row',
     borderWidth: 1,
-    marginBottom: 15,
-    padding: 10,
+    borderColor: '#007bff',
+    paddingHorizontal: WINDOW_HEIGHT * 0.02,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: WINDOW_HEIGHT * 0.005,
   },
-  verificationButton: {
-    backgroundColor: '#3498db',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  verificationText: {
-    color: 'white',
-    fontSize: 18,
+  backButtonText: {
+    color: '#007bff',
+    fontSize: BUTTON_TEXT_SIZE,
+    fontWeight: 'bold',
   },
 });
