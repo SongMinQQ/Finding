@@ -7,17 +7,29 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
+import { auth } from '../../FireBase/DB';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
+import { fireStoreDB } from '../../FireBase/DB';
+import { collection, addDoc } from "firebase/firestore";
+
+import { storage } from '../../FireBase/DB';
+import { ref, uploadBytes, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.18;
 
-export default function JoinMembershipSecondScreen({ navigation }) {
+export default function JoinMembershipSecondScreen({ navigation: {navigate}, route }) {
+  const navigation = useNavigation();
+
   const theme = {
     ...DefaultTheme,
     myOwnProperty: true,
@@ -31,7 +43,7 @@ export default function JoinMembershipSecondScreen({ navigation }) {
   const [name, setName] = useState('');   // 이름
   const [error, setError] = useState(null);   // 에러 메시지 
   //image  address
-  const [selectImageUrl, setImageUrl] = useState('');
+  const [selectImageUrl, setImageUrl] = useState(null);
   //권한 요청
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
@@ -53,25 +65,72 @@ export default function JoinMembershipSecondScreen({ navigation }) {
     if (result.cancelled) {
       return null; // 이미지 업로드 취소한 경우
     }
-    // 이미지 업로드 결과 및 이미지 경로 업데이트
     console.log(result);
+    // 이미지 업로드 결과 및 이미지 경로 업데이트
+    
     setImageUrl(result.assets[0].uri);
   };
 
-  // 회원가입 버튼을 눌렀을 때의 처리
-  const handleSignup = () => {
-    // 입력값이 비어있는지 확인
-    let newError = '';
-    if (!name) {
-      newError = '닉네임을 입력해주세요.';
-    } else if (name.length < 3) {
-      newError = '닉네임을 3글자 이상 입력해주세요.';
-    } else {
-      navigation.navigate("Join Membership Third");
-    }
 
-    setError(newError);
+  const uploadImageToFirebase = async (imageUri) => {
+    // 이미지 파일 이름 (예: image_12345.jpg)
+    const fileName = `image_${new Date().getTime()}.jpg`;
+    const storageRef = ref(storage, `profileImages/${fileName}`);
+  
+    try {
+      // 이미지를 Blob 형태로 변환
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+
+      // Blob을 Firebase Storage에 업로드
+      await uploadBytesResumable(storageRef, blob);
+
+      // 업로드된 이미지의 URL 가져오기
+      const url = await getDownloadURL(storageRef);
+
+      return url;
+    } catch (error) {
+      console.error("Error uploading image: ", error);
+      return null;
+    }
   };
+
+
+  const userData = {
+    email: route.params.email,
+    // password: route.params.password,
+    phoneNumber: route.params.phoneNumber,
+  }
+  // 회원가입 버튼을 눌렀을 때의 처리
+  const handleSignup = async () => {
+    let newError = '';
+    try {
+      if (!name) {
+        newError = '닉네임을 입력해주세요.';
+      } else if (name.length < 3) {
+        newError = '닉네임을 3글자 이상 입력해주세요.';
+      } else {
+        const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
+        const userCredential = await createUserWithEmailAndPassword(auth, route.params.email, route.params.password);
+        const user = userCredential.user;
+        await addDoc(collection(fireStoreDB, "users"), {
+          ...userData,
+          uid: user.uid,
+          name: name,
+          profileImageURL: firebaseImageUrl,
+        });
+        console.log("회원가입 성공, Firestore에 데이터 저장됨");
+        navigation.navigate("Join Membership Third");
+      }
+      setError(newError);
+    }catch (e) {
+      console.log("Error adding document: ", e);
+    }
+    
+
+  };
+
+
 
   return (
     <View style={styles.container}>
