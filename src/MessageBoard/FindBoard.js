@@ -109,7 +109,6 @@ const FindBoard = () => {
                             })}>
                             <Image
                                 source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}
-                                source={{ uri: item.imageUrl }}
                                 style={styles.itemImage}
                             />
                             <View style={styles.textContainer}>
