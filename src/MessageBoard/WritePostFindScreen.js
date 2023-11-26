@@ -47,22 +47,22 @@ const WritePostFindScreen = ({ navigation }) => {
     };
 
     const moneyList = [
-        { label: '필요없음', value: 'noMoney' },
-        { label: '1만원', value: '10000' },
-        { label: '2만원', value: '20000' },
-        { label: '3만원', value: '30000' },
-        { label: '4만원', value: '40000' },
-        { label: '5만원', value: '50000' },
-        { label: '6만원', value: '60000' },
-        { label: '7만원', value: '70000' },
-        { label: '8만원', value: '80000' },
-        { label: '9만원', value: '90000' },
-        { label: '10만원', value: '10000' },
+        { label: '필요없음', value: '필요없음' },
+        { label: '1만원', value: '1만원' },
+        { label: '2만원', value: '2만원' },
+        { label: '3만원', value: '3만원' },
+        { label: '4만원', value: '4만원' },
+        { label: '5만원', value: '5만원' },
+        { label: '6만원', value: '6만원' },
+        { label: '7만원', value: '7만원' },
+        { label: '8만원', value: '8만원' },
+        { label: '9만원', value: '9만원' },
+        { label: '10만원', value: '10만원' },
     ];
 
     const tradeList = [
-        { label: '직거래', value: 'meetTrade' },
-        { label: '택배', value: 'deliveryTrade' },
+        { label: '직거래', value: '직거래' },
+        { label: '택배', value: '택배' },
     ];
 
     //image  address
@@ -113,7 +113,7 @@ const WritePostFindScreen = ({ navigation }) => {
     const uploadImageToFirebase = async (imageUri) => {
         // 이미지 파일 이름 (예: image_12345.jpg)
         const fileName = `findboard_image_${new Date().getTime()}.jpg`;
-        const storageRef = ref(storage, `images/${fileName}`);
+        const storageRef = ref(storage, `findBoard/${fileName}`);
       
         try {
           // 이미지를 Blob 형태로 변환
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
         width: ICON_AREA_LAYOUT_HEIGHT,
         height: ICON_AREA_LAYOUT_HEIGHT,
         borderRadius: ICON_AREA_LAYOUT_HEIGHT / 2,
-        borderWidth: 5,
+        borderWidth: 2,
         borderColor: '#000',
         marginBottom: 10,
     },
