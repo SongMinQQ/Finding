@@ -13,7 +13,7 @@ import PickerSelect from 'react-native-picker-select';
 import { fireStoreDB } from '../../FireBase/DB';
 import { storage } from '../../FireBase/DB';
 import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -112,7 +112,7 @@ const WritePostFindScreen = ({ navigation }) => {
 
     const uploadImageToFirebase = async (imageUri) => {
         // 이미지 파일 이름 (예: image_12345.jpg)
-        const fileName = `image_${new Date().getTime()}.jpg`;
+        const fileName = `findboard_image_${new Date().getTime()}.jpg`;
         const storageRef = ref(storage, `images/${fileName}`);
       
         try {
@@ -121,7 +121,7 @@ const WritePostFindScreen = ({ navigation }) => {
           const blob = await response.blob();
       
           // Blob을 Firebase Storage에 업로드
-          await uploadBytes(storageRef, blob);
+          await uploadBytesResumable(storageRef, blob);
       
           // 업로드된 이미지의 URL 가져오기
           const url = await getDownloadURL(storageRef);
@@ -136,7 +136,7 @@ const WritePostFindScreen = ({ navigation }) => {
 
     const handleSubmit = async () => {
         try {
-            const firebaseImageUrl = await uploadImageToFirebase(imageUrl);
+            const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
 
             const docRef = await addDoc(collection(fireStoreDB, "findBoard"), {
                 ...postContent,
@@ -169,7 +169,7 @@ const WritePostFindScreen = ({ navigation }) => {
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>
                         <Image
-                            source={imageUrl ? { uri: imageUrl } : require('../../img/imageSelectDefault.png')}
+                            source={selectImageUrl ? { uri: selectImageUrl } : require('../../img/imageSelectDefault.png')}
                             style={styles.mainImage}
                         />
                     </TouchableOpacity>

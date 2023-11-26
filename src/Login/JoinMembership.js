@@ -23,10 +23,10 @@ export default function JoinMembership({ navigation }) {
     },
   };
 
-  // 사용자 입력값                
+  // 사용자 입력값
+  const [email, setEmail] = useState('');   // 이메일
   const [password, setPassword] = useState('');   // 비밀번호
   const [confirmPassword, setConfirmPassword] = useState('');   // 비밀번호 확인
-  const [email, setEmail] = useState('');   // 이메일
   const [phoneNumber, setPhoneNumber] = useState('');   // 전화번호
   const [error, setError] = useState(null);   // 에러 메시지 
   const [verificationCode, setVerificationCode] = useState('');   // 인증 코드 
@@ -53,7 +53,11 @@ export default function JoinMembership({ navigation }) {
     } else if (!isVerificated) {
       newError = '휴대폰 인증이 안되었습니다.';
     } else {
-      navigation.navigate("Join Membership Second");
+      navigation.navigate("Join Membership Second",{
+        email: email,
+        password: password,
+        phoneNumber: phoneNumber,
+      });
     }
 
     setError(newError);
