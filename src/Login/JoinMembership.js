@@ -44,7 +44,7 @@ export default function JoinMembership({ navigation }) {
     if (!email || !password || !confirmPassword) {
       newError = '입력이 안된 값이 있습니다.';
     }
-    else if (email.length < 8 || password.length < 8) {
+    else if (email.length < 6 || password.length < 6) {
       newError = '아이디와 비밀번호는 8자 이상이어야 합니다.';
     } else if (email.length > 20 || password.length > 20) {
       newError = '아이디와 비밀번호는 20자 이하여야 합니다.';

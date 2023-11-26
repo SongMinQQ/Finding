@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import WriteButton from './WriteButton';
+import { fireStoreDB } from '../../FireBase/DB';
+import { collection, getDocs } from "firebase/firestore";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -13,48 +15,56 @@ const FONT_SIZE_TEXT = WINDOW_HEIGHT * 0.019;
 const LostBoard = () => {
     const navigation = useNavigation();
 
-    const lostItemData = [...Array(21)].map((_, index) => ({
-        id: index,
-        imgURL: `https://picsum.photos/id/${index + 21}/200/200`,
-        itemName: `물건 ${index + 22}`,
-        category: `전자기기`,
-        location: `위치 ${index + 22}`,
-        date: `2023-10-${index + 1}`,
-        money: `${index+1}만원`,
-        tradeType: `직거래`,
-        tradeLocation: `천안`,
-        articleExplain: `물건 ${index + 22}을 천안에서 잃어버렸습니다. 찾은분 연락주세요.`
-    }));
+    const [posts, setPosts] = useState([]);
+
+    const fetchDocs = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(fireStoreDB, "lostBoard"));
+            setPosts(prevState => {
+                const fetchedPosts = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                return [...prevState, ...fetchedPosts];
+            });
+        } catch (error) {
+            console.error("Error fetching documents: ", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDocs();
+    }, [])
 
     return (
         <>
-            <ScrollView style={{backgroundColor: '#fff'}}>
+            <ScrollView style={{ backgroundColor: '#fff' }}>
                 <View style={styles.container}>
-                    {lostItemData.map((item) => (
-                        <TouchableOpacity key={item.id} style={styles.item} onPress={() => navigation.navigate("LostBoardDetail", {
-                            imgURL: item.imgURL,
-                            itemName: item.itemName,
-                            category: item.category,
-                            location: item.location,
-                            date: item.date,
-                            money: item.money,
-                            tradeType: item.tradeType,
-                            tradeLocation: item.tradeLocation,
-                            articleExplain: item.articleExplain,
-                        })}>
+                    {posts.map((item) => (
+                        <TouchableOpacity key={item.id}
+                            style={styles.item}
+                            onPress={() => navigation.navigate("LostBoardDetail", {
+                                imgURL: item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png'),
+                                itemName: item.title,
+                                location: item.findLocation,
+                                date: item.date.toDate().toLocaleDateString('ko-KR'),
+                                money: item.thankMoney,
+                                tradeType: item.tradeType,
+                                tradeLocation: item.tradeLocation,
+                                articleExplain: item.description,
+                            })}>
                             <Image
-                                source={{ uri: item.imgURL }}
+                                source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}
                                 style={styles.itemImage}
                             />
                             <View style={styles.textContainer}>
-                                <Text style={styles.itemName}>{item.itemName}</Text>
-                                <Text style={styles.itemText}>{item.location}</Text>
-                                <Text style={styles.itemText}>{item.date}</Text>
-                                <TouchableOpacity style={styles.itemUser} onPress={() => navigation.navigate('Home', {
-                                    screen: '프로필',
-                                })}>
-                                    {/* 😎자리에 프로필 이미지 들어오도록 구현해야함.*/}
-                                    {/* 채팅하기 버튼은 게시글 상세보기에 넣는게 좋을거 같아서 일단 뺌 */}
+                                <Text style={styles.itemName}>{item.title}</Text>
+                                <Text style={styles.itemText}>{item.findLocation}</Text>
+                                <Text style={styles.itemText}>{item.date.toDate().toLocaleDateString('ko-KR')}</Text>
+                                <TouchableOpacity style={styles.itemUser}
+                                    onPress={() => navigation.navigate('Home', {
+                                        screen: '프로필',
+                                    })}>
                                     <Text>😎홍길동</Text>
                                 </TouchableOpacity>
                             </View>
@@ -62,7 +72,7 @@ const LostBoard = () => {
                     ))}
                 </View>
             </ScrollView>
-            <WriteButton type="lost"/>
+            <WriteButton type="lost" />
         </>
     );
 };

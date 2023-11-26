@@ -14,17 +14,16 @@ const PROFILE_IMAGE_MARGIN_RIGHT = windowHeight * 0.03;
 const FONT_SIZE_MEDIUM = windowHeight * 0.025;
 const FONT_SIZE_SMALL = windowHeight * 0.02;
 
-const ProfileMain = () => {
+const ProfileMain = ({name, imgURL}) => {
     const navigation = useNavigation();
     return (
         <View style={styles.profileSection}>
             <Image
-                source={ require('../../img/defaultProfile.png') }
+                source={imgURL ? { uri: imgURL } : require('../../img/defaultProfile.png')}
                 style={styles.profileImage}
             />
             <View style={styles.userInfo}>
-                <Text style={styles.textMedium}>홍길동</Text>
-                <Text style={styles.textSmall}>지역: 천안</Text>
+                <Text style={styles.textMedium}>{name}</Text>
                 <Text style={styles.textSmall}>찾아준 횟수: 15</Text>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate("ProfileEdit")}>
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
     },
     userInfo: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'space-around'
     },
     textMedium: {
         fontSize: FONT_SIZE_MEDIUM,

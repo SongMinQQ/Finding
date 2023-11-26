@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 
 // 창의 높이를 계산합니다.
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -14,13 +15,12 @@ const BUTTON_PADDING = WINDOW_HEIGHT * 0.01; // 예: 전체 높이의 1%
 const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; // 예: 전체 높이의 0.5%
 
 // DetailMain 컴포넌트
-const DetailMain = ({ imgURL, itemName, category, location, date, onPress, findOrLost }) => {
+const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost }) => {
   return (
     <View style={styles.itemLayout}>
-      <Image source={{ uri: imgURL }} style={styles.itemImage} />
-      <View style={styles.itemContent}>
+      <Image source={ imgURL } style={styles.itemImage} />
+      <View style={[styles.itemContent, findOrLost === 'find' ? {justifyContent: 'space-between'}:{justifyContent: 'flex-start',gap:'10'}]}>
         <Text style={styles.itemName}>{itemName}</Text>
-        <Text style={styles.itemDetail}>{`카테고리: ${category}`}</Text>
         <Text style={styles.itemDetail}>{findOrLost === 'find' ? '획득지역: ' : '분실지역: '}{location}</Text>
         <Text style={styles.itemDetail}>{findOrLost === 'find' ? '획득날짜: ' : '분실날짜: '}{date}</Text>
         {findOrLost === 'find' && (
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     height: ITEM_IMAGE_SIZE,
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
 
   },
   itemName: {
