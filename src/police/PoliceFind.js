@@ -68,9 +68,7 @@ const PoliceFind = ({ navigation }) => {
             setLoading(false); // 로딩 완료 시 로딩 상태 업데이트
         }
     }
-    useEffect(() => {
-      
-    }, [searchResult])
+
     return (
         <View style={styles.container}>
             <View style={styles.search}>
