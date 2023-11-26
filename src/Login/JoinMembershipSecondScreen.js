@@ -74,7 +74,7 @@ export default function JoinMembershipSecondScreen({ navigation: {navigate}, rou
 
   const uploadImageToFirebase = async (imageUri) => {
     // 이미지 파일 이름 (예: image_12345.jpg)
-    const fileName = `image_${new Date().getTime()}.jpg`;
+    const fileName = `profile_image_${new Date().getTime()}.jpg`;
     const storageRef = ref(storage, `profileImages/${fileName}`);
   
     try {
