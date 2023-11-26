@@ -47,19 +47,17 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
                 <DetailMain
                     imgURL={route.params.imgURL}
                     itemName={route.params.itemName}
-                    category={route.params.category}
                     location={route.params.location}
                     date={route.params.date}
                     //onPress={handleFindPress}
                     findOrLost={findOrLost}
                 />
-                <Text style={styles.requireHeader}> 요구 사항 </Text>
+                <Text style={styles.requireHeader}>보답 사항</Text>
 
                 <View style={styles.requireSelectLayout}>
                     <View style={styles.requireInfoBox}>
                         <View style={styles.iconArea}>
                             <FontAwesome name="dollar" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
-
                         </View>
 
                         <Text style={styles.requireText}>{route.params.money}</Text>
@@ -144,6 +142,7 @@ const styles = StyleSheet.create({
     item: {
         fontSize: FONT_SIZE_SMALL,
         marginVertical: 15,
+        minHeight: 70,
     },
     requireInfoBox: {
         flex: 1,
@@ -156,7 +155,7 @@ const styles = StyleSheet.create({
         width: ICON_AREA_LAYOUT_HEIGHT,
         height: ICON_AREA_LAYOUT_HEIGHT,
         borderRadius: ICON_AREA_LAYOUT_HEIGHT / 2,
-        borderWidth: 5,
+        borderWidth: 2,
         borderColor: '#000',
         marginBottom: 10,
     },

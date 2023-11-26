@@ -10,47 +10,64 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import PickerSelect from 'react-native-picker-select';
 
+import { fireStoreDB } from '../../FireBase/DB';
+import { storage } from '../../FireBase/DB';
+import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
+
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const MAIN_SELECT_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.18;
 const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
 const WritePostLostScreen = ({ navigation }) => {
-    const theme = {
-        ...DefaultTheme,
-        myOwnProperty: true,
-        colors: {
-            ...DefaultTheme.colors,
-            text: '#FF0000',
-            primary: '#007bff', // 이거 바꾸면 됨
-        },
-    };
 
     const [title, setTitle] = useState('');
-
     const [findLocation, setFindLocation] = useState('');
+    const [date, setDate] = useState(null);
+
+
+    const [thankMoney, setThankMoney] = useState('');
+    const [tradeType, setTradeType] = useState('');
     const [tradeLocation, setTradeLocation] = useState('');
 
     const [description, setDescription] = useState('');
 
+    const postContent = {
+        title: title,
+        findLocation: findLocation,
+        date: date,
+        thankMoney: thankMoney,
+        tradeType: tradeType,
+        tradeLocation: tradeLocation,
+        description: description
+    };
+
     const moneyList = [
-        { label: '필요없음', value: 'noMoney' },
-        { label: '1만원 이하', value: 'money1' },
-        { label: '1~3만원', value: 'money1to3' },
-        { label: '3~5만원', value: 'money3to5' },
-        { label: '5만원 이상', value: 'money5over' },
+        { label: '필요없음', value: '필요없음' },
+        { label: '1만원', value: '1만원' },
+        { label: '2만원', value: '2만원' },
+        { label: '3만원', value: '3만원' },
+        { label: '4만원', value: '4만원' },
+        { label: '5만원', value: '5만원' },
+        { label: '6만원', value: '6만원' },
+        { label: '7만원', value: '7만원' },
+        { label: '8만원', value: '8만원' },
+        { label: '9만원', value: '9만원' },
+        { label: '10만원', value: '10만원' },
     ];
 
     const tradeList = [
-        { label: '직거래', value: 'meetTrade' },
-        { label: '택배', value: 'deliveryTrade' },
+        { label: '직거래', value: '직거래' },
+        { label: '택배', value: '택배' },
     ];
 
     //image  address
-    const [imageUrl, setImageUrl] = useState('');
+    const [selectImageUrl, setImageUrl] = useState('');
     //권한 요청
     const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [date, setDate] = useState(null);
+
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -89,9 +106,44 @@ const WritePostLostScreen = ({ navigation }) => {
         setImageUrl(result.assets[0].uri);
     };
 
-    const handleSubmit = () => {
-        // 글 작성 완료
-        navigation.navigate('Home');
+    const uploadImageToFirebase = async (imageUri) => {
+        // 이미지 파일 이름 (예: image_12345.jpg)
+        const fileName = `lostboard_image_${new Date().getTime()}.jpg`;
+        const storageRef = ref(storage, `lostBoard/${fileName}`);
+
+        try {
+            // 이미지를 Blob 형태로 변환
+            const response = await fetch(imageUri);
+            const blob = await response.blob();
+
+            // Blob을 Firebase Storage에 업로드
+            await uploadBytesResumable(storageRef, blob);
+
+            // 업로드된 이미지의 URL 가져오기
+            const url = await getDownloadURL(storageRef);
+            return url;
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+            return null;
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
+
+            const docRef = await addDoc(collection(fireStoreDB, "lostBoard"), {
+                ...postContent,
+                imageUrl: firebaseImageUrl  // 이미지 URL 추가
+            });
+            console.log("Document written with ID: ", docRef.id);
+            console.log('글 작성 성공');
+            navigation.navigate('Home');
+        } catch (e) {
+            console.log('글 작성 실패');
+            console.log("Error adding document: ", e);
+        }
+
     };
 
     //모달 관련 함수, 상태변수
@@ -111,7 +163,7 @@ const WritePostLostScreen = ({ navigation }) => {
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>
                         <Image
-                            source={imageUrl ? { uri: imageUrl } : require('../../img/imageSelectDefault.png')}
+                            source={selectImageUrl ? { uri: selectImageUrl } : require('../../img/imageSelectDefault.png')}
                             style={styles.mainImage}
                         />
                     </TouchableOpacity>
@@ -123,7 +175,7 @@ const WritePostLostScreen = ({ navigation }) => {
                             textColor='#000'
                             value={title}
                             onChangeText={text => setTitle(text)}
-                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD' } }}
                             activeUnderlineColor="#000"
                         />
                         <TextInput
@@ -133,7 +185,7 @@ const WritePostLostScreen = ({ navigation }) => {
                             textColor='#000'
                             value={findLocation}
                             onChangeText={text => setFindLocation(text)}
-                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD' } }}
                             activeUnderlineColor="#000"
                         />
                         <TextInput
@@ -143,7 +195,7 @@ const WritePostLostScreen = ({ navigation }) => {
                             textColor='#000'
                             value={date ? date.toLocaleDateString('ko-KR') : ""}
                             onFocus={showDatePicker}
-                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD' } }}
                             activeUnderlineColor="#000"
                             onPressIn={openModal}
                         />
@@ -157,7 +209,7 @@ const WritePostLostScreen = ({ navigation }) => {
                         </View>
 
                         <PickerSelect
-                            onValueChange={(value) => console.log(value)}
+                            onValueChange={(value) => setThankMoney(value)}
                             items={moneyList}
                             style={pickerSelectStyles}
                             useNativeAndroidPickerStyle={false}
@@ -173,7 +225,7 @@ const WritePostLostScreen = ({ navigation }) => {
 
                         </View>
                         <PickerSelect
-                            onValueChange={(value) => console.log(value)}
+                            onValueChange={(value) => setTradeType(value)}
                             items={tradeList}
                             style={pickerSelectStyles}
                             useNativeAndroidPickerStyle={false}
@@ -194,7 +246,7 @@ const WritePostLostScreen = ({ navigation }) => {
                             placeholder="거래 장소"
                             value={tradeLocation}
                             onChangeText={text => setTradeLocation(text)}
-                            theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                            theme={{ colors: { onSurfaceVariant: '#BDBDBD' } }}
                             activeOutlineColor="#000"
                         />
                     </View>
@@ -206,33 +258,33 @@ const WritePostLostScreen = ({ navigation }) => {
                     placeholder="자세한 설명"
                     value={description}
                     onChangeText={text => setDescription(text)}
-                    theme={{ colors: { onSurfaceVariant: '#BDBDBD'} }}
+                    theme={{ colors: { onSurfaceVariant: '#BDBDBD' } }}
                     activeOutlineColor="#000"
                 />
 
                 <TouchableOpacity style={styles.completeButton} onPress={handleSubmit}>
-                    <Text style={{fontWeight:'bold', color:"#fff", fontSize: WINDOW_HEIGHT * 0.017}}>글 작성 완료</Text>
+                    <Text style={{ fontWeight: 'bold', color: "#fff", fontSize: WINDOW_HEIGHT * 0.017 }}>글 작성 완료</Text>
                 </TouchableOpacity>
                 {Platform.OS === 'ios' ? <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-                locale="ko-KR"
-            /> :
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date" // 또는 "time", "datetime"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-                locale="ko-KR"
-                // display = "calendar"
-                // value={new Date()}
-                // display="default"
-            />}
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleConfirm}
+                    onCancel={hideDatePicker}
+                    locale="ko-KR"
+                /> :
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date" // 또는 "time", "datetime"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                        locale="ko-KR"
+                    // display = "calendar"
+                    // value={new Date()}
+                    // display="default"
+                    />}
             </ScrollView >
             {/* {modal && <DatePicker visible={modal} hideModal={closeModal}/>} */}
-            
+
 
 
         </>
@@ -259,7 +311,7 @@ const styles = StyleSheet.create({
         width: ICON_AREA_LAYOUT_HEIGHT,
         height: ICON_AREA_LAYOUT_HEIGHT,
         borderRadius: ICON_AREA_LAYOUT_HEIGHT / 2,
-        borderWidth: 5,
+        borderWidth: 2,
         borderColor: '#000',
         marginBottom: 10,
     },
@@ -282,7 +334,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:"#007bff",
+        backgroundColor: "#007bff",
         height: WINDOW_HEIGHT * 0.05,
         borderRadius: WINDOW_HEIGHT * 0.008,
         marginTop: 10,
@@ -304,7 +356,7 @@ const styles = StyleSheet.create({
     textInput: {
         width: '100%',
         backgroundColor: '#fff',
-        height: WINDOW_HEIGHT* 0.055,
+        height: WINDOW_HEIGHT * 0.055,
     },
     label: {
         fontSize: 18,
@@ -321,7 +373,7 @@ const styles = StyleSheet.create({
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
-        height: WINDOW_HEIGHT* 0.055,
+        height: WINDOW_HEIGHT * 0.055,
         fontSize: 16,
         paddingVertical: 12,
         paddingHorizontal: 10,
@@ -333,9 +385,9 @@ const pickerSelectStyles = StyleSheet.create({
     },
     placeholder: {
         color: '#BDBDBD',
-      },
+    },
     inputAndroid: {
-        height: WINDOW_HEIGHT* 0.055,
+        height: WINDOW_HEIGHT * 0.055,
         fontSize: 16,
         paddingHorizontal: 10,
         paddingVertical: 8,

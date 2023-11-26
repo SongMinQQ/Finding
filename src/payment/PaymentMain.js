@@ -13,14 +13,13 @@ const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.017; 
 
 // PaymentMain 컴포넌트
-const PaymentMain = ({ imgURL, itemName, category, location, date }) => {
+const PaymentMain = ({ imgURL, itemName, location, date }) => {
   return (
     <View style={{alignSelf: 'flex-start'}}>
       <View style={styles.itemLayout}>
-        <Image source={{ uri: imgURL }} style={styles.itemImage} />
+        <Image source={ imgURL } style={styles.itemImage} />
         <View style={styles.itemContent}>
           <Text style={styles.itemName}>{itemName}</Text>
-          <Text style={styles.itemDetail}>{`카테고리: ${category}`}</Text>
           <Text style={styles.itemDetail}>{`획득지역: ${location}`}</Text>
           <Text style={styles.itemDetail}>{`획득날짜: ${date}`}</Text>
         </View>

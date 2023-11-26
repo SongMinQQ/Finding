@@ -28,8 +28,10 @@ const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       spinner.start();
-      await signInWithEmailAndPassword(auth, userID, userPW);
-      console.log('로그인 성공');
+      const userCredential = await signInWithEmailAndPassword(auth, userID, userPW);
+      const user = userCredential.user;
+
+      console.log('uid: '+user.uid);
       navigation.navigate("Home");
       // 로그인 성공 처리
     } catch (error) {

@@ -81,7 +81,6 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                 <PaymentMain
                     imgURL={route.params.imgURL}
                     itemName={route.params.itemName}
-                    category={route.params.category}
                     location={route.params.location}
                     date={route.params.date}
                 />

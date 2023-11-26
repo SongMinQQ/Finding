@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, ScrollView, Image, TouchableOpacity
 import WriteButton from './WriteButton';
 import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
-import { collection, getDocs } from "firebase/firestore";
+import { collection,  query, where, getDocs } from "firebase/firestore";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -59,9 +59,24 @@ const FindBoard = () => {
         }
     };
 
+    const fetchUserData = async (uid) => {
+        try {
+          const usersRef = collection(fireStoreDB, "users");
+          const q = query(usersRef, where("uid", "==", uid));
+          const querySnapshot = await getDocs(q);
+      
+          querySnapshot.forEach((doc) => {
+            console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+          });
+        } catch (error) {
+          console.error("Error fetching user data: ", error);
+        }
+      };
+      
+
     useEffect(() => {
         fetchDocs();
-    },[])
+    }, [])
     // const findItemData = [...Array(21)].map((_, index) => ({
     //     id: index,
     //     imgURL: `https://picsum.photos/id/${index}/200/200`,
@@ -79,37 +94,29 @@ const FindBoard = () => {
         <>
             <ScrollView style={{ backgroundColor: '#fff' }}>
                 <View style={styles.container}>
-                    {posts.map((item, index) => (
-                        <TouchableOpacity key={index} style={styles.item} onPress={() => navigation.navigate("FindBoardDetail", {
-                            imgURL: item.imageUrl,
-                            itemName: item.title,
-                            // category: item.category,
-                            location: item.findLocation,
-                            // date: item.date,
-                            money: item.thankMoney,
-                            tradeType: item.tradeType,
-                            tradeLocation: item.tradeLocation,
-                            articleExplain: item.description,
-                        })}>
+                    {posts.map((item) => (
+                        <TouchableOpacity key={item.id}
+                            style={styles.item}
+                            onPress={() => navigation.navigate("FindBoardDetail", {
+                                imgURL: item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png'),
+                                itemName: item.title,
+                                location: item.findLocation,
+                                date: item.date.toDate().toLocaleDateString('ko-KR'),
+                                money: item.thankMoney,
+                                tradeType: item.tradeType,
+                                tradeLocation: item.tradeLocation,
+                                articleExplain: item.description,
+                            })}>
                             <Image
+                                source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}
                                 source={{ uri: item.imageUrl }}
                                 style={styles.itemImage}
                             />
                             <View style={styles.textContainer}>
                                 <Text style={styles.itemName}>{item.title}</Text>
                                 <Text style={styles.itemText}>{item.findLocation}</Text>
-                                {/* <Text style={styles.itemText}>{item.date}</Text> */}
-                                <TouchableOpacity style={styles.itemUser}
-                                    onPress={() => {
-                                        // navigation.navigate('Home', {
-                                        // screen: '프로필',})
-
-                                        // fetchDocs();
-                                        console.log(posts);
-
-                                    }}>
-                                    {/* 😎자리에 프로필 이미지 들어오도록 구현해야함.*/}
-                                    {/* 채팅하기 버튼은 게시글 상세보기에 넣는게 좋을거 같아서 일단 뺌 */}
+                                <Text style={styles.itemText}>{item.date.toDate().toLocaleDateString('ko-KR')}</Text>
+                                <TouchableOpacity style={styles.itemUser}>
                                     <Text>😎홍길동</Text>
                                 </TouchableOpacity>
                             </View>

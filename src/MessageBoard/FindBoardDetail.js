@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
@@ -7,11 +7,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+
+import { fireStoreDB } from '../../FireBase/DB';
+import { collection,  query, where, getDocs } from "firebase/firestore";
+
+
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const PROFILE_SECTION_HEIGHT = WINDOW_HEIGHT * 0.16;
 const PROFILE_SECTION_PADDING = WINDOW_HEIGHT * 0.017;
-const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.1;
+const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.12;
 const PROFILE_IMAGE_MARGIN_RIGHT = WINDOW_HEIGHT * 0.03;
 
 const MAIN_SELECT_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.14;
@@ -28,13 +33,33 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   const navigation = useNavigation();
 
   const findOrLost = "find";
-  const userName = "홍길동";
+  const [profileImage, setProfileImage] = useState(''); 
+  const [userName,setUserName] = useState(null); 
+
+  const fetchUserData = async (uid) => {
+    try {
+      const usersRef = collection(fireStoreDB, "users");
+      const q = query(usersRef, where("uid", "==", uid));
+      const querySnapshot = await getDocs(q);
+  
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        setProfileImage(data.profileImageURL);
+        setUserName(data.name);
+      });
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData("Vm6cVPllNeZzZpa4KBUl5OxlHwQ2");
+}, [])
 
   const handleFindPress = () => {
     navigation.navigate("PaymentLegalAgree", {
       imgURL: route.params.imgURL,
       itemName: route.params.itemName,
-      category: route.params.category,
       location: route.params.location,
       date: route.params.date,
       userName: userName,
@@ -53,7 +78,6 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
         <DetailMain
           imgURL={route.params.imgURL}
           itemName={route.params.itemName}
-          category={route.params.category}
           location={route.params.location}
           date={route.params.date}
           onPress={handleFindPress}
@@ -88,11 +112,12 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
         <Text style={styles.item}>{route.params.articleExplain}</Text>
         <View style={styles.profileSection}>
           <Image
-            source={require('../../img/defaultProfile.png')}
+            //source={require('../../img/defaultProfile.png')}
+            source={profileImage ? { uri: profileImage } : require('../../img/defaultProfile.png')}
             style={styles.profileImage}
           />
           <View style={styles.userInfo}>
-            <Text style={styles.textMedium}>홍길동</Text>
+            <Text style={styles.textMedium}>{userName}</Text>
             <Text style={styles.textSmall}>친절점수 : 90점</Text>
           </View>
           {/* '채팅하기' 버튼 추가 */}
@@ -150,6 +175,7 @@ const styles = StyleSheet.create({
   item: {
     fontSize: FONT_SIZE_SMALL,
     marginVertical: 15,
+    minHeight: 70,
   },
   requireInfoBox: {
     flex: 1,
@@ -162,7 +188,7 @@ const styles = StyleSheet.create({
     width: ICON_AREA_LAYOUT_HEIGHT,
     height: ICON_AREA_LAYOUT_HEIGHT,
     borderRadius: ICON_AREA_LAYOUT_HEIGHT / 2,
-    borderWidth: 5,
+    borderWidth: 2,
     borderColor: '#000',
     marginBottom: 10,
   },
