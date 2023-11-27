@@ -9,9 +9,9 @@ const windowHeight = Dimensions.get('window').height;
 // 상수 정의
 const PROFILE_SECTION_HEIGHT = windowHeight * 0.15;
 const PROFILE_SECTION_PADDING = windowHeight * 0.015;
-const PROFILE_IMAGE_SIZE = windowHeight * 0.1;
-const PROFILE_IMAGE_MARGIN_RIGHT = windowHeight * 0.03;
-const FONT_SIZE_MEDIUM = windowHeight * 0.025;
+const PROFILE_IMAGE_SIZE = windowHeight * 0.12;
+const PROFILE_IMAGE_MARGIN_RIGHT = windowHeight * 0.02;
+const FONT_SIZE_MEDIUM = windowHeight * 0.028;
 const FONT_SIZE_SMALL = windowHeight * 0.02;
 
 const ProfileMain = ({name, imgURL}) => {
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     },
     userInfo: {
         flex: 1,
+        height: PROFILE_IMAGE_SIZE,
         justifyContent: 'space-around'
     },
     textMedium: {
