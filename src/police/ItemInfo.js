@@ -97,8 +97,6 @@ const styles = StyleSheet.create({
     articleKind: {
         flex: 1,
         fontSize: WINDOW_HEIGHT * 0.02,
-        borderRightWidth: 2,
-        borderColor: '#000',
     },
     articleText: {
         flex: 4,
