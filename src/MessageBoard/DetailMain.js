@@ -19,7 +19,7 @@ const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost }) =
   return (
     <View style={styles.itemLayout}>
       <Image source={ imgURL } style={styles.itemImage} />
-      <View style={[styles.itemContent, findOrLost === 'find' ? {justifyContent: 'space-between'}:{justifyContent: 'flex-start',gap:'10'}]}>
+      <View style={[styles.itemContent, findOrLost === 'find' ? {justifyContent: 'space-between'}:{justifyContent: 'flex-start',gap: 10}]}>
         <Text style={styles.itemName}>{itemName}</Text>
         <Text style={styles.itemDetail}>{findOrLost === 'find' ? '획득지역: ' : '분실지역: '}{location}</Text>
         <Text style={styles.itemDetail}>{findOrLost === 'find' ? '획득날짜: ' : '분실날짜: '}{date}</Text>

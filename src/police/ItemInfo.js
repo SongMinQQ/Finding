@@ -51,10 +51,16 @@ const ItemInfo = ({ route }) => {
                     <View style={styles.articleLine} />
                     <Text style={styles.articleText}>{detailInfo.lstYmd}</Text>
                 </View>
+                
                 <View style={styles.articleRow}>
                     <Text style={styles.articleKind}>관할관서</Text>
                     <View style={styles.articleLine} />
                     <Text style={styles.articleText}>{detailInfo.orgNm} {detailInfo.tel}</Text>
+                </View>
+                <View style={styles.articleRow}>
+                    <Text style={styles.articleKind}>습득장소</Text>
+                    <View style={styles.articleLine} />
+                    <Text style={styles.articleText}>{detailInfo.lstPlaceSeNm}</Text>
                 </View>
                 <Text style={{ fontSize: WINDOW_HEIGHT * 0.02, marginBottom: 10 }}>내 용</Text>
                 <Text style={styles.articleContent}>{detailInfo.lstSbjt}</Text>
@@ -91,8 +97,6 @@ const styles = StyleSheet.create({
     articleKind: {
         flex: 1,
         fontSize: WINDOW_HEIGHT * 0.02,
-        borderRightWidth: 2,
-        borderColor: '#000',
     },
     articleText: {
         flex: 4,

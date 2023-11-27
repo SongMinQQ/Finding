@@ -8,12 +8,14 @@ import ProfileGladMessage from '../profile/ProfileGladMessage';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { useSelector } from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator();
 
 const ProfileTopTabNavigation = () => {
     const [profileImage, setProfileImage] = useState('');
     const [userName, setUserName] = useState(null);
+    const displayName = useSelector((state) => state.displayName);
 
     const fetchUserData = async (uid) => {
         try {
@@ -33,11 +35,12 @@ const ProfileTopTabNavigation = () => {
     };
     useEffect(() => {
         fetchUserData("Vm6cVPllNeZzZpa4KBUl5OxlHwQ2");
+        console.log(displayName);
     }, [])
 
     return (
         <View style={styles.container}>
-            <ProfileMain name={userName} imgURL={profileImage} />
+            <ProfileMain name={displayName} imgURL={profileImage} />
             <Tab.Navigator>
                 <Tab.Screen name="찾은 물건" component={ProfileFind} />
                 <Tab.Screen name="분실 물건" component={ProfileLost} />

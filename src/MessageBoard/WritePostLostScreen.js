@@ -14,12 +14,15 @@ import { fireStoreDB } from '../../FireBase/DB';
 import { storage } from '../../FireBase/DB';
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useSelector } from 'react-redux';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const MAIN_SELECT_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.18;
 const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
+
 const WritePostLostScreen = ({ navigation }) => {
+    const displayName = useSelector((state) => state.displayName);
 
     const [title, setTitle] = useState('');
     const [findLocation, setFindLocation] = useState('');

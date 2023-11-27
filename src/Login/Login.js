@@ -8,10 +8,12 @@ import { TextInput } from 'react-native-paper';
 import { auth } from '../../FireBase/DB';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { LoadingContext } from '../Loading/LoadingContext';
+import { useDispatch } from 'react-redux';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const Login = ({ navigation }) => {
+  const dispatch = useDispatch();
   // TextInput 클릭 시 테두리 색 변경하는 코드
   const theme = {
     ...DefaultTheme,
@@ -29,8 +31,9 @@ const Login = ({ navigation }) => {
     try {
       spinner.start();
       const userCredential = await signInWithEmailAndPassword(auth, userID, userPW);
-      const user = userCredential.user;
-
+      const user = auth.currentUser;
+      dispatch({type: 'SET_DISPLAYNAME', payload: user.displayName});
+      console.log(user.displayName);
       console.log('uid: '+user.uid);
       navigation.navigate("Home");
       // 로그인 성공 처리
