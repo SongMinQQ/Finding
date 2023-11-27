@@ -15,7 +15,7 @@ import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import { auth } from '../../FireBase/DB';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile  } from "firebase/auth";
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { collection, addDoc } from "firebase/firestore";
@@ -110,17 +110,33 @@ export default function JoinMembershipSecondScreen({ navigation: {navigate}, rou
       } else if (name.length < 3) {
         newError = '닉네임을 3글자 이상 입력해주세요.';
       } else {
+
+
         const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
-        const userCredential = await createUserWithEmailAndPassword(auth, route.params.email, route.params.password);
-        const user = userCredential.user;
-        await addDoc(collection(fireStoreDB, "users"), {
-          ...userData,
-          uid: user.uid,
-          name: name,
-          profileImageURL: firebaseImageUrl,
+        await createUserWithEmailAndPassword(auth, route.params.email, route.params.password);
+        // const userCredential = await createUserWithEmailAndPassword(auth, route.params.email, route.params.password);
+        // const user = userCredential.user;
+        // await addDoc(collection(fireStoreDB, "users"), {
+        //   ...userData,
+        //   uid: user.uid,
+        //   name: name,
+        //   profileImageURL: firebaseImageUrl,
+        // });
+        // console.log("회원가입 성공, Firestore에 데이터 저장됨");
+        // navigation.navigate("Join Membership Third");
+
+        updateProfile(auth.currentUser, {
+          displayName: name, 
+          photoURL: firebaseImageUrl,
+          phoneNumber: route.params.phoneNumber,
+        }).then(() => {
+          // Profile updated!
+          navigation.navigate("Join Membership Third");
+        }).catch((error) => {
+          console.error("에러남ㅅㄱ: "+error)
         });
-        console.log("회원가입 성공, Firestore에 데이터 저장됨");
-        navigation.navigate("Join Membership Third");
+
+
       }
       setError(newError);
     }catch (e) {

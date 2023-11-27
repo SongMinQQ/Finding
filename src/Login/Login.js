@@ -31,7 +31,7 @@ const Login = ({ navigation }) => {
       const userCredential = await signInWithEmailAndPassword(auth, userID, userPW);
       const user = userCredential.user;
 
-      console.log('uid: '+user.uid);
+      // console.log('uid: '+user.uid);
       navigation.navigate("Home");
       // 로그인 성공 처리
     } catch (error) {
