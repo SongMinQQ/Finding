@@ -14,6 +14,7 @@ import { fireStoreDB } from '../../FireBase/DB';
 import { storage } from '../../FireBase/DB';
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useSelector } from 'react-redux';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -22,7 +23,7 @@ const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
 
 
 const WritePostFindScreen = ({ navigation }) => {
-
+    const displayName = useSelector((state) => state.displayName);
     // 글 내용들
     const [title, setTitle] = useState('');
     const [findLocation, setFindLocation] = useState('');
