@@ -60,21 +60,6 @@ const FindBoard = () => {
         }
     };
 
-    // const fetchUserData = async (uid) => {
-    //     try {
-    //       const usersRef = collection(fireStoreDB, "users");
-    //       const q = query(usersRef, where("uid", "==", uid));
-    //       const querySnapshot = await getDocs(q);
-      
-    //       querySnapshot.forEach((doc) => {
-    //         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-    //       });
-    //     } catch (error) {
-    //       console.error("Error fetching user data: ", error);
-    //     }
-    //   };
-      
-
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             fetchDocs();
@@ -83,19 +68,6 @@ const FindBoard = () => {
         // 컴포넌트 언마운트 시 리스너 제거
         return unsubscribe;
     }, [navigation])
-
-    // const findItemData = [...Array(21)].map((_, index) => ({
-    //     id: index,
-    //     imgURL: `https://picsum.photos/id/${index}/200/200`,
-    //     itemName: `물건 ${index + 1}`,
-    //     category: `전자기기`,
-    //     location: `위치 ${index + 1}`,
-    //     date: `2023-10-${index + 1}`,
-    //     money: `${index + 1}만원`,
-    //     tradeType: `직거래`,
-    //     tradeLocation: `천안`,
-    //     articleExplain: `물건 ${index + 1}을 천안에서 찾았습니다. 연락주세요.`
-    // }));
 
     return (
         <>
@@ -115,6 +87,7 @@ const FindBoard = () => {
                                 articleExplain: item.description,
                                 displayName: item.displayName,
                                 profileImage: item.profileImage,
+                                uid: item.uid,
                             })}>
                             <Image
                                 source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}

@@ -21,14 +21,12 @@ const linking = {
 };
 
 export default function App() {
-  const { loading } = useContext(LoadingContext);
   return (
     <Provider store={store}>
       <StripeProvider publishableKey="pk_test_51OCDQFBcSamKvAztjX6vP7wREnhTfwk93daIRA25QA946sblaKwyrWLtQSzbmEakQk5K072xaOqzopwCpNvSDtaz00YXvZ1VXu">
         <SafeAreaProvider>
           <LoadingContextProvider>
             <NavigationContainer linking={linking}>
-              {loading && <LoadingSpinner/>}
               <StackNavigation />
             </NavigationContainer>
             

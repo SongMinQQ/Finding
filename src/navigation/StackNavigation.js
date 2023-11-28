@@ -190,6 +190,15 @@ const StackNavigation = () => {
                       },
                 }}/>
             </Stack.Group>
+            <Stack.Group>
+                <Stack.Screen name="Chatting" component={Chatting} options={{
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                      }
+                }}/>
+            </Stack.Group>
         </Stack.Navigator>
     );
 };

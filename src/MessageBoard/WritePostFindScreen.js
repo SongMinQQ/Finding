@@ -12,9 +12,12 @@ import PickerSelect from 'react-native-picker-select';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { storage } from '../../FireBase/DB';
-import { collection, addDoc } from "firebase/firestore";
+import { doc, collection, arrayUnion, addDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -26,6 +29,9 @@ const WritePostFindScreen = ({ navigation }) => {
     const displayName = useSelector((state) => state.displayName);
     const uid = useSelector((state) => state.UID);
     const profileImage = useSelector((state) => state.profileImg);
+
+    const { loading } = useContext(LoadingContext);
+
     // 글 내용들
     const [title, setTitle] = useState('');
     const [findLocation, setFindLocation] = useState('');
@@ -53,17 +59,17 @@ const WritePostFindScreen = ({ navigation }) => {
     };
 
     const moneyList = [
-        { label: '필요없음', value: '필요없음' },
-        { label: '1만원', value: '1만원' },
-        { label: '2만원', value: '2만원' },
-        { label: '3만원', value: '3만원' },
-        { label: '4만원', value: '4만원' },
-        { label: '5만원', value: '5만원' },
-        { label: '6만원', value: '6만원' },
-        { label: '7만원', value: '7만원' },
-        { label: '8만원', value: '8만원' },
-        { label: '9만원', value: '9만원' },
-        { label: '10만원', value: '10만원' },
+        { label: '필요없음', value: 0 },
+        { label: '1만원', value: 10000 },
+        { label: '2만원', value: 20000 },
+        { label: '3만원', value: 30000 },
+        { label: '4만원', value: 40000 },
+        { label: '5만원', value: 50000 },
+        { label: '6만원', value: 60000 },
+        { label: '7만원', value: 70000 },
+        { label: '8만원', value: 80000 },
+        { label: '9만원', value: 90000 },
+        { label: '10만원', value: 100000 },
     ];
 
     const tradeList = [
@@ -139,9 +145,11 @@ const WritePostFindScreen = ({ navigation }) => {
       };
 
     
-
+    const { spinner } = useContext(LoadingContext);
+    
     const handleSubmit = async () => {
         try {
+            spinner.start();
             const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
 
             const docRef = await addDoc(collection(fireStoreDB, "findBoard"), {
@@ -149,11 +157,17 @@ const WritePostFindScreen = ({ navigation }) => {
                 imageUrl: firebaseImageUrl  // 이미지 URL 추가
             });
             console.log("Document written with ID: ", docRef.id);
+
+            const userRef = doc(fireStoreDB, "users", uid);
+            await setDoc(userRef, { findPosts: arrayUnion(docRef.id) }, { merge: true });
+
             console.log('글 작성 성공');
             navigation.navigate('Home');
         } catch (e) {
             console.log('글 작성 실패');
             console.log("Error adding document: ", e);
+        } finally {
+            spinner.stop();
         }
 
     };
@@ -171,6 +185,7 @@ const WritePostFindScreen = ({ navigation }) => {
 
     return (
         <>
+            {loading && <LoadingSpinner/>}
             <ScrollView style={styles.container}>
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>

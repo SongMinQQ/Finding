@@ -9,11 +9,14 @@ import { auth } from '../../FireBase/DB';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { LoadingContext } from '../Loading/LoadingContext';
 import { useDispatch } from 'react-redux';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { loading } = useContext(LoadingContext);
+
   // TextInput 클릭 시 테두리 색 변경하는 코드
   const theme = {
     ...DefaultTheme,
@@ -74,6 +77,7 @@ const Login = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {loading && <LoadingSpinner/>}
       <View style={styles.flexbox}>
         <Image style={styles.image} source={require('../../img/loginIcon.png')} />
         {/* 임시 로고(이미지로 만들 경우 교체해야 함) */}

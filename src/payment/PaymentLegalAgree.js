@@ -58,6 +58,11 @@ const PaymentLegalAgree = ({navigation: {navigate}, route}) => {
                     itemName: route.params.itemName,
                     location: route.params.location,
                     date: route.params.date,
+                    userName: route.params.userName,
+                    money: route.params.money,
+                    tradeType: route.params.tradeType,
+                    tradeLocation: route.params.tradeLocation,
+                    sellUser: route.params.sellUser,
                 }) }}
             >
                 <Text style={styles.findButtonText}>물건 찾기</Text>

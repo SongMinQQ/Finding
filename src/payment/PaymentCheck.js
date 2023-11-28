@@ -4,7 +4,7 @@ import PaymentMain from './PaymentMain';
 import PaymentInfo from './PaymentInfo';
 import { useNavigation } from '@react-navigation/native';
 import { useStripe } from '@stripe/stripe-react-native';
-
+import { useSelector } from 'react-redux';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -26,6 +26,10 @@ const BUTTON_PADDING = WINDOW_HEIGHT * 0.01;
 const PaymentCheck = ({ navigation: { navigate }, route }) => {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
+    const displayName = useSelector((state) => state.displayName);
+    const uid = useSelector((state) => state.UID);
+    const profileImage = useSelector((state) => state.profileImg);
+
     // 결제 성공 카드 번호: 4242 4242 4242 4242
     // 인증 부족 카드 번호: 4000 0025 0000 3155
     // 잔액 부족 카드 번호: 4000 0000 0000 9995
@@ -38,6 +42,18 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({
+                    key: `key_${new Date().getTime()}_${Math.random().toString(36).substr(2, 9)}`,
+                    itemName: `${route.params.itemName}`,
+                    findLocation: `${route.params.location}`,
+                    findDate: `${route.params.date}`,
+                    amount: `${route.params.money}`,
+                    tradeType: `${route.params.tradeType}`,
+                    tradeLocation: `${route.params.tradeLocation}`,
+                    deliveryInfo: '배송 정보',
+                    buyUser: `${uid}`,
+                    sellUSer: `${route.params.sellUser}`,
+                }),
             });
             const data = await response.json();
             console.log('결제 세션 응답:', data);

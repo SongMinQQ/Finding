@@ -3,12 +3,12 @@ import React from 'react';
 import MaterialTopTabNavigation from './MaterialTopTabNavigation';
 import PoliceFind from '../police/PoliceFind';
 import ProfileMain from '../profile/ProfileMain';
-import Chatting from '../chatting/Chatting';
 import ProfileTopTabNavigation from './ProfileTopTabNavigation';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import ChattingChannels from '../chatting/ChattingChannels';
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigation = () => {
@@ -26,7 +26,7 @@ const BottomTabNavigation = () => {
                     <MaterialCommunityIcons name="police-badge" size={size} color={color} />
                   ),
             }}/>
-            <Tab.Screen name="채팅" component={Chatting} options={{
+            <Tab.Screen name="채팅" component={ChattingChannels} options={{
                 headerShown: false,
                 tabBarIcon: ( { color, size } ) => (
                     <Entypo name="chat" size={size} color={color} />
