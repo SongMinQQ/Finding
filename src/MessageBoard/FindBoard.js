@@ -87,6 +87,7 @@ const FindBoard = () => {
                                 articleExplain: item.description,
                                 displayName: item.displayName,
                                 profileImage: item.profileImage,
+                                uid: item.uid,
                             })}>
                             <Image
                                 source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}
