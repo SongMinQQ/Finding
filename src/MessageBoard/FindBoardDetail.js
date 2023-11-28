@@ -62,7 +62,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       itemName: route.params.itemName,
       location: route.params.location,
       date: route.params.date,
-      userName: "홍길동",
+      userName: route.params.displayName,
     });
   };
 
@@ -113,11 +113,11 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
         <View style={styles.profileSection}>
           <Image
             //source={require('../../img/defaultProfile.png')}
-            source={profileImage ? { uri: profileImage } : require('../../img/defaultProfile.png')}
+            source={route.params.profileImage ? { uri: route.params.profileImage } : require('../../img/defaultProfile.png')}
             style={styles.profileImage}
           />
           <View style={styles.userInfo}>
-            <Text style={styles.textMedium}>홍길동</Text>
+            <Text style={styles.textMedium}>{route.params.displayName}</Text>
             <Text style={styles.textSmall}>친절점수 : 90점</Text>
           </View>
           {/* '채팅하기' 버튼 추가 */}

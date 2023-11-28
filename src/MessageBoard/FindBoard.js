@@ -114,6 +114,7 @@ const FindBoard = () => {
                                 tradeLocation: item.tradeLocation,
                                 articleExplain: item.description,
                                 displayName: item.displayName,
+                                profileImage: item.profileImage,
                             })}>
                             <Image
                                 source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}
