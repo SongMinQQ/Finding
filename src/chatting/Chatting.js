@@ -24,20 +24,22 @@ const Chatting = ({ route }) => {
             querySnapshot.docChanges().forEach(({ type, doc }) => {
               if (type === "added") {
                 const data = doc.data();
-                // Ensure 'createdAt' is a valid timestamp
-                const createdAt = data.createdAt?.seconds ? new Date(data.createdAt.seconds * 1000) : new Date();
-                // Use document ID as message _id
-                const message = {
-                  _id: doc.id,
-                  text: data.text,
-                  createdAt: createdAt,
-                  user: {
-                    _id: data.user._id,
-                    name: data.user.name,
-                    avatar: data.user.avatar,
-                  },
-                };
-                newMessages.push(message);
+                if (doc.id) { // Check if doc.id is not undefined
+                  // Ensure 'createdAt' is a valid timestamp
+                  const createdAt = data.createdAt?.seconds ? new Date(data.createdAt.seconds * 1000) : new Date();
+                  // Use document ID as message _id
+                  const message = {
+                    _id: doc.id,
+                    text: data.text,
+                    createdAt: createdAt,
+                    user: {
+                      _id: data.user._id,
+                      name: data.user.name,
+                      avatar: data.user.avatar,
+                    },
+                  };
+                  newMessages.push(message);
+                }
               }
             });
       
