@@ -25,6 +25,7 @@ const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
 const WritePostFindScreen = ({ navigation }) => {
     const displayName = useSelector((state) => state.displayName);
     const uid = useSelector((state) => state.UID);
+    const profileImage = useSelector((state) => state.profileImg);
     // 글 내용들
     const [title, setTitle] = useState('');
     const [findLocation, setFindLocation] = useState('');
@@ -48,6 +49,7 @@ const WritePostFindScreen = ({ navigation }) => {
         description: description,
         displayName: displayName,
         uid: uid,
+        profileImage: profileImage
     };
 
     const moneyList = [

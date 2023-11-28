@@ -60,19 +60,19 @@ const FindBoard = () => {
         }
     };
 
-    const fetchUserData = async (uid) => {
-        try {
-          const usersRef = collection(fireStoreDB, "users");
-          const q = query(usersRef, where("uid", "==", uid));
-          const querySnapshot = await getDocs(q);
+    // const fetchUserData = async (uid) => {
+    //     try {
+    //       const usersRef = collection(fireStoreDB, "users");
+    //       const q = query(usersRef, where("uid", "==", uid));
+    //       const querySnapshot = await getDocs(q);
       
-          querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-          });
-        } catch (error) {
-          console.error("Error fetching user data: ", error);
-        }
-      };
+    //       querySnapshot.forEach((doc) => {
+    //         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+    //       });
+    //     } catch (error) {
+    //       console.error("Error fetching user data: ", error);
+    //     }
+    //   };
       
 
     useEffect(() => {
@@ -114,6 +114,7 @@ const FindBoard = () => {
                                 tradeLocation: item.tradeLocation,
                                 articleExplain: item.description,
                                 displayName: item.displayName,
+                                profileImage: item.profileImage,
                             })}>
                             <Image
                                 source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}

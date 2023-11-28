@@ -33,6 +33,7 @@ const Login = ({ navigation }) => {
       const userCredential = await signInWithEmailAndPassword(auth, userID, userPW);
       const user = auth.currentUser;
       dispatch({type: 'SET_DISPLAYNAME', payload: user.displayName});
+      dispatch({type: 'SET_PROFILE_IMG', payload: user.photoURL});
       dispatch({type: 'SET_ID', payload: user.uid});
       console.log('uid: '+user.uid);
       navigation.navigate("Home");

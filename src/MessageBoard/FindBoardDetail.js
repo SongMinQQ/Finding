@@ -34,27 +34,27 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
   const findOrLost = "find";
   const [profileImage, setProfileImage] = useState(''); 
-  const [userName,setUserName] = useState(null); 
+  // const [userName,setUserName] = useState(null); 
 
-  const fetchUserData = async (uid) => {
-    try {
-      const usersRef = collection(fireStoreDB, "users");
-      const q = query(usersRef, where("uid", "==", uid));
-      const querySnapshot = await getDocs(q);
+//   const fetchUserData = async (uid) => {
+//     try {
+//       const usersRef = collection(fireStoreDB, "users");
+//       const q = query(usersRef, where("uid", "==", uid));
+//       const querySnapshot = await getDocs(q);
   
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        setProfileImage(data.profileImageURL);
-        setUserName(data.name);
-      });
-    } catch (error) {
-      console.error("Error fetching user data: ", error);
-    }
-  };
+//       querySnapshot.forEach((doc) => {
+//         const data = doc.data();
+//         setProfileImage(data.profileImageURL);
+//         setUserName(data.name);
+//       });
+//     } catch (error) {
+//       console.error("Error fetching user data: ", error);
+//     }
+//   };
 
-  useEffect(() => {
-    fetchUserData("Vm6cVPllNeZzZpa4KBUl5OxlHwQ2");
-}, [])
+//   useEffect(() => {
+//     fetchUserData("Vm6cVPllNeZzZpa4KBUl5OxlHwQ2");
+// }, [])
 
   const handleFindPress = () => {
     navigation.navigate("PaymentLegalAgree", {
@@ -62,7 +62,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       itemName: route.params.itemName,
       location: route.params.location,
       date: route.params.date,
-      userName: userName,
+      userName: route.params.displayName,
     });
   };
 
@@ -113,11 +113,11 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
         <View style={styles.profileSection}>
           <Image
             //source={require('../../img/defaultProfile.png')}
-            source={profileImage ? { uri: profileImage } : require('../../img/defaultProfile.png')}
+            source={route.params.profileImage ? { uri: route.params.profileImage } : require('../../img/defaultProfile.png')}
             style={styles.profileImage}
           />
           <View style={styles.userInfo}>
-            <Text style={styles.textMedium}>{userName}</Text>
+            <Text style={styles.textMedium}>{route.params.displayName}</Text>
             <Text style={styles.textSmall}>친절점수 : 90점</Text>
           </View>
           {/* '채팅하기' 버튼 추가 */}

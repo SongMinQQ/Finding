@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 // 초기 상태
 const initialState = {
   displayName: '',
+  profileImg: '',
   UID: '',
 };
 
@@ -11,6 +12,8 @@ const rootReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'SET_DISPLAYNAME':// 유저 이름 저장
         return { ...state, displayName: action.payload };
+        case 'SET_PROFILE_IMG':// 유저 이름 저장
+          return { ...state, profileImg: action.payload };
       case 'SET_ID': // ID 저장
         return { ...state, UID: action.payload };
     default:
