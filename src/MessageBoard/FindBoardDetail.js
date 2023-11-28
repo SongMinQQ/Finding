@@ -9,7 +9,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { collection,  query, where, getDocs } from "firebase/firestore";
+import { collection,  query, where, getDocs, addDoc } from "firebase/firestore";
+import { useSelector } from 'react-redux';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -34,27 +35,6 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
   const findOrLost = "find";
   const [profileImage, setProfileImage] = useState(''); 
-  // const [userName,setUserName] = useState(null); 
-
-//   const fetchUserData = async (uid) => {
-//     try {
-//       const usersRef = collection(fireStoreDB, "users");
-//       const q = query(usersRef, where("uid", "==", uid));
-//       const querySnapshot = await getDocs(q);
-  
-//       querySnapshot.forEach((doc) => {
-//         const data = doc.data();
-//         setProfileImage(data.profileImageURL);
-//         setUserName(data.name);
-//       });
-//     } catch (error) {
-//       console.error("Error fetching user data: ", error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchUserData("Vm6cVPllNeZzZpa4KBUl5OxlHwQ2");
-// }, [])
 
   const handleFindPress = () => {
     navigation.navigate("PaymentLegalAgree", {
@@ -65,9 +45,30 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       userName: route.params.displayName,
     });
   };
+  //글 작성자의 UID
+  const writerId = route.params.uid;
+  //현재 로그인한 사용자의 UID
+  const uid = useSelector((state) => state.UID);
+  //현재 로그인한 사용자의 닉네임
+  const displayName = useSelector((state) => state.displayName);
+  // const handleChatPress = (writerId, uid) => {
 
-  const handleChatPress = () => {
-    navigation.navigate('Home', {
+  const handleChatPress = async () => {
+    // 채팅방 ID를 생성하기 위해 두 사용자의 ID를 정렬합니다.
+    const chatRoomId = [writerId, uid].sort().join('_');
+
+    // Firestore에서 새로운 채팅방 문서를 생성합니다.
+    const chatRoomRef = await addDoc(collection(fireStoreDB, "channels"), {
+      // 채팅방에 필요한 초기 데이터를 설정합니다.
+      writerId: writerId,
+      writerProfileImage: route.params.profileImage,
+      writerDisplayName: route.params.displayName,
+      uid: uid,
+      displayName: displayName,
+      createdAt: new Date(), // 채팅방 생성 시간
+      // 기타 채팅방에 필요한 데이터를 추가할 수 있습니다.
+    });
+      navigation.navigate('Home', {
       screen: '채팅',
     })
   };
@@ -82,6 +83,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           date={route.params.date}
           onPress={handleFindPress}
           findOrLost={findOrLost}
+          writerId={writerId}
         />
         <Text style={styles.requireHeader}>요구 사항</Text>
 
@@ -121,9 +123,9 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
             <Text style={styles.textSmall}>친절점수 : 90점</Text>
           </View>
           {/* '채팅하기' 버튼 추가 */}
-          <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
+          {writerId != uid && <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
             <Text style={styles.buttonText}>채팅하기</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
       </View>
     </ScrollView>
