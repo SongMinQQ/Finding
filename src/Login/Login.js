@@ -36,7 +36,10 @@ const Login = ({ navigation }) => {
       dispatch({type: 'SET_PROFILE_IMG', payload: user.photoURL});
       dispatch({type: 'SET_ID', payload: user.uid});
       console.log('uid: '+user.uid);
-      navigation.navigate("Home");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
       // 로그인 성공 처리
     } catch (error) {
       // 로그인 실패 처리
