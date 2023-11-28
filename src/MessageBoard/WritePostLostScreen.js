@@ -23,6 +23,7 @@ const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
 
 const WritePostLostScreen = ({ navigation }) => {
     const displayName = useSelector((state) => state.displayName);
+    const uid = useSelector((state) => state.UID);
 
     const [title, setTitle] = useState('');
     const [findLocation, setFindLocation] = useState('');
@@ -42,7 +43,9 @@ const WritePostLostScreen = ({ navigation }) => {
         thankMoney: thankMoney,
         tradeType: tradeType,
         tradeLocation: tradeLocation,
-        description: description
+        description: description,
+        displayName: displayName,
+        uid: uid,
     };
 
     const moneyList = [

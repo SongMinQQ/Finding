@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity
 import { useNavigation } from '@react-navigation/native';
 import WriteButton from './WriteButton';
 import { fireStoreDB } from '../../FireBase/DB';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -19,22 +19,28 @@ const LostBoard = () => {
 
     const fetchDocs = async () => {
         try {
-            const querySnapshot = await getDocs(collection(fireStoreDB, "lostBoard"));
-            setPosts(prevState => {
-                const fetchedPosts = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                return [...prevState, ...fetchedPosts];
-            });
+            const q = query(collection(fireStoreDB, "lostBoard"), orderBy("date", "desc"));
+        
+            // 생성된 쿼리를 사용하여 문서들을 가져옵니다.
+            const querySnapshot = await getDocs(q);
+            const fetchedPosts = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setPosts(fetchedPosts);
         } catch (error) {
             console.error("Error fetching documents: ", error);
         }
     };
 
     useEffect(() => {
-        fetchDocs();
-    }, [])
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchDocs();
+        });
+
+        // 컴포넌트 언마운트 시 리스너 제거
+        return unsubscribe;
+    }, [navigation])
 
     return (
         <>

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, ScrollView, Image, TouchableOpacity
 import WriteButton from './WriteButton';
 import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
-import { collection,  query, where, getDocs } from "firebase/firestore";
+import { collection,  query, where, getDocs, orderBy } from "firebase/firestore";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -46,14 +46,15 @@ const FindBoard = () => {
 
     const fetchDocs = async () => {
         try {
-            const querySnapshot = await getDocs(collection(fireStoreDB, "findBoard"));
-            setPosts(prevState => {
-                const fetchedPosts = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                return [...prevState, ...fetchedPosts];
-            });
+            const q = query(collection(fireStoreDB, "findBoard"), orderBy("date", "desc"));
+        
+            // 생성된 쿼리를 사용하여 문서들을 가져옵니다.
+            const querySnapshot = await getDocs(q);
+            const fetchedPosts = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setPosts(fetchedPosts);
         } catch (error) {
             console.error("Error fetching documents: ", error);
         }
@@ -75,8 +76,14 @@ const FindBoard = () => {
       
 
     useEffect(() => {
-        fetchDocs();
-    }, [])
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchDocs();
+        });
+
+        // 컴포넌트 언마운트 시 리스너 제거
+        return unsubscribe;
+    }, [navigation])
+
     // const findItemData = [...Array(21)].map((_, index) => ({
     //     id: index,
     //     imgURL: `https://picsum.photos/id/${index}/200/200`,
@@ -106,6 +113,7 @@ const FindBoard = () => {
                                 tradeType: item.tradeType,
                                 tradeLocation: item.tradeLocation,
                                 articleExplain: item.description,
+                                displayName: item.displayName,
                             })}>
                             <Image
                                 source={item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png')}
@@ -116,14 +124,14 @@ const FindBoard = () => {
                                 <Text style={styles.itemText}>{item.findLocation}</Text>
                                 <Text style={styles.itemText}>{item.date.toDate().toLocaleDateString('ko-KR')}</Text>
                                 <TouchableOpacity style={styles.itemUser}>
-                                    <Text>😎홍길동</Text>
+                                    <Text>{item.displayName}</Text>
                                 </TouchableOpacity>
                             </View>
                         </TouchableOpacity>
                     ))}
                 </View>
             </ScrollView>
-            <WriteButton type="find" />
+            <WriteButton type="find"/>
         </>
     );
 };
