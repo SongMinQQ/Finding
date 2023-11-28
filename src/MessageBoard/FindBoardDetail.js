@@ -55,28 +55,71 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   const uid = useSelector((state) => state.UID);
   //현재 로그인한 사용자의 닉네임
   const displayName = useSelector((state) => state.displayName);
+  //현재 로그인한 사용자의 프로필 사진
+  const profileImg = useSelector((state) => state.profileImg);
   // const handleChatPress = (writerId, uid) => {
 
+  // const handleChatPress = async () => {
+  //   // 채팅방 ID를 생성하기 위해 두 사용자의 ID를 정렬합니다.
+  //   const chatRoomId = [writerId, uid].sort().join('_');
+
+  //   // Firestore에서 새로운 채팅방 문서를 생성합니다.
+  //   const chatRoomRef = await addDoc(collection(fireStoreDB, "channels"), {
+  //     // 채팅방에 필요한 초기 데이터를 설정합니다.
+  //     chatRoomId: chatRoomId, // Unique identifier for the chat room
+  //     participants: {
+  //       [uid]: {
+  //         uid: uid,
+  //         displayName: displayName, // Display name of the current user
+  //         profileImage: profileImg, // Profile image of the current user
+  //       },
+  //       [writerId]: {
+  //         uid: writerId,
+  //         displayName: route.params.writerDisplayName, // Display name of the writer
+  //         profileImage: route.params.writerProfileImage, // Profile image of the writer
+  //       }
+  //     },
+  //     createdAt: new Date(), // 채팅방 생성 시간
+  //     // 기타 채팅방에 필요한 데이터를 추가할 수 있습니다.
+  //   });
+  //     navigation.navigate('Home', {
+  //     screen: '채팅',
+  //   })
+  // };
   const handleChatPress = async () => {
-    // 채팅방 ID를 생성하기 위해 두 사용자의 ID를 정렬합니다.
+    // Create a unique chat room ID using both user IDs
     const chatRoomId = [writerId, uid].sort().join('_');
-
-    // Firestore에서 새로운 채팅방 문서를 생성합니다.
-    const chatRoomRef = await addDoc(collection(fireStoreDB, "channels"), {
-      // 채팅방에 필요한 초기 데이터를 설정합니다.
-      writerId: writerId,
-      writerProfileImage: route.params.profileImage,
-      writerDisplayName: route.params.displayName,
-      uid: uid,
-      displayName: displayName,
-      createdAt: new Date(), // 채팅방 생성 시간
-      // 기타 채팅방에 필요한 데이터를 추가할 수 있습니다.
-    });
-      navigation.navigate('Home', {
-      screen: '채팅',
-    })
+  
+    // Check if the chat room already exists
+    const chatRoomQuery = query(collection(fireStoreDB, "channels"), where("chatRoomId", "==", chatRoomId));
+    const querySnapshot = await getDocs(chatRoomQuery);
+  
+    // Proceed to create a new chat room only if it doesn't exist
+    if (querySnapshot.empty) {
+      // Firestore document for the chat room
+      await addDoc(collection(fireStoreDB, "channels"), {
+        chatRoomId: chatRoomId, // Unique identifier for the chat room
+        participants: {
+          [uid]: {
+            uid: uid,
+            displayName: displayName, // Display name of the current user
+            profileImage: profileImg, // Profile image of the current user
+          },
+          [writerId]: {
+            uid: writerId,
+            displayName: route.params.displayName, // Display name of the writer
+            profileImage: route.params.profileImage, // Profile image of the writer
+          }
+        },
+        createdAt: new Date(), // Timestamp when the chat room is created
+      });
+    }
+  
+    // Navigate to the chat screen with the chatRoomId
+    navigation.navigate('Home', {
+          screen: '채팅',
+        });
   };
-
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
       <View style={styles.container}>

@@ -12,26 +12,27 @@ const ChattingChannels = () => {
     const navigation = useNavigation();
     useEffect(() => {
         const fetchChatRooms = async () => {
-          // 첫 번째 쿼리: uid가 현재 사용자의 uid와 일치하는 채팅방
-          const q1 = query(collection(fireStoreDB, "channels"), where("uid", "==", uid));
-          // 두 번째 쿼리: writerId가 현재 사용자의 uid와 일치하는 채팅방
-          const q2 = query(collection(fireStoreDB, "channels"), where("writerId", "==", uid));
+          const chatRoomsRef = collection(fireStoreDB, "channels");
+          const q = query(chatRoomsRef, where(`participants.${uid}.uid`, "==", uid));
       
           try {
-            // 두 쿼리 모두 실행
-            const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
-            // 두 결과를 하나의 배열로 병합
-            const combinedRooms = [...querySnapshot1.docs, ...querySnapshot2.docs]
-              .map(doc => ({
-                id: doc.id,
-                ...doc.data()
-              }))
-              // 동일한 채팅방 제거 (uid와 writerId가 같은 경우)
-              .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
-              // 필터링 조건 적용
-              .filter(doc => doc.writerProfileImage && doc.writerDisplayName);
+            const querySnapshot = await getDocs(q);
+            const fetchedChatRooms = querySnapshot.docs.map(doc => {
+              const data = doc.data();
+              const participants = data.participants || {};
+              const otherUserId = Object.keys(participants).find(participantUid => participantUid !== uid);
+              const otherUser = participants[otherUserId] || {};
       
-            setChatRooms(combinedRooms);
+              return {
+                id: doc.id,
+                otherUserId: otherUserId,
+                otherUserDisplayName: otherUser.displayName,
+                otherUserProfileImage: otherUser.profileImage,
+                ...data
+              };
+            });
+      
+            setChatRooms(fetchedChatRooms);
           } catch (error) {
             console.error("Error fetching chat rooms: ", error);
           }
@@ -45,10 +46,10 @@ const ChattingChannels = () => {
 
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.chatRoomContainer} onPress={() => goToChat(item)}>
-            <Image source={{ uri: item.writerProfileImage }} style={styles.profileImage} />
-            <Text style={styles.displayName}>{item.writerDisplayName}</Text>
+          <Image source={{ uri: item.otherUserProfileImage }} style={styles.profileImage} />
+          <Text style={styles.displayName}>{item.otherUserDisplayName}</Text>
         </TouchableOpacity>
-    );
+      );
 
     return (
         <FlatList
