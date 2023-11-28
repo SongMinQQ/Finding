@@ -15,6 +15,9 @@ import { storage } from '../../FireBase/DB';
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -24,6 +27,8 @@ const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
 const WritePostLostScreen = ({ navigation }) => {
     const displayName = useSelector((state) => state.displayName);
     const uid = useSelector((state) => state.UID);
+
+    const { loading } = useContext(LoadingContext);
 
     const [title, setTitle] = useState('');
     const [findLocation, setFindLocation] = useState('');
@@ -134,8 +139,11 @@ const WritePostLostScreen = ({ navigation }) => {
         }
     };
 
+    const { spinner } = useContext(LoadingContext);
+
     const handleSubmit = async () => {
         try {
+            spinner.start();
             const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
 
             const docRef = await addDoc(collection(fireStoreDB, "lostBoard"), {
@@ -148,20 +156,11 @@ const WritePostLostScreen = ({ navigation }) => {
         } catch (e) {
             console.log('글 작성 실패');
             console.log("Error adding document: ", e);
+        } finally {
+            spinner.stop();
         }
 
     };
-
-    //모달 관련 함수, 상태변수
-    const [modal, setModal] = useState(false);
-
-    const openModal = () => {
-        setModal(true);
-    }
-
-    const closeModal = () => {
-        setModal(false);
-    }
 
     return (
         <>
@@ -203,7 +202,6 @@ const WritePostLostScreen = ({ navigation }) => {
                             onFocus={showDatePicker}
                             theme={{ colors: { onSurfaceVariant: '#BDBDBD' } }}
                             activeUnderlineColor="#000"
-                            onPressIn={openModal}
                         />
                     </View>
                 </View>

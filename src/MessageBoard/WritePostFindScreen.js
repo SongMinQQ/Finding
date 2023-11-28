@@ -15,6 +15,9 @@ import { storage } from '../../FireBase/DB';
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -26,6 +29,9 @@ const WritePostFindScreen = ({ navigation }) => {
     const displayName = useSelector((state) => state.displayName);
     const uid = useSelector((state) => state.UID);
     const profileImage = useSelector((state) => state.profileImg);
+
+    const { loading } = useContext(LoadingContext);
+
     // 글 내용들
     const [title, setTitle] = useState('');
     const [findLocation, setFindLocation] = useState('');
@@ -139,9 +145,11 @@ const WritePostFindScreen = ({ navigation }) => {
       };
 
     
-
+    const { spinner } = useContext(LoadingContext);
+    
     const handleSubmit = async () => {
         try {
+            spinner.start();
             const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
 
             const docRef = await addDoc(collection(fireStoreDB, "findBoard"), {
@@ -154,6 +162,8 @@ const WritePostFindScreen = ({ navigation }) => {
         } catch (e) {
             console.log('글 작성 실패');
             console.log("Error adding document: ", e);
+        } finally {
+            spinner.stop();
         }
 
     };
@@ -171,6 +181,7 @@ const WritePostFindScreen = ({ navigation }) => {
 
     return (
         <>
+            {loading && <LoadingSpinner/>}
             <ScrollView style={styles.container}>
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>
