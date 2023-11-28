@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
-import { Image } from 'expo-image';
+import { Image } from "react-native-expo-image-cache";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -27,6 +27,7 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
 const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     const navigation = useNavigation();
+    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
     const findOrLost = "lost"
     const userName = "홍길동"
@@ -38,7 +39,7 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     const handleChatPress = () => {
         navigation.navigate('Home', {
             screen: '채팅',
-          })
+        })
     };
 
     return (
@@ -80,8 +81,9 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
                 <Text style={styles.item}>{route.params.articleExplain}</Text>
                 <View style={styles.profileSection}>
                     <Image
-                        source={require('../../img/defaultProfile.png')}
+                        {...{ preview, uri: route.params.profileImage }}
                         style={styles.profileImage}
+                        onError={(e) => console.log(e)}
                     />
                     <View style={styles.userInfo}>
                         <Text style={styles.textMedium}>홍길동</Text>

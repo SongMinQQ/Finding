@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity, RefreshControl  } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, arrayUnion, addDoc, setDoc, collection, query, where, getDoc, orderBy } from "firebase/firestore";
 import { useSelector } from 'react-redux';
+import { Image } from "react-native-expo-image-cache";
+
+
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -17,6 +20,8 @@ const ITEM_TEXT_SIZE_SMALL = ITEM_SIZE * 0.12;
 const ProfileFind = () => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
+    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+   
     const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
@@ -55,14 +60,9 @@ const ProfileFind = () => {
         }
     };
 
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         fetchUserPosts();
-    //     });
-
-    //     // 컴포넌트 언마운트 시 리스너 제거
-    //     return unsubscribe;
-    // }, [navigation])
+    useEffect(() => {
+        fetchUserPosts();
+    }, [])
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -94,8 +94,9 @@ const ProfileFind = () => {
                         })}>
 
                         <Image
-                            source={{ uri: item.imageUrl }}
+                            {...{ preview, uri: item.imageUrl }}
                             style={styles.itemImage}
+                            onError={(e) => console.log(e)}
                         />
                         <Text style={styles.itemName}>{item.title}</Text>
                         <Text style={styles.itemLocation}>{item.findLocation}</Text>

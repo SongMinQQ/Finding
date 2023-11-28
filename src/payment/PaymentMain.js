@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
-
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { Image } from "expo-image";
 // 창의 높이를 계산합니다.
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
