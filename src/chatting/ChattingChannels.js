@@ -11,31 +11,33 @@ const ChattingChannels = () => {
     const uid = useSelector((state) => state.UID);
     const navigation = useNavigation();
     useEffect(() => {
-        
         const fetchChatRooms = async () => {
-          const q = query(
-            collection(fireStoreDB, "channels"),
-            where("uid", "==", uid)
-        );
-    
-        try {
-            const querySnapshot = await getDocs(q);
-            const rooms = querySnapshot.docs
-            .map(doc => ({
+          // 첫 번째 쿼리: uid가 현재 사용자의 uid와 일치하는 채팅방
+          const q1 = query(collection(fireStoreDB, "channels"), where("uid", "==", uid));
+          // 두 번째 쿼리: writerId가 현재 사용자의 uid와 일치하는 채팅방
+          const q2 = query(collection(fireStoreDB, "channels"), where("writerId", "==", uid));
+      
+          try {
+            // 두 쿼리 모두 실행
+            const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+            // 두 결과를 하나의 배열로 병합
+            const combinedRooms = [...querySnapshot1.docs, ...querySnapshot2.docs]
+              .map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            }))
-              // Filter out any rooms without a writerProfileImage or writerDisplayName
-            .filter(doc => doc.writerProfileImage && doc.writerDisplayName);
-    
-            setChatRooms(rooms);
-        } catch (error) {
+              }))
+              // 동일한 채팅방 제거 (uid와 writerId가 같은 경우)
+              .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+              // 필터링 조건 적용
+              .filter(doc => doc.writerProfileImage && doc.writerDisplayName);
+      
+            setChatRooms(combinedRooms);
+          } catch (error) {
             console.error("Error fetching chat rooms: ", error);
-        }
+          }
         };
         fetchChatRooms();
-        console.log(chatRooms);
-    }, [uid]);
+      }, [uid]);
 
     const goToChat = (chatRoom) => {
         navigation.navigate('Chatting', { chatRoomId: chatRoom.id, chatRoom });
