@@ -30,6 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.5",
+    "react-native-expo-image-cache": "^4.1.0",
     "react-native-gifted-chat": "^2.4.0",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-paper": "^5.11.1",

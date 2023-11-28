@@ -43,6 +43,10 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       location: route.params.location,
       date: route.params.date,
       userName: route.params.displayName,
+      money: route.params.money,
+      tradeType: route.params.tradeType,
+      tradeLocation: route.params.tradeLocation,
+      sellUser: route.params.sellUser,
     });
   };
   //글 작성자의 UID
