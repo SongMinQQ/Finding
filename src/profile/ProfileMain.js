@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
     userInfo: {
         flex: 1,
         height: PROFILE_IMAGE_SIZE,
-        justifyContent: 'space-around'
+        justifyContent: 'center',
+        gap: 10,
     },
     textMedium: {
         fontSize: FONT_SIZE_MEDIUM,
