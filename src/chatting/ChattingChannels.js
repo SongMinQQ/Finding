@@ -22,7 +22,6 @@ const ChattingChannels = () => {
               const participants = data.participants || {};
               const otherUserId = Object.keys(participants).find(participantUid => participantUid !== uid);
               const otherUser = participants[otherUserId] || {};
-      
               return {
                 id: doc.id,
                 otherUserId: otherUserId,
