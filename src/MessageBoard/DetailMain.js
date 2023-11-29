@@ -31,7 +31,21 @@ const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost, wri
           {findOrLost === "find" ? "획득날짜: " : "분실날짜: "}
           {date}
         </Text>
-        {findOrLost === "find" ? (
+        {(() => {
+          if (findOrLost === "find") return (
+            <TouchableOpacity style={styles.findButton} onPress={onPress}>
+              <Text style={styles.findButtonText}>{writerId != uid ? "물건 찾기" : "글 삭제"}</Text>
+            </TouchableOpacity>)
+          else if (findOrLost === "lost" && writerId === uid) return (
+            <TouchableOpacity style={styles.findButton} onPress={onPress}>
+              <Text style={styles.findButtonText}>글삭제</Text>
+            </TouchableOpacity>)
+          else return (
+            <View style={[styles.findButton, { backgroundColor: '#fff' }]}>
+              <Text style={styles.findButtonText}>글 삭제</Text>
+            </View>)
+        })()}
+        {/* {findOrLost === "find" ? (
           <TouchableOpacity style={styles.findButton} onPress={onPress}>
             <Text style={styles.findButtonText}>{writerId != uid ? "물건 찾기":"글 삭제"}</Text>
           </TouchableOpacity>
@@ -39,7 +53,7 @@ const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost, wri
           <View style={[styles.findButton,{backgroundColor: '#fff'}]}>
             <Text style={styles.findButtonText}>글 삭제</Text>
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );

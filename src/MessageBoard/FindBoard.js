@@ -40,7 +40,7 @@ const FONT_SIZE_TEXT = WINDOW_HEIGHT * 0.019;
 
 
 
-const FindBoard = () => {
+const FindBoard = ({ navigation: { navigate }, route }) => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
@@ -57,7 +57,7 @@ const FindBoard = () => {
                 id: doc.id,
                 ...doc.data()
             }));
-            console.log("찾음 게시글 가져옴");
+            console.log("게시글 정보 가져옴");
             setPosts(fetchedPosts);
         } catch (error) {
             console.error("Error fetching documents: ", error);
@@ -68,6 +68,8 @@ const FindBoard = () => {
         fetchDocs();
     }, [])
 
+
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         fetchDocs().then(() => setRefreshing(false));
@@ -77,6 +79,7 @@ const FindBoard = () => {
         <TouchableOpacity
             style={styles.item}
             onPress={() => navigation.navigate("FindBoardDetail", {
+                id: item.id,
                 imgURL: item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png'),
                 itemName: item.title,
                 location: item.findLocation,

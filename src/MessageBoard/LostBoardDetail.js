@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
@@ -6,6 +6,12 @@ import { Image } from "react-native-expo-image-cache";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
+
+import { fireStoreDB } from '../../FireBase/DB';
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDocs, addDoc } from "firebase/firestore";
+import { useSelector } from 'react-redux';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -27,15 +33,45 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
 const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     const navigation = useNavigation();
+    const { loading } = useContext(LoadingContext);
+ 
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
+    const { spinner } = useContext(LoadingContext);
+    
     const findOrLost = "lost"
     const userName = "홍길동"
 
-    // const handleFindPress = () => {
-    //     navigation.navigate("PaymentLegalAgree");
-    // };
+    const deletePost = async (postId) => {
+        try {
+            spinner.start();
+            const postRef = doc(fireStoreDB, "lostBoard", postId);
+            await deleteDoc(postRef);
+    
+            const userRef = doc(fireStoreDB, "users", uid);
+            await updateDoc(userRef, {
+              lostPosts: arrayRemove(postId)
+            });
+            console.log("Document successfully deleted: ", postId);
+        } catch (error) {
+            console.error("Error removing document: ", error);
+        } finally {
+            spinner.stop();
+            navigation.navigate('Home');
+        }
+    };
 
+    const handleDeletePress = () => {
+        deletePost(route.params.id);
+    };
+
+    const writerId = route.params.sellUser;
+    const uid = useSelector((state) => state.UID);
+    //현재 로그인한 사용자의 닉네임
+    const displayName = useSelector((state) => state.displayName);
+    //현재 로그인한 사용자의 프로필 사진
+    const profileImg = useSelector((state) => state.profileImg);
+    
     const handleChatPress = () => {
         navigation.navigate('Home', {
             screen: '채팅',
@@ -50,8 +86,9 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
                     itemName={route.params.itemName}
                     location={route.params.location}
                     date={route.params.date}
-                    //onPress={handleFindPress}
+                    onPress={handleDeletePress}
                     findOrLost={findOrLost}
+                    writerId={writerId}
                 />
                 <Text style={styles.requireHeader}>보답 사항</Text>
 

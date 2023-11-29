@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, Button, Dimensions, StyleSheet } from 'react-native';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper';
 import { auth } from '../../FireBase/DB';
@@ -76,7 +75,7 @@ const Login = ({ navigation }) => {
   const [loginFail, setLoginFail] = useState(false);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       {loading && <LoadingSpinner/>}
       <View style={styles.flexbox}>
         <Image style={styles.image} source={require('../../img/loginIcon.png')} />
@@ -127,7 +126,7 @@ const Login = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
