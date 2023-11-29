@@ -11,6 +11,7 @@ const LoadingSpinner = () => {
 
 const styles = StyleSheet.create({
     loadingView: {
+        flex: 1,
         position:'absolute',
         zIndex:5,
         opacity: 0.3,

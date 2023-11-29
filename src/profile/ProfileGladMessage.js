@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, Button } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, Button, RefreshControl } from 'react-native';
 import GladMessageDialog from './GladMessageDialog';
+import { useNavigation } from '@react-navigation/native';
+import { fireStoreDB } from '../../FireBase/DB';
+import { doc, getDoc } from "firebase/firestore";
+import { useSelector } from 'react-redux';
 import { Image } from 'expo-image';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -14,7 +18,10 @@ const TEXT_SIZE_SMALL = WINDOW_HEIGHT * 0.012;
 const ProfileGladMessage = () => {
     const [dialogVisible, setDialogVisible] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
-
+    const [refreshing, setRefreshing] = useState(false);
+  
+    const uid = useSelector((state) => state.UID);
+    const [posts, setPosts] = useState([]);
 
     const messagesData = [...Array(10)].map((_, index) => ({
         id: index,
@@ -31,18 +38,51 @@ const ProfileGladMessage = () => {
         setDialogVisible(true);
     };
 
+    const fetchGladMessages = async () => {
+        try {
+            const userRef = doc(fireStoreDB, "users", uid); // UID는 현재 로그인한 사용자의 ID
+            console.log("감사 메시지 가져오기");
+            const userDoc = await getDoc(userRef);
+            console.log("감사 메시지 가져오기 성공");
+    
+            if (userDoc.exists()) {
+                const gladMessages = userDoc.data().gladMessages; // 사용자의 감사 메시지 배열
+                if (gladMessages && Array.isArray(gladMessages)) {
+                    setPosts(gladMessages);
+                    // gladMessages.forEach(messageObj => {
+                    //     console.log("displayName:", messageObj.displayName);
+                    //     console.log("message:", messageObj.message);
+                    //     console.log("profileImage:", messageObj.profileImage);
+                    //     console.log("uid:", messageObj.uid);
+                    // });
+                } else {
+                    console.log("감사 메시지가 존재하지 않습니다.");
+                }
+            } else {
+                console.log("사용자 문서가 존재하지 않습니다.");
+            }
+        } catch (error) {
+            console.error("감사 메시지 가져오기 오류:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchGladMessages();
+    }, [])
+
+
     return (
         <ScrollView style={{backgroundColor: '#fff'}}>
             <View style={styles.container}>
-                {messagesData.map((message) => (
-                    <TouchableOpacity key={message.id} onPress={() => handleCardPress(message)}>
+                {posts.map((message, index) => (
+                    <TouchableOpacity key={index} onPress={() => handleCardPress(message)}>
                         <View style={styles.card}>
                             <Image
                                 source={ message.profileImage }
                                 style={styles.profileImage}
                             />
                                 <View style={styles.messageContainer}>
-                                    <Text style={styles.itemName}>{message.userName}</Text>
+                                    <Text style={styles.itemName}>{message.displayName}</Text>
                                     <Text
                                         style={styles.messageText}
                                         numberOfLines={2}
@@ -61,8 +101,8 @@ const ProfileGladMessage = () => {
                     visible={dialogVisible}
                     onClose={() => setDialogVisible(false)}
                     message={selectedMessage.message}
-                    userName={selectedMessage.userName}
-                    lostArticle={selectedMessage.lostArticle}
+                    userName={selectedMessage.displayName}
+                    lostArticle={selectedMessage.itemName}
                     profileImage={selectedMessage.profileImage}
                 />
             )}
