@@ -18,7 +18,8 @@ const Chatting = ({ route }) => {
               createdAt: serverTimestamp(),
               user: {
                   _id: uid,
-                  // ... other user properties
+                  name: displayName, // Replace with current user's name
+                  avatar: profileImg,// ... other user properties
               },
           });
       });
