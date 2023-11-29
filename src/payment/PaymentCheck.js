@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+
 import PaymentMain from './PaymentMain';
 import DeliveryInfo from './DeliveryInfo';
 import MeetTradeInfo from './MeetTradeInfo';
+
 import { useNavigation } from '@react-navigation/native';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useSelector } from 'react-redux';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { fireStoreDB } from '../../FireBase/DB';
+import { storage } from '../../FireBase/DB';
+import { doc, collection, arrayUnion, addDoc, setDoc } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -55,18 +64,35 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
     const [meetPhoneNum, setMeetPhoneNum] = useState('');
 
     const loadUserInfo = async () => {
-        setDeliveryName(await getData('deliveryName') || '');
-        setDeliveryPhoneNum(await getData('deliveryPhoneNum') || '');
-        setDeliveryAddress(await getData('deliveryAddress') || '');
-
-        
-        setMeetName(await getData('meetName') || '');
-        setMeetPhoneNum(await getData('meetPhoneNum') || '');
+        if(route.params.tradeType === '택배'){
+            console.log("배달 정보 띄움");
+            setDeliveryName(await getData('deliveryName') || '');
+            setDeliveryPhoneNum(await getData('deliveryPhoneNum') || '');
+            setDeliveryAddress(await getData('deliveryAddress') || '');
+            setMeetName('');
+            setMeetPhoneNum('');
+        }else{
+            console.log(route.params.tradeType);
+            console.log("직거래 정보 띄움");
+            setDeliveryName('');
+            setDeliveryPhoneNum('');
+            setDeliveryAddress('');
+            setMeetName(await getData('meetName') || '');
+            setMeetPhoneNum(await getData('meetPhoneNum') || '');
+        }
     };
 
-    useEffect(() => {
-        loadUserInfo();
-    }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            loadUserInfo();
+            // 페이지가 포커스 될 때마다 실행될 로직을 여기에 작성합니다.
+
+            return () => {
+                // 포커스가 사라질 때 실행될 클린업 로직이 필요하다면 여기에 작성합니다.
+            };
+        }, [route.params])
+    );
 
     // 결제 성공 카드 번호: 4242 4242 4242 4242
     // 인증 부족 카드 번호: 4000 0025 0000 3155
@@ -98,6 +124,8 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                     deliveryPhoneNum: `${deliveryPhoneNum}`,
                     deliveryAddress: `${deliveryAddress}`,
                     deliveryRequest: `${deliveryRequest}`,
+                    meetName: `${meetName}`,
+                    meetPhoneNum: `${meetPhoneNum}`,
                     buyUser: `${uid}`,
                     sellUSer: `${route.params.sellUser}`,
                 }),
@@ -132,6 +160,37 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
             const response = await fetch(`https://neighbouring-dormouse-beakseok.koyeb.app/payment-details/${paymentIntentId}`);
             const paymentDetails = await response.json();
             console.log('결제 세부 정보:', paymentDetails);
+            // 필요한 데이터 추출
+            const amount = paymentDetails.amount;
+            const description = paymentDetails.description;
+            const metadata = paymentDetails.metadata;
+
+            const paymentContent = {
+                key: metadata.key,
+                amount: paymentDetails.amount,
+                description: paymentDetails.description,
+                itemName: metadata.itemName,
+                paymentDate: metadata.paymentDate,
+                buyUser: metadata.buyUser,
+                sellUser: metadata.sellUSer,
+                findLocation:  metadata.findLocation,
+                findDate: metadata.findDate,
+                tradeType: metadata.tradeType,
+                tradeLocation:metadata.tradeLocation,
+                meetName:  metadata.meetName,
+                meetPhoneNum:  metadata.meetPhoneNum,
+                deliveryName:  metadata.deliveryName,
+                deliveryPhoneNum:  metadata.deliveryPhoneNum,
+                deliveryAddress:  metadata.deliveryAddress,
+                deliveryRequest:  metadata.deliveryRequest,
+            };
+
+            const docRef = await addDoc(collection(fireStoreDB, "paymentInfo"), {
+                ...paymentContent,
+            });
+            console.log("Document written with ID: ", docRef.id);
+
+
         } catch (error) {
             console.error('결제 세부 정보 조회 중 오류 발생:', error);
         }
