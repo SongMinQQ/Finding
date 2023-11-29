@@ -3,13 +3,21 @@ import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from
 import PaymentMain from './PaymentMain';
 import LegalCheckBox from './LegalCheckBox';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const FONT_SIZE_HEADER = WINDOW_HEIGHT * 0.03;
 
-const PaymentLegalAgree = ({navigation: {navigate}, route}) => {
+const PaymentLegalAgree = ({ navigation: { navigate }, route }) => {
     const navigation = useNavigation();
+
+
+    //현재 로그인한 사용자의 UID
+    const uid = useSelector((state) => state.UID);
+    //현재 로그인한 사용자의 닉네임
+    const displayName = useSelector((state) => state.displayName);
 
     const [isChecked1, setChecked1] = useState(false);
     const [isChecked2, setChecked2] = useState(false);
@@ -17,58 +25,61 @@ const PaymentLegalAgree = ({navigation: {navigate}, route}) => {
 
     const allChecked = isChecked1 && isChecked2 && isChecked3;
     return (
-        <View style={styles.container}>
-            <Text style={styles.headerText}>
-                {route.params.userName} 님의 물건이{'\n'}
-                <Text style={styles.highlightText}>정말 맞나요?</Text>
-            </Text>
-            <PaymentMain
-                imgURL={route.params.imgURL}
-                itemName={route.params.itemName}
-                location={route.params.location}
-                date={route.params.date}
-            />
+        <ScrollView style={{backgroundColor: '#fff'}}>
+            <View style={styles.container}>
+                <Text style={styles.headerText}>
+                    {displayName} 님의 물건이{'\n'}
+                    <Text style={styles.highlightText}>정말 맞나요?</Text>
+                </Text>
+                <PaymentMain
+                    imgURL={route.params.imgURL}
+                    itemName={route.params.itemName}
+                    location={route.params.location}
+                    date={route.params.date}
+                />
 
-            <View style={styles.legalSectionContainer}>
-                <ScrollView style={styles.legalSection}>
-                    <Text>법률 안내사항</Text>
-                </ScrollView>
+                <View style={styles.legalSectionContainer}>
+                    <ScrollView style={styles.legalSection}>
+                        <Text>법률 안내사항</Text>
+                    </ScrollView>
+                </View>
+
+                <LegalCheckBox
+                    label="정말 제 물건이 맞습니다."
+                    value={isChecked1}
+                    onChange={setChecked1}
+                />
+                <LegalCheckBox
+                    label="법률 안내사항을 모두 숙지하였습니다."
+                    value={isChecked2}
+                    onChange={setChecked2}
+                />
+                <LegalCheckBox
+                    label="법률을 어겼을 시 처벌을 받을 수 있다는 것을 인지하였습니다."
+                    value={isChecked3}
+                    onChange={setChecked3}
+                />
+                <TouchableOpacity
+                    style={[styles.findButton, { backgroundColor: allChecked ? '#007bff' : '#cccccc' }]}
+                    disabled={!allChecked}
+                    onPress={() => {
+                        navigation.navigate("PaymentCheck", {
+                            imgURL: route.params.imgURL,
+                            itemName: route.params.itemName,
+                            location: route.params.location,
+                            date: route.params.date,
+                            tradeType: route.params.tradeType,
+                            tradeLocation: route.params.tradeLocation,
+                            displayName: route.params.displayName, // 판매자 이름
+                            money: route.params.money,
+                            sellUser: route.params.sellUser, // 판매자 Uid
+                        })
+                    }}
+                >
+                    <Text style={styles.findButtonText}>물건 찾기</Text>
+                </TouchableOpacity>
             </View>
-
-            <LegalCheckBox
-                label="정말 제 물건이 맞습니다."
-                value={isChecked1}
-                onChange={setChecked1}
-            />
-            <LegalCheckBox
-                label="법률 안내사항을 모두 숙지하였습니다."
-                value={isChecked2}
-                onChange={setChecked2}
-            />
-            <LegalCheckBox
-                label="법률을 어겼을 시 처벌을 받을 수 있다는 것을 인지하였습니다."
-                value={isChecked3}
-                onChange={setChecked3}
-            />
-            <TouchableOpacity
-                style={[styles.findButton, { backgroundColor: allChecked ? '#007bff' : '#cccccc' }]}
-                disabled={!allChecked}
-                onPress={() => { navigation.navigate("PaymentCheck", {
-                    imgURL: route.params.imgURL,
-                    itemName: route.params.itemName,
-                    location: route.params.location,
-                    date: route.params.date,
-                    userName: route.params.userName,
-                    money: route.params.money,
-                    tradeType: route.params.tradeType,
-                    tradeLocation: route.params.tradeLocation,
-                    sellUser: route.params.sellUser,
-                }) }}
-            >
-                <Text style={styles.findButtonText}>물건 찾기</Text>
-            </TouchableOpacity>
-        </View>
-
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({

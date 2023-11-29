@@ -42,10 +42,10 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       itemName: route.params.itemName,
       location: route.params.location,
       date: route.params.date,
-      userName: route.params.displayName,
-      money: route.params.money,
       tradeType: route.params.tradeType,
       tradeLocation: route.params.tradeLocation,
+      displayName: route.params.displayName,
+      money: route.params.money,
       sellUser: route.params.sellUser,
     });
   };

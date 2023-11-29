@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, arrayUnion, addDoc, setDoc, collection, query, where, getDoc, orderBy } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 import { Image } from "react-native-expo-image-cache";
 
@@ -84,7 +84,7 @@ const ProfileFind = () => {
                             itemName: item.title,
                             location: item.findLocation,
                             date: item.date.toDate().toLocaleDateString('ko-KR'),
-                            displayName: item.displayName,
+                            sellUser: item.displayName,
                             money: item.thankMoney,
                             tradeType: item.tradeType,
                             tradeLocation: item.tradeLocation,
