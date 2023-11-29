@@ -130,7 +130,6 @@ export default function JoinMembership({ navigation }) {
               placeholder="휴대전화번호 입력"
               placeholderTextColor={'#BDBDBD'}
               theme={theme}
-              autoCorrect={false}
               keyboardType="phone-pad"
               onChangeText={(text) => setPhoneNumber(text)}
             />

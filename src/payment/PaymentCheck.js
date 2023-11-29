@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import PaymentMain from './PaymentMain';
-import PaymentInfo from './PaymentInfo';
+import DeliveryInfo from './DeliveryInfo';
+import MeetTradeInfo from './MeetTradeInfo';
 import { useNavigation } from '@react-navigation/native';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -21,14 +23,50 @@ const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.009;
 // 버튼 padding값
 const BUTTON_PADDING = WINDOW_HEIGHT * 0.01;
 
+// 로드
+const getData = async (key) => {
+    try {
+        const value = await AsyncStorage.getItem(key);
+        if (value !== null) {
+            // 값이 존재할 경우
+            return value;
+        }
+    } catch (e) {
+        // 로드 오류
+        console.error('Failed to load the data from the storage');
+    }
+};
 
 
 const PaymentCheck = ({ navigation: { navigate }, route }) => {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
+    const deliveryCost = 2200;
 
     const displayName = useSelector((state) => state.displayName);
     const uid = useSelector((state) => state.UID);
     const profileImage = useSelector((state) => state.profileImg);
+
+    const [deliveryName, setDeliveryName] = useState('');
+    const [deliveryPhoneNum, setDeliveryPhoneNum] = useState('');
+    const [deliveryAddress, setDeliveryAddress] = useState('');
+    const [deliveryRequest, setDeliveryRequest] = useState('');
+
+    const [meetName, setMeetName] = useState('');
+    const [meetPhoneNum, setMeetPhoneNum] = useState('');
+
+    const loadUserInfo = async () => {
+        setDeliveryName(await getData('deliveryName') || '');
+        setDeliveryPhoneNum(await getData('deliveryPhoneNum') || '');
+        setDeliveryAddress(await getData('deliveryAddress') || '');
+
+        
+        setMeetName(await getData('meetName') || '');
+        setMeetPhoneNum(await getData('meetPhoneNum') || '');
+    };
+
+    useEffect(() => {
+        loadUserInfo();
+    }, []);
 
     // 결제 성공 카드 번호: 4242 4242 4242 4242
     // 인증 부족 카드 번호: 4000 0025 0000 3155
@@ -37,6 +75,12 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
     const handlePayment = async () => {
         try {
             console.log('결제 세션 요청 시작');
+            let paymentTotalCost;
+            if(route.params.tradeType === '직거래'){
+                paymentTotalCost = route.params.money;
+            }else{
+                paymentTotalCost = route.params.money + deliveryCost;
+            }
             const response = await fetch('https://neighbouring-dormouse-beakseok.koyeb.app/create-payment-session', {
                 method: 'POST',
                 headers: {
@@ -47,10 +91,13 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                     itemName: `${route.params.itemName}`,
                     findLocation: `${route.params.location}`,
                     findDate: `${route.params.date}`,
-                    amount: `${route.params.money}`,
+                    amount: `${paymentTotalCost}`,
                     tradeType: `${route.params.tradeType}`,
                     tradeLocation: `${route.params.tradeLocation}`,
-                    deliveryInfo: '배송 정보',
+                    deliveryName: `${deliveryName}`,
+                    deliveryPhoneNum: `${deliveryPhoneNum}`,
+                    deliveryAddress: `${deliveryAddress}`,
+                    deliveryRequest: `${deliveryRequest}`,
                     buyUser: `${uid}`,
                     sellUSer: `${route.params.sellUser}`,
                 }),
@@ -92,7 +139,7 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
 
     const navigation = useNavigation();
     return (
-        <ScrollView>
+        <ScrollView style={{backgroundColor: '#fff'}}>
             <View style={styles.container}>
                 <PaymentMain
                     imgURL={route.params.imgURL}
@@ -100,14 +147,36 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                     location={route.params.location}
                     date={route.params.date}
                 />
-
-                <PaymentInfo
-                    userName="홍길동"
-                    userPhoneNum="010-1234-5678"
-                    userAdress="충남 천안시 동남구 안서동"
-                    thankCost="50000"
-                    deliveryCost="2200"
-                />
+                {route.params.tradeType === '직거래'?
+                (<MeetTradeInfo
+                    thankCost={route.params.money}
+                    meetName={meetName}
+                    meetPhoneNum={meetPhoneNum}
+                    setMeetName={setMeetName}
+                    setMeetPhoneNum={setMeetPhoneNum}
+                />):
+                (<DeliveryInfo
+                    thankCost={route.params.money}
+                    deliveryCost={deliveryCost}
+                    deliveryName={deliveryName}
+                    deliveryPhoneNum={deliveryPhoneNum}
+                    deliveryAddress={deliveryAddress}
+                    setDeliveryName={setDeliveryName}
+                    setDeliveryPhoneNum={setDeliveryPhoneNum}
+                    setDeliveryAddress={setDeliveryAddress}
+                    setDeliveryRequest={setDeliveryRequest}
+                />)}
+                {/* <DeliveryInfo
+                    thankCost={route.params.money}
+                    deliveryCost={deliveryCost}
+                    deliveryName={deliveryName}
+                    deliveryPhoneNum={deliveryPhoneNum}
+                    deliveryAddress={deliveryAddress}
+                    setDeliveryName={setDeliveryName}
+                    setDeliveryPhoneNum={setDeliveryPhoneNum}
+                    setDeliveryAddress={setDeliveryAddress}
+                    setDeliveryRequest={setDeliveryRequest}
+                /> */}
                 <TouchableOpacity
                     style={styles.paymentButton}
                     onPress={handlePayment}
