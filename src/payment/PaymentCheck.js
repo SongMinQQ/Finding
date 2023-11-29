@@ -143,7 +143,12 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                 console.log('결제 시트 표시 완료', error ? error : 'No error');
                 if (!error) {
                     await fetchPaymentDetails(data.clientSecret.split('_secret')[0]);
-                    navigate('PaymentFinish');
+                    // navigate('PaymentFinish');
+                    navigation.navigate("PaymentFinish", {
+                        itemName: route.params.itemName,
+                        displayName: route.params.displayName,
+                        sellUser: route.params.sellUser,
+                    })
                 } else {
                     console.log('결제 시트 오류:', error);
                 }
@@ -159,10 +164,6 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
         try {
             const response = await fetch(`https://neighbouring-dormouse-beakseok.koyeb.app/payment-details/${paymentIntentId}`);
             const paymentDetails = await response.json();
-            console.log('결제 세부 정보:', paymentDetails);
-            // 필요한 데이터 추출
-            const amount = paymentDetails.amount;
-            const description = paymentDetails.description;
             const metadata = paymentDetails.metadata;
 
             const paymentContent = {
@@ -225,17 +226,6 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                     setDeliveryAddress={setDeliveryAddress}
                     setDeliveryRequest={setDeliveryRequest}
                 />)}
-                {/* <DeliveryInfo
-                    thankCost={route.params.money}
-                    deliveryCost={deliveryCost}
-                    deliveryName={deliveryName}
-                    deliveryPhoneNum={deliveryPhoneNum}
-                    deliveryAddress={deliveryAddress}
-                    setDeliveryName={setDeliveryName}
-                    setDeliveryPhoneNum={setDeliveryPhoneNum}
-                    setDeliveryAddress={setDeliveryAddress}
-                    setDeliveryRequest={setDeliveryRequest}
-                /> */}
                 <TouchableOpacity
                     style={styles.paymentButton}
                     onPress={handlePayment}

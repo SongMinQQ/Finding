@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
 import { Image } from "react-native-expo-image-cache";
@@ -37,20 +37,25 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   const [profileImage, setProfileImage] = useState(''); 
 
   const handleFindPress = () => {
-    navigation.navigate("PaymentLegalAgree", {
-      imgURL: route.params.imgURL,
-      itemName: route.params.itemName,
-      location: route.params.location,
-      date: route.params.date,
-      tradeType: route.params.tradeType,
-      tradeLocation: route.params.tradeLocation,
-      displayName: route.params.displayName,
-      money: route.params.money,
-      sellUser: route.params.sellUser,
-    });
+    if(writerId != uid){
+      navigation.navigate("PaymentLegalAgree", {
+        imgURL: route.params.imgURL,
+        itemName: route.params.itemName,
+        location: route.params.location,
+        date: route.params.date,
+        tradeType: route.params.tradeType,
+        tradeLocation: route.params.tradeLocation,
+        displayName: route.params.displayName,
+        money: route.params.money,
+        sellUser: route.params.sellUser,
+      });
+    } else{
+        Alert.alert('글 삭제 할게요.');
+    }
+    
   };
   //글 작성자의 UID
-  const writerId = route.params.uid;
+  const writerId = route.params.sellUser;
   //현재 로그인한 사용자의 UID
   const uid = useSelector((state) => state.UID);
   //현재 로그인한 사용자의 닉네임
