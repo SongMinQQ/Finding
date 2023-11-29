@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
@@ -6,10 +6,12 @@ import { Image } from "react-native-expo-image-cache";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { collection,  query, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDocs, addDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 
@@ -32,9 +34,31 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
 const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   const navigation = useNavigation();
+  const { loading } = useContext(LoadingContext);
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const findOrLost = "find";
   const [profileImage, setProfileImage] = useState(''); 
+
+  const { spinner } = useContext(LoadingContext);
+
+  const deletePost = async (postId) => {
+    try {
+        spinner.start();
+        const postRef = doc(fireStoreDB, "findBoard", postId);
+        await deleteDoc(postRef);
+
+        const userRef = doc(fireStoreDB, "users", uid);
+        await updateDoc(userRef, {
+          findPosts: arrayRemove(postId)
+        });
+        console.log("Document successfully deleted: ", postId);
+    } catch (error) {
+        console.error("Error removing document: ", error);
+    } finally {
+        spinner.stop();
+        navigation.navigate('Home');
+    }
+};
 
   const handleFindPress = () => {
     if(writerId != uid){
@@ -50,7 +74,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
         sellUser: route.params.sellUser,
       });
     } else{
-        Alert.alert('글 삭제 할게요.');
+        deletePost(route.params.id);
     }
     
   };
@@ -146,7 +170,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
             </View>
 
-            <Text style={styles.requireText}>{route.params.money}</Text>
+            <Text style={styles.requireText}>{route.params.money}원</Text>
           </View>
           <View style={styles.requireInfoBox}>
             <View style={styles.iconArea}>

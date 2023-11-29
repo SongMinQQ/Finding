@@ -53,6 +53,7 @@ const LostBoard = () => {
         <TouchableOpacity key={item.id}
             style={styles.item}
             onPress={() => navigation.navigate("LostBoardDetail", {
+                id: item.id,
                 imgURL: item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png'),
                 itemName: item.title,
                 location: item.findLocation,
