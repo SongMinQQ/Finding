@@ -18,7 +18,7 @@ const rootReducer = (state = initialState, action) => {
         return { ...state, profileImg: action.payload };
       case 'SET_ID': // ID 저장
         return { ...state, UID: action.payload };
-      case 'SET_OPPONENT_DISPLAYNAME':
+      case 'SET_OPPONENT_DISPLAYNAME': // 채팅 상대방의 닉네임 저장
         return { ...state, opponentDisplayName: action.payload };
         case 'SET_SEARCH_TEXT':
           return { ...state, searchText: action.payload };
