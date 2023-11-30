@@ -12,7 +12,6 @@ import { useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
 
-import SearchBar from './SearchBar';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const WINDOW_WIDTH =  Dimensions.get('window').width;
