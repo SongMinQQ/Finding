@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { storage } from '../../FireBase/DB';
-import { doc, collection, arrayUnion, addDoc, setDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, getDoc, arrayUnion, arrayRemove, addDoc, setDoc, FieldValue, increment   } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -64,14 +64,14 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
     const [meetPhoneNum, setMeetPhoneNum] = useState('');
 
     const loadUserInfo = async () => {
-        if(route.params.tradeType === '택배'){
+        if (route.params.tradeType === '택배') {
             console.log("배달 정보 띄움");
             setDeliveryName(await getData('deliveryName') || '');
             setDeliveryPhoneNum(await getData('deliveryPhoneNum') || '');
             setDeliveryAddress(await getData('deliveryAddress') || '');
             setMeetName('');
             setMeetPhoneNum('');
-        }else{
+        } else {
             console.log(route.params.tradeType);
             console.log("직거래 정보 띄움");
             setDeliveryName('');
@@ -82,6 +82,23 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
         }
     };
 
+
+    const deletePost = async (postId) => {
+        try {
+            const postRef = doc(fireStoreDB, "findBoard", postId);
+            await deleteDoc(postRef);
+
+            const userRef = doc(fireStoreDB, "users", route.params.sellUser);
+            await updateDoc(userRef, {
+                findPosts: arrayRemove(postId),
+                foundItemsCount: increment(1)
+            });
+
+            console.log("Document successfully deleted: ", postId);
+        } catch (error) {
+            console.error("Error removing document: ", error);
+        }
+    };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -102,9 +119,9 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
         try {
             console.log('결제 세션 요청 시작');
             let paymentTotalCost;
-            if(route.params.tradeType === '직거래'){
+            if (route.params.tradeType === '직거래') {
                 paymentTotalCost = route.params.money;
-            }else{
+            } else {
                 paymentTotalCost = route.params.money + deliveryCost;
             }
             const response = await fetch('https://neighbouring-dormouse-beakseok.koyeb.app/create-payment-session', {
@@ -144,6 +161,7 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                 if (!error) {
                     await fetchPaymentDetails(data.clientSecret.split('_secret')[0]);
                     // navigate('PaymentFinish');
+                    deletePost(route.params.id);
                     navigation.navigate("PaymentFinish", {
                         itemName: route.params.itemName,
                         displayName: route.params.displayName,
@@ -174,16 +192,16 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                 paymentDate: metadata.paymentDate,
                 buyUser: metadata.buyUser,
                 sellUser: metadata.sellUSer,
-                findLocation:  metadata.findLocation,
+                findLocation: metadata.findLocation,
                 findDate: metadata.findDate,
                 tradeType: metadata.tradeType,
-                tradeLocation:metadata.tradeLocation,
-                meetName:  metadata.meetName,
-                meetPhoneNum:  metadata.meetPhoneNum,
-                deliveryName:  metadata.deliveryName,
-                deliveryPhoneNum:  metadata.deliveryPhoneNum,
-                deliveryAddress:  metadata.deliveryAddress,
-                deliveryRequest:  metadata.deliveryRequest,
+                tradeLocation: metadata.tradeLocation,
+                meetName: metadata.meetName,
+                meetPhoneNum: metadata.meetPhoneNum,
+                deliveryName: metadata.deliveryName,
+                deliveryPhoneNum: metadata.deliveryPhoneNum,
+                deliveryAddress: metadata.deliveryAddress,
+                deliveryRequest: metadata.deliveryRequest,
             };
 
             const docRef = await addDoc(collection(fireStoreDB, "paymentInfo"), {
@@ -199,7 +217,7 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
 
     const navigation = useNavigation();
     return (
-        <ScrollView style={{backgroundColor: '#fff'}}>
+        <ScrollView style={{ backgroundColor: '#fff' }}>
             <View style={styles.container}>
                 <PaymentMain
                     imgURL={route.params.imgURL}
@@ -207,25 +225,25 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                     location={route.params.location}
                     date={route.params.date}
                 />
-                {route.params.tradeType === '직거래'?
-                (<MeetTradeInfo
-                    thankCost={route.params.money}
-                    meetName={meetName}
-                    meetPhoneNum={meetPhoneNum}
-                    setMeetName={setMeetName}
-                    setMeetPhoneNum={setMeetPhoneNum}
-                />):
-                (<DeliveryInfo
-                    thankCost={route.params.money}
-                    deliveryCost={deliveryCost}
-                    deliveryName={deliveryName}
-                    deliveryPhoneNum={deliveryPhoneNum}
-                    deliveryAddress={deliveryAddress}
-                    setDeliveryName={setDeliveryName}
-                    setDeliveryPhoneNum={setDeliveryPhoneNum}
-                    setDeliveryAddress={setDeliveryAddress}
-                    setDeliveryRequest={setDeliveryRequest}
-                />)}
+                {route.params.tradeType === '직거래' ?
+                    (<MeetTradeInfo
+                        thankCost={route.params.money}
+                        meetName={meetName}
+                        meetPhoneNum={meetPhoneNum}
+                        setMeetName={setMeetName}
+                        setMeetPhoneNum={setMeetPhoneNum}
+                    />) :
+                    (<DeliveryInfo
+                        thankCost={route.params.money}
+                        deliveryCost={deliveryCost}
+                        deliveryName={deliveryName}
+                        deliveryPhoneNum={deliveryPhoneNum}
+                        deliveryAddress={deliveryAddress}
+                        setDeliveryName={setDeliveryName}
+                        setDeliveryPhoneNum={setDeliveryPhoneNum}
+                        setDeliveryAddress={setDeliveryAddress}
+                        setDeliveryRequest={setDeliveryRequest}
+                    />)}
                 <TouchableOpacity
                     style={styles.paymentButton}
                     onPress={handlePayment}

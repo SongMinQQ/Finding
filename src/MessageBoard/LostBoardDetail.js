@@ -8,9 +8,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -34,11 +35,12 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     const navigation = useNavigation();
     const { loading } = useContext(LoadingContext);
- 
+    const [findCount, setFindCount] = useState('');
+
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
     const { spinner } = useContext(LoadingContext);
-    
+
     const findOrLost = "lost"
     const userName = "홍길동"
 
@@ -47,10 +49,10 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
             spinner.start();
             const postRef = doc(fireStoreDB, "lostBoard", postId);
             await deleteDoc(postRef);
-    
+
             const userRef = doc(fireStoreDB, "users", uid);
             await updateDoc(userRef, {
-              lostPosts: arrayRemove(postId)
+                lostPosts: arrayRemove(postId)
             });
             console.log("Document successfully deleted: ", postId);
         } catch (error) {
@@ -60,6 +62,32 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
             navigation.navigate('Home');
         }
     };
+
+
+    const fetchUserCount = async () => {
+        try {
+            const userRef = doc(fireStoreDB, "users", route.params.sellUser);
+            console.log("글ID 가져오기");
+            const userDoc = await getDoc(userRef);
+            console.log("글ID 가져오기 성공");
+            const userFindCount = userDoc.data().foundItemsCount ? userDoc.data().foundItemsCount:0;
+            setFindCount(userFindCount);
+        } catch (error) {
+            console.error("Error fetching user posts: ", error);
+        }
+    };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchUserCount();
+            // 페이지가 포커스 될 때마다 실행될 로직을 여기에 작성합니다.
+
+            return () => {
+                // 포커스가 사라질 때 실행될 클린업 로직이 필요하다면 여기에 작성합니다.
+            };
+        }, [route.params])
+    );
+
 
     const handleDeletePress = () => {
         deletePost(route.params.id);
@@ -71,7 +99,7 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     const displayName = useSelector((state) => state.displayName);
     //현재 로그인한 사용자의 프로필 사진
     const profileImg = useSelector((state) => state.profileImg);
-    
+
     const handleChatPress = () => {
         navigation.navigate('Home', {
             screen: '채팅',
@@ -123,8 +151,8 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
                         onError={(e) => console.log(e)}
                     />
                     <View style={styles.userInfo}>
-                        <Text style={styles.textMedium}>홍길동</Text>
-                        <Text style={styles.textSmall}>친절점수 : 90점</Text>
+                        <Text style={styles.textMedium}>{route.params.displayName}</Text>
+                        <Text style={styles.textSmall}>찾아준 횟수: {findCount}번</Text>
                     </View>
                     {/* '채팅하기' 버튼 추가 */}
                     <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
