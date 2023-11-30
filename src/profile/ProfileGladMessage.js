@@ -23,15 +23,6 @@ const ProfileGladMessage = () => {
     const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
-    const messagesData = [...Array(10)].map((_, index) => ({
-        id: index,
-        userName: `사용자 ${index + 1}`,
-        lostArticle: `물건 ${index + 1}`,
-        profileImage: require('../../img/defaultProfile.png'),
-        message: `물건 ${index + 1}을 찾아주셔서 정말 감사합니다. 덕분에 잃어버린 물건을 찾을 수 있었습니다. 이 은혜 평생 잊지 않겠습니다. 정말 너무나도 고맙습니다.`
-           
-    }));
-
 
     const handleCardPress = (index) => {
         setSelectedMessage(index);

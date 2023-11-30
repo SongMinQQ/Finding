@@ -11,6 +11,11 @@ import {
 import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 
+import { auth } from '../../FireBase/DB';
+import { app } from '../../FireBase/DB';
+import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
+import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
+
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 export default function JoinMembership({ navigation }) {
@@ -29,14 +34,57 @@ export default function JoinMembership({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState('');   // 비밀번호 확인
   const [phoneNumber, setPhoneNumber] = useState('');   // 전화번호
   const [error, setError] = useState(null);   // 에러 메시지 
-  const [verificationCode, setVerificationCode] = useState('');   // 인증 코드 
+
+
   const [isVerificated, setIsVerificated] = useState(false);
+
+  const recaptchaVerifier = React.useRef(null);
+  const firebaseConfig = app ? app.options : undefined;
+
+  const [message, showMessage] = React.useState();
+  const attemptInvisibleVerification = false;
+
+  const [verificationId, setVerificationId] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+
+  // 인증 코드 전송 함수
+  const sendVerificationCode = async () => {
+    try {
+      const phoneProvider = new PhoneAuthProvider(auth);
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        "+82"+phoneNumber,
+        recaptchaVerifier.current
+      );
+      setVerificationId(verificationId);
+      Alert.alert('인증번호 전송 성공');
+    } catch (err) {
+      Alert.alert('인증번호 전송 실패: '+err);
+    }
+
+  };
+
+  // 인증 코드 확인 함수
+  const verifyPhoneNumber = async () => {
+    try {
+      const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
+      await signInWithCredential(auth, credential);
+      navigation.navigate("Join Membership Second", {
+        email: email,
+        password: password,
+        phoneNumber: phoneNumber,
+      });
+    } catch (err) {
+      Alert.alert('인증 실패: '+err);
+    }
+  };
+
 
   // 전화번호 인증 임시 코드
   const handleVerification = () => {
-    Alert.alert('전화번호 인증 성공');
-    setIsVerificated(true);
+    sendVerificationCode();
   };
+
+
 
   // 정보 입력 완료 함수 (아이디 길이 말고 이메일 형식 지키라고 경고하도록 수정 필요)
   const handleSignup = () => {
@@ -50,14 +98,9 @@ export default function JoinMembership({ navigation }) {
       newError = '아이디와 비밀번호는 20자 이하여야 합니다.';
     } else if (password !== confirmPassword) {
       newError = '비밀번호와 비밀번호 확인이 일치하지 않습니다.';
-    } else if (!isVerificated) {
-      newError = '휴대폰 인증이 안되었습니다.';
     } else {
-      navigation.navigate("Join Membership Second",{
-        email: email,
-        password: password,
-        phoneNumber: phoneNumber,
-      });
+      verifyPhoneNumber();
+
     }
 
     setError(newError);
@@ -65,6 +108,11 @@ export default function JoinMembership({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={app.options}
+      // attemptInvisibleVerification
+      />
       {/* 아이디 입력 */}
       <View style={{ width: '100%' }}>
         <View style={styles.textInputBox}>
