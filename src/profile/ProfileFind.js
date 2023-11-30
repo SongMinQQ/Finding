@@ -80,11 +80,12 @@ const ProfileFind = () => {
                         key={item.id}
                         style={styles.item}
                         onPress={() => navigation.navigate("FindBoardDetail", {
-                            imgURL: item.imageUrl,
+                            imgURL: item.imageUrl ? { uri: item.imageUrl } : { uri: 'https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a' },
                             itemName: item.title,
                             location: item.findLocation,
                             date: item.date.toDate().toLocaleDateString('ko-KR'),
-                            sellUser: item.displayName,
+                            displayName: item.displayName,
+                            sellUser: item.uid,
                             money: item.thankMoney,
                             tradeType: item.tradeType,
                             tradeLocation: item.tradeLocation,
@@ -94,7 +95,7 @@ const ProfileFind = () => {
                         })}>
 
                         <Image
-                            {...{preview, uri: route.params.profileImage ? route.params.profileImage: "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}}
+                            {...{preview, uri: item.imageUrl ? item.imageUrl: "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a"}}
                             style={styles.itemImage}
                             onError={(e) => console.log(e)}
                         />

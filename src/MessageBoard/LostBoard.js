@@ -54,7 +54,7 @@ const LostBoard = () => {
             style={styles.item}
             onPress={() => navigation.navigate("LostBoardDetail", {
                 id: item.id,
-                imgURL: item.imageUrl ? { uri: item.imageUrl } : require('../../img/defaultPost.png'),
+                imgURL: item.imageUrl ? { uri: item.imageUrl } : { uri: 'https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a' },
                 itemName: item.title,
                 location: item.findLocation,
                 date: item.date.toDate().toLocaleDateString('ko-KR'),
