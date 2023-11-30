@@ -146,7 +146,7 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
                 <Text style={styles.item}>{route.params.articleExplain}</Text>
                 <View style={styles.profileSection}>
                     <Image
-                        {...{ preview, uri: route.params.profileImage }}
+                        {...{preview, uri: route.params.profileImage ? route.params.profileImage: "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}}
                         style={styles.profileImage}
                         onError={(e) => console.log(e)}
                     />

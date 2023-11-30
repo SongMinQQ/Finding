@@ -94,7 +94,7 @@ const ProfileFind = () => {
                         })}>
 
                         <Image
-                            {...{ preview, uri: item.imageUrl }}
+                            {...{preview, uri: route.params.profileImage ? route.params.profileImage: "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}}
                             style={styles.itemImage}
                             onError={(e) => console.log(e)}
                         />
