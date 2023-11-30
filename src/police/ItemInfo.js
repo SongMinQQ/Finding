@@ -65,11 +65,6 @@ const ItemInfo = ({ route }) => {
                 <Text style={{ fontSize: WINDOW_HEIGHT * 0.02, marginBottom: 10 }}>내 용</Text>
                 <Text style={styles.articleContent}>{detailInfo.lstSbjt}</Text>
                 {/* <Text>{detailInfo.uniq}</Text> */}
-                {/* Lost112어플 연결 버튼, 구현 어려우면 빼도됨 */}
-                <TouchableOpacity style={styles.linkButton}>
-                    <Text style={styles.linkText}>Lost112 열기</Text>
-                </TouchableOpacity>
-
             </View>
         </ScrollView>
     );
