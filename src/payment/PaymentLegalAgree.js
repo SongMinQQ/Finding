@@ -64,6 +64,7 @@ const PaymentLegalAgree = ({ navigation: { navigate }, route }) => {
                     disabled={!allChecked}
                     onPress={() => {
                         navigation.navigate("PaymentCheck", {
+                            id: route.params.id,
                             imgURL: route.params.imgURL,
                             itemName: route.params.itemName,
                             location: route.params.location,

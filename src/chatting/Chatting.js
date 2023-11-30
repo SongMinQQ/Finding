@@ -3,6 +3,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { collection, doc, addDoc, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
 import { fireStoreDB } from '../../FireBase/DB';
 import { useSelector } from 'react-redux';
+import { View } from 'react-native';
 
 const Chatting = ({ route }) => {
   //메세지들이 저장되는 state
@@ -60,11 +61,13 @@ const Chatting = ({ route }) => {
   }, [chatRoomId]);
   //messages는 메세지를 렌더링. onSend는 사용자가 메세지를 보내는 동작을 할때 수행. _id는 현재 로그인된 유저 uid를 redux에서 받아옴. 공식문서 참조
   return (
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
       <GiftedChat
           messages={messages}
           onSend={messages => onSend(messages)}
           user={{ _id: uid }}
       />
+      </View>
     );
 };
 

@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Image } from 'expo-image';
+
+
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -14,8 +16,11 @@ const PROFILE_IMAGE_MARGIN_RIGHT = windowHeight * 0.02;
 const FONT_SIZE_MEDIUM = windowHeight * 0.028;
 const FONT_SIZE_SMALL = windowHeight * 0.02;
 
-const ProfileMain = ({name, imgURL}) => {
+const ProfileMain = ({name, imgURL, findCount}) => {
     const navigation = useNavigation();
+
+
+    
     return (
         <View style={styles.profileSection}>
             <Image
@@ -24,7 +29,7 @@ const ProfileMain = ({name, imgURL}) => {
             />
             <View style={styles.userInfo}>
                 <Text style={styles.textMedium}>{name}</Text>
-                <Text style={styles.textSmall}>찾아준 횟수: 15</Text>
+                <Text style={styles.textSmall}>찾아준 횟수: {findCount}</Text>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate("ProfileEdit")}>
                 <Icon name="edit" size={24} color="black" />

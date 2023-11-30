@@ -8,10 +8,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 
@@ -38,6 +38,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const findOrLost = "find";
   const [profileImage, setProfileImage] = useState(''); 
+  const [findCount, setFindCount] = useState('');
 
   const { spinner } = useContext(LoadingContext);
 
@@ -60,9 +61,34 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     }
 };
 
+const fetchUserCount = async () => {
+  try {
+      const userRef = doc(fireStoreDB, "users", route.params.sellUser); 
+      console.log("글ID 가져오기");
+      const userDoc = await getDoc(userRef);
+      console.log("글ID 가져오기 성공");
+      const userFindCount = userDoc.data().foundItemsCount;
+      setFindCount(userFindCount);
+  } catch (error) {
+      console.error("Error fetching user posts: ", error);
+  }
+};
+
+useFocusEffect(
+  React.useCallback(() => {
+    fetchUserCount();
+      // 페이지가 포커스 될 때마다 실행될 로직을 여기에 작성합니다.
+
+      return () => {
+          // 포커스가 사라질 때 실행될 클린업 로직이 필요하다면 여기에 작성합니다.
+      };
+  }, [route.params])
+);
+
   const handleFindPress = () => {
     if(writerId != uid){
       navigation.navigate("PaymentLegalAgree", {
+        id: route.params.id,
         imgURL: route.params.imgURL,
         itemName: route.params.itemName,
         location: route.params.location,
@@ -196,7 +222,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
             />
           <View style={styles.userInfo}>
             <Text style={styles.textMedium}>{route.params.displayName}</Text>
-            <Text style={styles.textSmall}>친절점수 : 90점</Text>
+            <Text style={styles.textSmall}>찾아준 횟수: {findCount}번</Text>
           </View>
           {/* '채팅하기' 버튼 추가 */}
           {writerId != uid && <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
