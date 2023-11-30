@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
 import { fireStoreDB } from "../../FireBase/DB";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 const ChattingChannels = () => {
@@ -10,6 +10,9 @@ const ChattingChannels = () => {
   const [refreshing, setRefreshing] = useState(false);
   const uid = useSelector((state) => state.UID);
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+  const opponentDisplayName = useSelector((state) => state.opponentDisplayName); 
 
   const fetchChatRooms = async () => {
     const chatRoomsRef = collection(fireStoreDB, "channels");
@@ -50,8 +53,12 @@ const ChattingChannels = () => {
     fetchChatRooms().then(() => setRefreshing(false));
   }, []);
 
+  const getOpponentDisplayName = (item) =>{
+    dispatch({type: 'SET_OPPONENT_DISPLAYNAME', payload: item.otherUserDisplayName});
+  };
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.chatRoomContainer} onPress={() => goToChat(item)}>
+    <TouchableOpacity style={styles.chatRoomContainer} onPress={() => {getOpponentDisplayName(item); goToChat(item);}}>
       <Image source={{ uri: item.otherUserProfileImage }} style={styles.profileImage} />
       <Text style={styles.displayName}>{item.otherUserDisplayName}</Text>
     </TouchableOpacity>

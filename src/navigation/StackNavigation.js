@@ -27,12 +27,15 @@ import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
 import ItemInfo from '../police/ItemInfo';
 import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
+import { useSelector } from 'react-redux';
 
 const Stack = createStackNavigator();
 
 const StackNavigation = () => {
     const { loading } = useContext(LoadingContext);
     const ref = useRef(null);
+    const opponentDisplayName = useSelector((state) => state.opponentDisplayName); 
+
     return (
         <Stack.Navigator>
             {/* 로그인 페이지 그룹 */}
@@ -192,6 +195,7 @@ const StackNavigation = () => {
             </Stack.Group>
             <Stack.Group>
                 <Stack.Screen name="Chatting" component={Chatting} options={{
+                    headerTitle: opponentDisplayName,
                     headerStyle: {
                         borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
                         elevation: 0, // 안드로이드에서의 shadow 없앰
