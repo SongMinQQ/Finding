@@ -48,7 +48,7 @@ const ProfileTopTabNavigation = ({ navigation: { navigate }, route }) => {
         <View style={styles.container}>
             <ProfileMain name={displayName} imgURL={profileImage} findCount={findCount} />
             <Tab.Navigator>
-                <Tab.Screen name="찾은 물건" component={ProfileFind} />
+                <Tab.Screen name="습득 물건" component={ProfileFind} />
                 <Tab.Screen name="분실 물건" component={ProfileLost} />
                 <Tab.Screen name="감사 편지" component={ProfileGladMessage} />
             </Tab.Navigator>
