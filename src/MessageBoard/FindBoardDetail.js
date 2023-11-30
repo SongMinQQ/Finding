@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Alert, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
 import { Image } from "react-native-expo-image-cache";
@@ -9,9 +9,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 import { useFocusEffect } from '@react-navigation/native';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 
@@ -32,61 +34,113 @@ const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.02;
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
 const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
+
 const FindBoardDetail = ({ navigation: { navigate }, route }) => {
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff', // 이거 바꾸면 됨
+    },
+  };
+
+
+
   const navigation = useNavigation();
   const { loading } = useContext(LoadingContext);
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const findOrLost = "find";
-  const [profileImage, setProfileImage] = useState(''); 
+  const [profileImage, setProfileImage] = useState('');
   const [findCount, setFindCount] = useState('');
 
   const { spinner } = useContext(LoadingContext);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleReport = () => {
+    openModal();
+    // 여기에 원하는 로직을 추가합니다.
+  };
+
+  const [reportTitle, setReportTitle] = useState('');
+  const [reportContent, setReportContent] = useState('');
+  // 네비게이션 헤더에 버튼 추가
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleReport}>
+          <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
+        </TouchableOpacity>
+      )
+    });
+  }, [navigation]);
+
   const deletePost = async (postId) => {
     try {
-        spinner.start();
-        const postRef = doc(fireStoreDB, "findBoard", postId);
-        await deleteDoc(postRef);
+      spinner.start();
+      const postRef = doc(fireStoreDB, "findBoard", postId);
+      await deleteDoc(postRef);
 
-        const userRef = doc(fireStoreDB, "users", uid);
-        await updateDoc(userRef, {
-          findPosts: arrayRemove(postId)
-        });
-        console.log("Document successfully deleted: ", postId);
+      const userRef = doc(fireStoreDB, "users", uid);
+      await updateDoc(userRef, {
+        findPosts: arrayRemove(postId)
+      });
+      console.log("Document successfully deleted: ", postId);
     } catch (error) {
-        console.error("Error removing document: ", error);
+      console.error("Error removing document: ", error);
     } finally {
-        spinner.stop();
-        navigation.navigate('Home');
+      spinner.stop();
+      navigation.navigate('Home');
     }
-};
+  };
 
-const fetchUserCount = async () => {
-  try {
-      const userRef = doc(fireStoreDB, "users", route.params.sellUser); 
+  const fetchUserCount = async () => {
+    try {
+      const userRef = doc(fireStoreDB, "users", route.params.sellUser);
       console.log("글ID 가져오기");
       const userDoc = await getDoc(userRef);
       console.log("글ID 가져오기 성공");
       const userFindCount = userDoc.data().foundItemsCount;
       setFindCount(userFindCount);
-  } catch (error) {
+    } catch (error) {
       console.error("Error fetching user posts: ", error);
-  }
-};
+    }
+  };
 
-useFocusEffect(
-  React.useCallback(() => {
-    fetchUserCount();
+  const handleSave = async () => {
+    const reportRef = doc(fireStoreDB, "findBoardReport", route.params.id);
+    await setDoc(reportRef, { 
+      reportInfo: arrayUnion({
+        reportUser: uid,
+        reportTitle: reportTitle,
+        reportContent: reportContent,
+    }) }, { merge: true });
+
+    setModalVisible(false);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserCount();
       // 페이지가 포커스 될 때마다 실행될 로직을 여기에 작성합니다.
 
       return () => {
-          // 포커스가 사라질 때 실행될 클린업 로직이 필요하다면 여기에 작성합니다.
+        // 포커스가 사라질 때 실행될 클린업 로직이 필요하다면 여기에 작성합니다.
       };
-  }, [route.params])
-);
+    }, [route.params])
+  );
 
   const handleFindPress = () => {
-    if(writerId != uid){
+    if (writerId != uid) {
       navigation.navigate("PaymentLegalAgree", {
         id: route.params.id,
         imgURL: route.params.imgURL,
@@ -99,10 +153,10 @@ useFocusEffect(
         money: route.params.money,
         sellUser: route.params.sellUser,
       });
-    } else{
-        deletePost(route.params.id);
+    } else {
+      deletePost(route.params.id);
     }
-    
+
   };
   //글 작성자의 UID
   const writerId = route.params.sellUser;
@@ -144,11 +198,11 @@ useFocusEffect(
   const handleChatPress = async () => {
     // Create a unique chat room ID using both user IDs
     const chatRoomId = [writerId, uid].sort().join('_');
-  
+
     // Check if the chat room already exists
     const chatRoomQuery = query(collection(fireStoreDB, "channels"), where("chatRoomId", "==", chatRoomId));
     const querySnapshot = await getDocs(chatRoomQuery);
-  
+
     // Proceed to create a new chat room only if it doesn't exist
     if (querySnapshot.empty) {
       // Firestore document for the chat room
@@ -169,11 +223,11 @@ useFocusEffect(
         createdAt: new Date(), // Timestamp when the chat room is created
       });
     }
-  
+
     // Navigate to the chat screen with the chatRoomId
     navigation.navigate('Home', {
-          screen: '채팅',
-        });
+      screen: '채팅',
+    });
   };
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
@@ -216,10 +270,10 @@ useFocusEffect(
         <Text style={styles.item}>{route.params.articleExplain}</Text>
         <View style={styles.profileSection}>
           <Image
-                {...{preview, uri: route.params.profileImage ? route.params.profileImage: "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}}
-                style={styles.profileImage}
-                onError={(e) => console.log(e)}
-            />
+            {...{ preview, uri: route.params.profileImage ? route.params.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+            style={styles.profileImage}
+            onError={(e) => console.log(e)}
+          />
           <View style={styles.userInfo}>
             <Text style={styles.textMedium}>{route.params.displayName}</Text>
             <Text style={styles.textSmall}>찾아준 횟수: {findCount}번</Text>
@@ -230,6 +284,50 @@ useFocusEffect(
           </TouchableOpacity>}
         </View>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalView}>
+              <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                  <Text style={styles.modalHeader}>게시글 신고하기</Text>
+                  <TouchableOpacity
+                    onPress={closeModal}
+                    style={{ alignSelf: 'flex-start' }}>
+                    <FontAwesome name="close" size={FONT_SIZE_LARGE} color="#000" />
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  style={styles.input}
+                  mode="outlined"
+                  onChangeText={setReportTitle}
+                  value={reportTitle}
+                  theme={theme}
+                  placeholder="신고 제목"
+                />
+                <TextInput
+                  mode="outlined"
+                  style={[styles.input, { height: WINDOW_HEIGHT * 0.4 }]}
+                  onChangeText={setReportContent}
+                  value={reportContent}
+                  theme={theme}
+                  multiline={true}
+                  placeholder="신고 내용"
+                />
+              </View>
+
+              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                <Text style={styles.saveButtonText}>저장</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </ScrollView>
   );
 };
@@ -342,6 +440,56 @@ const styles = StyleSheet.create({
   userInfo: {
     flex: 1,
     justifyContent: 'center'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    alignSelf: 'center', // 모달을 가운데로 정렬합니다.
+    width: '90%', // 모달의 너비를 확장합니다.
+    height: '70%', // 모달의 최대 높이를 설정합니다.
+    justifyContent: 'space-between', // 모달 내부의 요소들을 세로 방향으로 가운데 정렬합니다.
+  },
+  modalHeader: {
+    fontSize: FONT_SIZE_LARGE,
+    fontWeight: 'bold',
+    width: '100%',
+    textAlign: 'left',
+    marginBottom: 10,
+  },
+  modalContainer: {
+    flex: 1, // 모달 컨테이너가 전체 화면을 차지하도록 설정
+    justifyContent: 'center', // 수직 방향으로 중앙 정렬
+    alignItems: 'center', // 가로 방향으로 중앙 정렬
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  input: {
+    width: '100%',
+    backgroundColor: "#fff",
+    marginBottom: 10,
+  },
+  saveButton: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 20,
+    marginTop: 10,
+    width: '100%', // 저장 버튼의 너비를 늘립니다.
+    alignItems: 'center', // 버튼 내부의 텍스트를 가운데로 정렬합니다.
+  },
+  saveButtonText: {
+    color: "white",
+    fontSize: FONT_SIZE_SMALL,
+    fontWeight: "bold",
   },
 });
 

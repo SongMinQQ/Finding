@@ -44,6 +44,7 @@ export default function JoinMembership({ navigation }) {
   const [message, showMessage] = React.useState();
   const attemptInvisibleVerification = false;
 
+  const [isSend, setIsSend] = useState(false);
   const [verificationId, setVerificationId] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
 
@@ -81,7 +82,12 @@ export default function JoinMembership({ navigation }) {
 
   // 전화번호 인증 임시 코드
   const handleVerification = () => {
-    sendVerificationCode();
+    if(!isSend){
+      sendVerificationCode();
+      setIsSend(true);
+    }else {
+      Alert.alert("인증코드는 한번만 보낼 수 있습니다.")
+    }
   };
 
 

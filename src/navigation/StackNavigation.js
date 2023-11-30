@@ -108,12 +108,8 @@ const StackNavigation = () => {
                         elevation: 0, // 안드로이드에서의 shadow 없앰
                         shadowOpacity: 0, // iOS에서의 shadow 없앰
                       },
-                    headerRight: () => (
-                        <View style={styles.headerRight}>
-                          <FontAwesome name="exclamation-triangle" size={24} color="black" style={styles.icons} />
-                        </View>
-                      ),
                 }} />
+                {/* 찾은 물건 글쓰기*/}
                 <Stack.Screen name="WritePostFindScreen" component={WritePostFindScreen} options={{
                     headerTitle: '글쓰기', 
                     headerTintColor: 'black',
@@ -124,6 +120,7 @@ const StackNavigation = () => {
                         shadowOpacity: 0, // iOS에서의 shadow 없앰
                       },
                 }}/>
+                {/* 분실 물건 글쓰기*/}
                 <Stack.Screen name="WritePostLostScreen" component={WritePostLostScreen} options={{
                     headerTitle: '글쓰기', 
                     headerTintColor: 'black',
@@ -143,11 +140,6 @@ const StackNavigation = () => {
                         elevation: 0, // 안드로이드에서의 shadow 없앰
                         shadowOpacity: 0, // iOS에서의 shadow 없앰
                       },
-                    headerRight: () => (
-                        <View style={styles.headerRight}>
-                          <FontAwesome name="exclamation-triangle" size={24} color="black" style={styles.icons} />
-                        </View>
-                      ),
                 }}/>
             </Stack.Group>
             {/* 프로필 페이지 그룹 */}

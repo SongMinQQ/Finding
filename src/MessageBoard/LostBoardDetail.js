@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
 import { Image } from "react-native-expo-image-cache";
@@ -9,9 +9,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 import { useFocusEffect } from '@react-navigation/native';
+import { TextInput } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -33,6 +35,16 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
 
 const LostBoardDetail = ({ navigation: { navigate }, route }) => {
+    const theme = {
+        ...DefaultTheme,
+        myOwnProperty: true,
+        colors: {
+          ...DefaultTheme.colors,
+          primary: '#007bff', // 이거 바꾸면 됨
+        },
+      };
+
+
     const navigation = useNavigation();
     const { loading } = useContext(LoadingContext);
     const [findCount, setFindCount] = useState('');
@@ -40,6 +52,37 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
     const { spinner } = useContext(LoadingContext);
+
+
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openModal = () => {
+      setModalVisible(true);
+    };
+  
+    const closeModal = () => {
+      setModalVisible(false);
+    };
+  
+    const handleReport = () => {
+      openModal();
+      // 여기에 원하는 로직을 추가합니다.
+    };
+  
+    const [reportTitle, setReportTitle] = useState('');
+    const [reportContent, setReportContent] = useState('');
+    // 네비게이션 헤더에 버튼 추가
+    useEffect(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity onPress={handleReport}>
+            <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
+          </TouchableOpacity>
+        )
+      });
+    }, [navigation]);
+
+    
 
     const findOrLost = "lost"
     const userName = "홍길동"
@@ -76,6 +119,19 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
             console.error("Error fetching user posts: ", error);
         }
     };
+
+    const handleSave = async () => {
+        const reportRef = doc(fireStoreDB, "lostBoardReport", route.params.id);
+        await setDoc(reportRef, { 
+          reportInfo: arrayUnion({
+            reportUser: uid,
+            reportTitle: reportTitle,
+            reportContent: reportContent,
+        }) }, { merge: true });
+    
+        setModalVisible(false);
+      };
+
 
     useFocusEffect(
         React.useCallback(() => {
@@ -160,6 +216,50 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalView}>
+              <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                  <Text style={styles.modalHeader}>게시글 신고하기</Text>
+                  <TouchableOpacity
+                    onPress={closeModal}
+                    style={{ alignSelf: 'flex-start' }}>
+                    <FontAwesome name="close" size={FONT_SIZE_LARGE} color="#000" />
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  style={styles.input}
+                  mode="outlined"
+                  onChangeText={setReportTitle}
+                  value={reportTitle}
+                  theme={theme}
+                  placeholder="신고 제목"
+                />
+                <TextInput
+                  mode="outlined"
+                  style={[styles.input, { height: WINDOW_HEIGHT * 0.4 }]}
+                  onChangeText={setReportContent}
+                  value={reportContent}
+                  theme={theme}
+                  multiline={true}
+                  placeholder="신고 내용"
+                />
+              </View>
+
+              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                <Text style={styles.saveButtonText}>저장</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
         </ScrollView>
     );
 };
@@ -273,6 +373,56 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
     },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 15,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        alignSelf: 'center', // 모달을 가운데로 정렬합니다.
+        width: '90%', // 모달의 너비를 확장합니다.
+        height: '70%', // 모달의 최대 높이를 설정합니다.
+        justifyContent: 'space-between', // 모달 내부의 요소들을 세로 방향으로 가운데 정렬합니다.
+      },
+      modalHeader: {
+        fontSize: FONT_SIZE_LARGE,
+        fontWeight: 'bold',
+        width: '100%',
+        textAlign: 'left',
+        marginBottom: 10,
+      },
+      modalContainer: {
+        flex: 1, // 모달 컨테이너가 전체 화면을 차지하도록 설정
+        justifyContent: 'center', // 수직 방향으로 중앙 정렬
+        alignItems: 'center', // 가로 방향으로 중앙 정렬
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      input: {
+        width: '100%',
+        backgroundColor: "#fff",
+        marginBottom: 10,
+      },
+      saveButton: {
+        backgroundColor: "#007bff",
+        padding: 10,
+        borderRadius: 20,
+        marginTop: 10,
+        width: '100%', // 저장 버튼의 너비를 늘립니다.
+        alignItems: 'center', // 버튼 내부의 텍스트를 가운데로 정렬합니다.
+      },
+      saveButtonText: {
+        color: "white",
+        fontSize: FONT_SIZE_SMALL,
+        fontWeight: "bold",
+      },
 
 });
 

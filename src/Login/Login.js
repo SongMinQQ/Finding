@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     margin: WINDOW_HEIGHT * 0.02,
   },
   signupBtn: {
-    margin: WINDOW_HEIGHT * 0.01,
+    margin: WINDOW_HEIGHT * 0.02,
   },
   loginBtn: {
     width: "100%",
