@@ -93,7 +93,7 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
                 sellUser: item.uid,
             })}>
             <Image
-                {...{preview, uri: item.imageUrl}}
+                {...{preview, uri: item.imageUrl ? item.imageUrl:"https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a"}}
                 style={styles.itemImage}
                 onError={(e) => console.log(e)}
             />

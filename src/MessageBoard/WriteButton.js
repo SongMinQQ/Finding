@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         height: 60,
         bottom: 20,
         right: 20,
-        backgroundColor: 'blue',
+        backgroundColor: '#007bff',
         borderRadius: 30, // 원 모양을 만들기 위해 width/2 값을 사용
         alignItems: 'center', // 가로 중앙 정렬을 위해 추가
         justifyContent: 'center', // 세로 중앙 정렬을 위해 추가
