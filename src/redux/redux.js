@@ -5,6 +5,7 @@ const initialState = {
   displayName: '',
   profileImg: '',
   UID: '',
+  opponentDisplayName: '',
 };
 
 // 리듀서 함수
@@ -12,10 +13,12 @@ const rootReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'SET_DISPLAYNAME':// 유저 이름 저장
         return { ...state, displayName: action.payload };
-        case 'SET_PROFILE_IMG':// 유저 이름 저장
-          return { ...state, profileImg: action.payload };
+      case 'SET_PROFILE_IMG':// 유저 이름 저장
+        return { ...state, profileImg: action.payload };
       case 'SET_ID': // ID 저장
         return { ...state, UID: action.payload };
+      case 'SET_OPPONENT_DISPLAYNAME':
+        return { ...state, opponentDisplayName: action.payload };
     default:
         return state;
     }
