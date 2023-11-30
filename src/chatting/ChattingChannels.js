@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { collection, query, where, getDocs, getFirestore } from 'firebase/firestore';
-import { fireStoreDB } from '../../FireBase/DB';
-import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
+import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
+import { fireStoreDB } from "../../FireBase/DB";
+import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const ChattingChannels = () => {
   const [chatRooms, setChatRooms] = useState([]);
