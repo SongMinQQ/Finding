@@ -59,7 +59,7 @@ const ChattingChannels = () => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.chatRoomContainer} onPress={() => {getOpponentDisplayName(item); goToChat(item);}}>
-      <Image source={{ uri: item.otherUserProfileImage }} style={styles.profileImage} />
+      <Image source={item.otherUserProfileImage ? { uri: item.otherUserProfileImage } : { uri : require('../../img/defaultProfile.png')}} style={styles.profileImage} />
       <Text style={styles.displayName}>{item.otherUserDisplayName}</Text>
     </TouchableOpacity>
   );
