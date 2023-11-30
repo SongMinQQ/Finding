@@ -75,7 +75,7 @@ const Login = ({ navigation }) => {
   const [loginFail, setLoginFail] = useState(false);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center' }}>
       {loading && <LoadingSpinner/>}
       <View style={styles.flexbox}>
         <Image style={styles.image} source={require('../../img/loginIcon.png')} />
