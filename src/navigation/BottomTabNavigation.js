@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import MaterialTopTabNavigation from './MaterialTopTabNavigation';
 import PoliceFind from '../police/PoliceFind';
 import ProfileMain from '../profile/ProfileMain';
@@ -9,9 +10,28 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import ChattingChannels from '../chatting/ChattingChannels';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { TouchableOpacity } from 'react-native';
 
 const Tab = createBottomTabNavigator();
-const BottomTabNavigation = () => {
+const BottomTabNavigation = ({ navigation: { navigate }, route }) => {
+    const navigation = useNavigation();
+
+    const handleSearch = () => {
+        console.log("검색 클릭");
+        navigation.navigate("Search");
+    }
+    useEffect(() => {
+        console.log("아이콘 띄우기");
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={handleSearch}>
+                    <FontAwesome name="search" size={24} color="black" style={{ marginRight: 15 }} />
+                </TouchableOpacity>
+            )
+        });
+    }, [navigation]);
+    
     return (
         <Tab.Navigator>
             <Tab.Screen name='게시판' component={MaterialTopTabNavigation} options={{

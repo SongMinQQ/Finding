@@ -6,6 +6,7 @@ const initialState = {
   profileImg: '',
   UID: '',
   opponentDisplayName: '',
+  searchText: '',
 };
 
 // 리듀서 함수
@@ -19,6 +20,8 @@ const rootReducer = (state = initialState, action) => {
         return { ...state, UID: action.payload };
       case 'SET_OPPONENT_DISPLAYNAME':
         return { ...state, opponentDisplayName: action.payload };
+        case 'SET_SEARCH_TEXT':
+          return { ...state, searchText: action.payload };
     default:
         return state;
     }
