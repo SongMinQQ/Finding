@@ -70,9 +70,16 @@ const ProfileGladMessage = () => {
         fetchGladMessages();
     }, [])
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        fetchGladMessages().then(() => setRefreshing(false));
+    }, []);
 
     return (
-        <ScrollView style={{backgroundColor: '#fff'}}>
+        <ScrollView style={{ backgroundColor: '#fff' }}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
             <View style={styles.container}>
                 {posts.map((message, index) => (
                     <TouchableOpacity key={index} onPress={() => handleCardPress(message)}>
