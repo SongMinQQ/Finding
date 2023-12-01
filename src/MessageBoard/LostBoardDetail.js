@@ -13,7 +13,7 @@ import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc, getDocs } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -167,11 +167,40 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
   //현재 로그인한 사용자의 프로필 사진
   const profileImg = useSelector((state) => state.profileImg);
 
-  const handleChatPress = () => {
-    navigation.navigate('Home', {
-      screen: '채팅',
-    })
-  };
+    const handleChatPress = async () => {
+      // Create a unique chat room ID using both user IDs
+      const chatRoomId = [writerId, uid].sort().join('_');
+  
+      // Check if the chat room already exists
+      const chatRoomQuery = query(collection(fireStoreDB, "channels"), where("chatRoomId", "==", chatRoomId));
+      const querySnapshot = await getDocs(chatRoomQuery);
+  
+      // Proceed to create a new chat room only if it doesn't exist
+      if (querySnapshot.empty) {
+        // Firestore document for the chat room
+        await addDoc(collection(fireStoreDB, "channels"), {
+          chatRoomId: chatRoomId, // Unique identifier for the chat room
+          participants: {
+            [uid]: {
+              uid: uid,
+              displayName: displayName, // Display name of the current user
+              profileImage: profileImg, // Profile image of the current user
+            },
+            [writerId]: {
+              uid: writerId,
+              displayName: route.params.displayName, // Display name of the writer
+              profileImage: route.params.profileImage, // Profile image of the writer
+            }
+          },
+          createdAt: new Date(), // Timestamp when the chat room is created
+        });
+      }
+  
+      // Navigate to the chat screen with the chatRoomId
+      navigation.navigate('Home', {
+        screen: '채팅',
+      });
+    };
 
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
