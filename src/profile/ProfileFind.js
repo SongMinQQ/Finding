@@ -21,7 +21,7 @@ const ProfileFind = () => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
-   
+
     const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
@@ -37,24 +37,28 @@ const ProfileFind = () => {
     const fetchUserPosts = async () => {
         try {
             const userRef = doc(fireStoreDB, "users", uid); // UID는 현재 로그인한 사용자의 ID
-            console.log("글ID 가져오기");
+
             const userDoc = await getDoc(userRef);
-            console.log("글ID 가져오기 성공");
-            const userPostsIds = userDoc.data().findPosts; // 사용자가 작성한 글 ID 목록
 
-            const postsData = [];
-            for (const postId of userPostsIds) {
-                const postRef = doc(fireStoreDB, "findBoard", postId);
-                console.log("글 정보 가져오기");
-                const postDoc = await getDoc(postRef);
-                console.log("글 정보 가져오기 성공");
-                if (postDoc.exists()) {
-                    postsData.push({ id: postDoc.id, ...postDoc.data() });
-                    console.log(postsData);
+            if (userDoc.exists()) {
+                const userPostsIds = userDoc.data().findPosts; // 사용자가 작성한 글 ID 목록
+                if (userPostsIds) {
+                    const postsData = [];
+                    for (const postId of userPostsIds) {
+                        const postRef = doc(fireStoreDB, "findBoard", postId);
+
+                        const postDoc = await getDoc(postRef);
+
+                        if (postDoc.exists()) {
+                            postsData.push({ id: postDoc.id, ...postDoc.data() });
+                            console.log(postsData);
+                        }
+                    }
+                    setPosts(postsData); // 가져온 게시글 정보로 상태 업데이트
                 }
+            } else {
+                console.log("습득 물건 게시글이 없습니다.");
             }
-
-            setPosts(postsData); // 가져온 게시글 정보로 상태 업데이트
         } catch (error) {
             console.error("Error fetching user posts: ", error);
         }
@@ -95,7 +99,7 @@ const ProfileFind = () => {
                         })}>
 
                         <Image
-                            {...{preview, uri: item.imageUrl ? item.imageUrl: "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a"}}
+                            {...{ preview, uri: item.imageUrl ? item.imageUrl : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
                             style={styles.itemImage}
                             onError={(e) => console.log(e)}
                         />
