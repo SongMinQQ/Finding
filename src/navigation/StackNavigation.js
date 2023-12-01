@@ -27,6 +27,7 @@ import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
 import SearchPage from '../MessageBoard/SearchPage';
 import ItemInfo from '../police/ItemInfo';
 import OpponentProfileTopTabNavigation from '../opponent/OpponentProfileTopTabNavigation';
+import FindPasswordComplete from '../Login/FindPasswordComplete';
 
 
 
@@ -83,7 +84,7 @@ const StackNavigation = () => {
                     },
                 }} />
                 <Stack.Screen name="Find Password" component={FindPassword} options={{
-                    headerTitle: '비밀번호 찾기',
+                    headerTitle: '비밀번호 재설정',
                     headerTintColor: 'black',
                     headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
                     headerStyle: {
@@ -91,6 +92,9 @@ const StackNavigation = () => {
                         elevation: 0, // 안드로이드에서의 shadow 없앰
                         shadowOpacity: 0, // iOS에서의 shadow 없앰
                     },
+                }} />
+                <Stack.Screen name="FindPasswordComplete" component={FindPasswordComplete} options={{
+                    headerShown: false
                 }} />
             </Stack.Group>
             {/* 메인 페이지 그룹 */}

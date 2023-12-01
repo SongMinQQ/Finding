@@ -28,7 +28,11 @@ const OpponentProfileTopTabNavigation = ({ navigation: { navigate }, route }) =>
 
             if (userDoc.exists()) {
                 const userFindCount = userDoc.data().foundItemsCount;
-                setFindCount(userFindCount);
+                if(userFindCount){
+                    setFindCount(userFindCount);
+                }else{
+                    setFindCount(0);
+                }
             }else {
                 console.log("찾아준 횟수가 존재하지 않습니다.");
                 setFindCount(0);

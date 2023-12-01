@@ -34,10 +34,10 @@ const Login = ({ navigation }) => {
       spinner.start();
       const userCredential = await signInWithEmailAndPassword(auth, userID, userPW);
       const user = auth.currentUser;
-      dispatch({type: 'SET_DISPLAYNAME', payload: user.displayName});
-      dispatch({type: 'SET_PROFILE_IMG', payload: user.photoURL});
-      dispatch({type: 'SET_ID', payload: user.uid});
-      console.log('uid: '+user.uid);
+      dispatch({ type: 'SET_DISPLAYNAME', payload: user.displayName });
+      dispatch({ type: 'SET_PROFILE_IMG', payload: user.photoURL });
+      dispatch({ type: 'SET_ID', payload: user.uid });
+      console.log('uid: ' + user.uid);
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
@@ -76,12 +76,12 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
-      {loading && <LoadingSpinner/>}
+      {loading && <LoadingSpinner />}
       <View style={styles.flexbox}>
         <Image style={styles.image} source={require('../../img/loginIcon.png')} />
         {/* 임시 로고(이미지로 만들 경우 교체해야 함) */}
         <Text style={styles.logoText}>Finding</Text>
-        <Text style={[styles.logoText, { fontSize: WINDOW_HEIGHT * 0.017, marginBottom: WINDOW_HEIGHT * 0.1 }]}>나의 분실물을 찾아라!</Text>
+        <Text style={[styles.logoText, { fontSize: WINDOW_HEIGHT * 0.017, marginBottom: WINDOW_HEIGHT * 0.05 }]}>나의 분실물을 찾아라!</Text>
 
         <TextInput style={styles.inputView}
           mode="outlined"
@@ -103,28 +103,32 @@ const Login = ({ navigation }) => {
             />
           }
         />
-        {loginFail && <Text style={{color:'#ff0000'}}>아이디 혹은 비밀번호가 잘못되었습니다.</Text>}
+        {loginFail && <Text style={{ color: '#ff0000' }}>아이디 혹은 비밀번호가 잘못되었습니다.</Text>}
+        <TouchableOpacity style={styles.loginBtn}
+          onPress={handleLogin}
+        ><Text style={{ fontWeight: 'bold', color: 'white', fontSize: WINDOW_HEIGHT * 0.02 }}>로그인</Text>
+        </TouchableOpacity>
+        <View style={styles.signBox}>
 
-        <View style={styles.buttonContainer}>
-          <View style={styles.forgotBox}>
-            <TouchableOpacity style={styles.forgot_button}
-              onPress={() => navigation.navigate("Find Id")}>
-              <Text>아이디 찾기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.forgot_button}
-              onPress={() => navigation.navigate("Find Password")}>
-              <Text>비밀번호 찾기</Text>
+          <View style={[styles.signButtonContainer,{justifyContent: 'flex-end'}]}>
+            <TouchableOpacity 
+              onPress={() => { navigation.navigate("Join Membership") }}>
+              <Text style={{ fontWeight: 'bold' }}>회원가입</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.loginBtn}
-            onPress={handleLogin}
-          ><Text style={{ fontWeight: 'bold', color: 'white' }}>로그인</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.signupBtn}
-            onPress={()=>{navigation.navigate("Join Membership")}}>
-            <Text style={{ fontWeight: 'bold' }}>회원가입</Text>
-          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          <View style={[styles.signButtonContainer,{justifyContent: 'flex-start'}]}>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate("Find Password")}>
+              <Text style={{ fontWeight: 'bold' }}>비밀번호 재설정</Text>
+            </TouchableOpacity>
+          </View>
+
         </View>
+
+
       </View>
     </View>
   );
@@ -165,24 +169,34 @@ const styles = StyleSheet.create({
     marginBottom: WINDOW_HEIGHT * 0.02,
   },
 
-  forgotBox: {
+  signBox: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    width: '80%',
+    alignItems: 'center',
+    marginTop: 25,
+    justifyContent: "center",
   },
-  forgot_button: {
-    margin: WINDOW_HEIGHT * 0.02,
+
+  signButtonContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
   },
-  signupBtn: {
-    margin: WINDOW_HEIGHT * 0.02,
+
+  divider: {
+    height: 15,
+    width: 0.5,
+    marginHorizontal: 25,
+    backgroundColor: "#000",
   },
   loginBtn: {
-    width: "100%",
-    borderRadius: 25,
+    width: "90%",
+    borderRadius: WINDOW_HEIGHT * 0.06 / 2,
     height: WINDOW_HEIGHT * 0.06,
     alignItems: "center",
     justifyContent: "center",
     marginTop: WINDOW_HEIGHT * 0.01,
     backgroundColor: "#007bff",
   },
-  
+
 });
