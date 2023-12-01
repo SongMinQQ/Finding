@@ -13,7 +13,7 @@ import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc, getDocs } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 
@@ -32,7 +32,7 @@ const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.03;
 const FONT_SIZE_MEDIUM = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.02;
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
-const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
+const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; 
 
 
 const FindBoardDetail = ({ navigation: { navigate }, route }) => {
@@ -82,6 +82,11 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       )
     });
   }, [navigation]);
+
+  useEffect(() => {
+    console.log("useEffect테스트");
+}, [])
+
 
   const deletePost = async (postId) => {
     try {
@@ -279,7 +284,12 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           </View>
         </View>
         <Text style={styles.item}>{route.params.articleExplain}</Text>
-        <View style={styles.profileSection}>
+        <TouchableOpacity style={styles.profileSection}
+          onPress={() => navigation.navigate("OpponentProfileTopTabNavigation", {
+            opponentUserID: route.params.sellUser,
+            profileImage: route.params.profileImage,
+            displayName: route.params.displayName,
+        })}>
           <Image
             {...{ preview, uri: route.params.profileImage ? route.params.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
             style={styles.profileImage}
@@ -293,7 +303,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           {writerId != uid && <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
             <Text style={styles.buttonText}>채팅하기</Text>
           </TouchableOpacity>}
-        </View>
+        </TouchableOpacity>
       </View>
       <Modal
         animationType="slide"
@@ -445,7 +455,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: WINDOW_HEIGHT*0.017,
     fontWeight: 'bold',
   },
   userInfo: {
