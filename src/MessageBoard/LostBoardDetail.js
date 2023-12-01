@@ -31,140 +31,141 @@ const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.03;
 const FONT_SIZE_MEDIUM = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.02;
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
-const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
+const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; 
 
 
 const LostBoardDetail = ({ navigation: { navigate }, route }) => {
-    const theme = {
-        ...DefaultTheme,
-        myOwnProperty: true,
-        colors: {
-          ...DefaultTheme.colors,
-          primary: '#007bff', // 이거 바꾸면 됨
-        },
-      };
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff', // 이거 바꾸면 됨
+    },
+  };
 
 
-    const navigation = useNavigation();
-    const { loading } = useContext(LoadingContext);
-    const [findCount, setFindCount] = useState('');
+  const navigation = useNavigation();
+  const { loading } = useContext(LoadingContext);
+  const [findCount, setFindCount] = useState('');
 
-    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
-    const { spinner } = useContext(LoadingContext);
+  const { spinner } = useContext(LoadingContext);
 
 
-    const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-    const openModal = () => {
-      setModalVisible(true);
-    };
-  
-    const closeModal = () => {
-      setModalVisible(false);
-    };
-  
-    const handleReport = () => {
-      openModal();
-    };
-  
-    const [reportTitle, setReportTitle] = useState('');
-    const [reportContent, setReportContent] = useState('');
-    // 네비게이션 헤더에 버튼 추가
-    useEffect(() => {
-      navigation.setOptions({
-        headerRight: () => (
-          <TouchableOpacity onPress={handleReport}>
-            <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
-          </TouchableOpacity>
-        )
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleReport = () => {
+    openModal();
+  };
+
+  const [reportTitle, setReportTitle] = useState('');
+  const [reportContent, setReportContent] = useState('');
+  // 네비게이션 헤더에 버튼 추가
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleReport}>
+          <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
+        </TouchableOpacity>
+      )
+    });
+  }, [navigation]);
+
+
+
+  const findOrLost = "lost"
+  const userName = "홍길동"
+
+  const deletePost = async (postId) => {
+    try {
+      spinner.start();
+      const postRef = doc(fireStoreDB, "lostBoard", postId);
+      await deleteDoc(postRef);
+
+      const userRef = doc(fireStoreDB, "users", uid);
+      await updateDoc(userRef, {
+        lostPosts: arrayRemove(postId)
       });
-    }, [navigation]);
+      console.log("Document successfully deleted: ", postId);
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    } finally {
+      spinner.stop();
+      navigation.navigate('Home');
+    }
+  };
 
-    
 
-    const findOrLost = "lost"
-    const userName = "홍길동"
+  const fetchUserCount = async () => {
+    try {
+      const userRef = doc(fireStoreDB, "users", route.params.sellUser);
 
-    const deletePost = async (postId) => {
-        try {
-            spinner.start();
-            const postRef = doc(fireStoreDB, "lostBoard", postId);
-            await deleteDoc(postRef);
+      const userDoc = await getDoc(userRef);
 
-            const userRef = doc(fireStoreDB, "users", uid);
-            await updateDoc(userRef, {
-                lostPosts: arrayRemove(postId)
-            });
-            console.log("Document successfully deleted: ", postId);
-        } catch (error) {
-            console.error("Error removing document: ", error);
-        } finally {
-            spinner.stop();
-            navigation.navigate('Home');
+      if (userDoc.exists()) {
+        const userFindCount = userDoc.data().foundItemsCount;
+        if (userFindCount) {
+          setFindCount(userFindCount);
+        } else {
+          console.log("찾아준 횟수가 존재하지 않습니다.");
+          setFindCount(0);
         }
-    };
+      } else {
+        console.log("찾아준 횟수가 존재하지 않습니다.");
+        setFindCount(0);
+      }
+
+    } catch (error) {
+      console.error("Error fetching user posts: ", error);
+    }
+  };
+
+  const handleSave = async () => {
+    const reportRef = doc(fireStoreDB, "lostBoardReport", route.params.id);
+    await setDoc(reportRef, {
+      reportInfo: arrayUnion({
+        reportUser: uid,
+        reportTitle: reportTitle,
+        reportContent: reportContent,
+      })
+    }, { merge: true });
+
+    setModalVisible(false);
+  };
 
 
-    const fetchUserCount = async () => {
-        try {
-            const userRef = doc(fireStoreDB, "users", route.params.sellUser);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserCount();
+      // 페이지가 포커스 될 때마다 실행될 로직을 여기에 작성합니다.
 
-            const userDoc = await getDoc(userRef);
-
-            if (userDoc.exists()) {
-              const userFindCount = userDoc.data().foundItemsCount;
-              if(userFindCount){
-                setFindCount(userFindCount);
-              }else {
-                console.log("찾아준 횟수가 존재하지 않습니다.");
-                setFindCount(0);
-              }
-            }else {
-                console.log("찾아준 횟수가 존재하지 않습니다.");
-                setFindCount(0);
-            }
-
-        } catch (error) {
-            console.error("Error fetching user posts: ", error);
-        }
-    };
-
-    const handleSave = async () => {
-        const reportRef = doc(fireStoreDB, "lostBoardReport", route.params.id);
-        await setDoc(reportRef, { 
-          reportInfo: arrayUnion({
-            reportUser: uid,
-            reportTitle: reportTitle,
-            reportContent: reportContent,
-        }) }, { merge: true });
-    
-        setModalVisible(false);
+      return () => {
+        // 포커스가 사라질 때 실행될 클린업 로직이 필요하다면 여기에 작성합니다.
       };
+    }, [route.params])
+  );
 
 
-    useFocusEffect(
-        React.useCallback(() => {
-            fetchUserCount();
-            // 페이지가 포커스 될 때마다 실행될 로직을 여기에 작성합니다.
+  const handleDeletePress = () => {
+    deletePost(route.params.id);
+  };
 
-            return () => {
-                // 포커스가 사라질 때 실행될 클린업 로직이 필요하다면 여기에 작성합니다.
-            };
-        }, [route.params])
-    );
-
-
-    const handleDeletePress = () => {
-        deletePost(route.params.id);
-    };
-
-    const writerId = route.params.sellUser;
-    const uid = useSelector((state) => state.UID);
-    //현재 로그인한 사용자의 닉네임
-    const displayName = useSelector((state) => state.displayName);
-    //현재 로그인한 사용자의 프로필 사진
-    const profileImg = useSelector((state) => state.profileImg);
+  const writerId = route.params.sellUser;
+  const uid = useSelector((state) => state.UID);
+  //현재 로그인한 사용자의 닉네임
+  const displayName = useSelector((state) => state.displayName);
+  //현재 로그인한 사용자의 프로필 사진
+  const profileImg = useSelector((state) => state.profileImg);
 
     const handleChatPress = async () => {
       // Create a unique chat room ID using both user IDs
@@ -201,61 +202,66 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
       });
     };
 
-    return (
-        <ScrollView style={{ backgroundColor: '#fff' }}>
-            <View style={styles.container}>
-                <DetailMain
-                    imgURL={route.params.imgURL}
-                    itemName={route.params.itemName}
-                    location={route.params.location}
-                    date={route.params.date}
-                    onPress={handleDeletePress}
-                    findOrLost={findOrLost}
-                    writerId={writerId}
-                />
-                <Text style={styles.requireHeader}>보답 사항</Text>
+  return (
+    <ScrollView style={{ backgroundColor: '#fff' }}>
+      <View style={styles.container}>
+        <DetailMain
+          imgURL={route.params.imgURL}
+          itemName={route.params.itemName}
+          location={route.params.location}
+          date={route.params.date}
+          onPress={handleDeletePress}
+          findOrLost={findOrLost}
+          writerId={writerId}
+        />
+        <Text style={styles.requireHeader}>보답 사항</Text>
 
-                <View style={styles.requireSelectLayout}>
-                    <View style={styles.requireInfoBox}>
-                        <View style={styles.iconArea}>
-                            <FontAwesome name="dollar" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
-                        </View>
-
-                        <Text style={styles.requireText}>{route.params.money}원</Text>
-                    </View>
-                    <View style={styles.requireInfoBox}>
-                        <View style={styles.iconArea}>
-                            <FontAwesome5 name="handshake" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
-
-                        </View>
-                        <Text style={styles.requireText}>{route.params.tradeType}</Text>
-                    </View>
-                    <View style={styles.requireInfoBox}>
-                        <View style={styles.iconArea}>
-                            <Ionicons name="location" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
-
-                        </View>
-                        <Text style={styles.requireText}>{route.params.tradeLocation}</Text>
-                    </View>
-                </View>
-                <Text style={styles.item}>{route.params.articleExplain}</Text>
-                <View style={styles.profileSection}>
-                    <Image
-                        {...{preview, uri: route.params.profileImage ? route.params.profileImage: "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}}
-                        style={styles.profileImage}
-                        onError={(e) => console.log(e)}
-                    />
-                    <View style={styles.userInfo}>
-                        <Text style={styles.textMedium}>{route.params.displayName}</Text>
-                        <Text style={styles.textSmall}>찾아준 횟수: {findCount}번</Text>
-                    </View>
-                    {/* '채팅하기' 버튼 추가 */}
-                    <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
-                        <Text style={styles.buttonText}>채팅하기</Text>
-                    </TouchableOpacity>
-                </View>
+        <View style={styles.requireSelectLayout}>
+          <View style={styles.requireInfoBox}>
+            <View style={styles.iconArea}>
+              <FontAwesome name="dollar" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
             </View>
-            <Modal
+
+            <Text style={styles.requireText}>{route.params.money}원</Text>
+          </View>
+          <View style={styles.requireInfoBox}>
+            <View style={styles.iconArea}>
+              <FontAwesome5 name="handshake" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
+
+            </View>
+            <Text style={styles.requireText}>{route.params.tradeType}</Text>
+          </View>
+          <View style={styles.requireInfoBox}>
+            <View style={styles.iconArea}>
+              <Ionicons name="location" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
+
+            </View>
+            <Text style={styles.requireText}>{route.params.tradeLocation}</Text>
+          </View>
+        </View>
+        <Text style={styles.item}>{route.params.articleExplain}</Text>
+        <TouchableOpacity style={styles.profileSection}
+          onPress={() => navigation.navigate("OpponentProfileTopTabNavigation", {
+            opponentUserID: route.params.sellUser,
+            profileImage: route.params.profileImage,
+            displayName: route.params.displayName,
+          })}>
+          <Image
+            {...{ preview, uri: route.params.profileImage ? route.params.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+            style={styles.profileImage}
+            onError={(e) => console.log(e)}
+          />
+          <View style={styles.userInfo}>
+            <Text style={styles.textMedium}>{route.params.displayName}</Text>
+            <Text style={styles.textSmall}>찾아준 횟수: {findCount}번</Text>
+          </View>
+          {/* '채팅하기' 버튼 추가 */}
+          <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
+            <Text style={styles.buttonText}>채팅하기</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -299,169 +305,169 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-        </ScrollView>
-    );
+    </ScrollView>
+  );
 };
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        backgroundColor: '#fff',
-        padding: 10,
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff',
+    padding: 10,
+  },
+  requireHeader: {
+    fontSize: FONT_SIZE_MEDIUM,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  requireText: {
+    fontSize: FONT_SIZE_SMALL,
+    fontWeight: 'bold',
+  },
+  imageContainer: {
+    alignItems: 'center',
+    margin: 10,
+  },
+  requireSelectLayout: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    height: MAIN_SELECT_LAYOUT_HEIGHT,
+    width: '100%',
+    marginBottom: 10,
+    gap: 5,
+    borderBottomWidth: 1,
+    borderColor: '#F2F2F2',
+  },
+  image: {
+    width: ITEM_SIZE * 0.5,
+    height: ITEM_SIZE * 0.5,
+    borderRadius: ITEM_BORDER_RADIUS,
+  },
+  imageText: {
+    marginTop: 5,
+    fontSize: 12,
+  },
+  item: {
+    fontSize: FONT_SIZE_SMALL,
+    marginVertical: 15,
+    minHeight: 70,
+  },
+  requireInfoBox: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  iconArea: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: ICON_AREA_LAYOUT_HEIGHT,
+    height: ICON_AREA_LAYOUT_HEIGHT,
+    borderRadius: ICON_AREA_LAYOUT_HEIGHT / 2,
+    borderWidth: 2,
+    borderColor: '#000',
+    marginBottom: 10,
+  },
+  textInput: {
+    width: '100%',
+    backgroundColor: '#fff',
+    height: WINDOW_HEIGHT * 0.055,
+  },
+  profileSection: {
+    flexDirection: 'row',
+    marginTop: 10,
+    width: '100%',
+    backgroundColor: '#EFF7FF',
+    height: PROFILE_SECTION_HEIGHT,
+    padding: PROFILE_SECTION_PADDING,
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  profileImage: {
+    width: PROFILE_IMAGE_SIZE,
+    height: PROFILE_IMAGE_SIZE,
+    borderRadius: PROFILE_IMAGE_SIZE / 2,
+    marginRight: PROFILE_IMAGE_MARGIN_RIGHT
+  },
+  textMedium: {
+    fontSize: FONT_SIZE_LARGE,
+    fontWeight: 'bold',
+    marginBottom: 10
+  },
+  textSmall: {
+    fontSize: FONT_SIZE_SMALL,
+    marginBottom: 5
+  },
+  chatButton: {
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: BUTTON_PADDING,
+    backgroundColor: '#007bff',
+    borderRadius: ITEM_BORDER_RADIUS,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: WINDOW_HEIGHT*0.017,
+    fontWeight: 'bold',
+  },
+  userInfo: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
     },
-    requireHeader: {
-        fontSize: FONT_SIZE_MEDIUM,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    requireText: {
-        fontSize: FONT_SIZE_SMALL,
-        fontWeight: 'bold',
-    },
-    imageContainer: {
-        alignItems: 'center',
-        margin: 10,
-    },
-    requireSelectLayout: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        height: MAIN_SELECT_LAYOUT_HEIGHT,
-        width: '100%',
-        marginBottom: 10,
-        gap: 5,
-        borderBottomWidth: 1,
-        borderColor: '#F2F2F2',
-    },
-    image: {
-        width: ITEM_SIZE * 0.5,
-        height: ITEM_SIZE * 0.5,
-        borderRadius: ITEM_BORDER_RADIUS,
-    },
-    imageText: {
-        marginTop: 5,
-        fontSize: 12,
-    },
-    item: {
-        fontSize: FONT_SIZE_SMALL,
-        marginVertical: 15,
-        minHeight: 70,
-    },
-    requireInfoBox: {
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    iconArea: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: ICON_AREA_LAYOUT_HEIGHT,
-        height: ICON_AREA_LAYOUT_HEIGHT,
-        borderRadius: ICON_AREA_LAYOUT_HEIGHT / 2,
-        borderWidth: 2,
-        borderColor: '#000',
-        marginBottom: 10,
-    },
-    textInput: {
-        width: '100%',
-        backgroundColor: '#fff',
-        height: WINDOW_HEIGHT * 0.055,
-    },
-    profileSection: {
-        flexDirection: 'row',
-        marginTop: 10,
-        width: '100%',
-        backgroundColor: '#EFF7FF',
-        height: PROFILE_SECTION_HEIGHT,
-        padding: PROFILE_SECTION_PADDING,
-        alignItems: 'center',
-        borderRadius: 20,
-    },
-    profileImage: {
-        width: PROFILE_IMAGE_SIZE,
-        height: PROFILE_IMAGE_SIZE,
-        borderRadius: PROFILE_IMAGE_SIZE / 2,
-        marginRight: PROFILE_IMAGE_MARGIN_RIGHT
-    },
-    textMedium: {
-        fontSize: FONT_SIZE_LARGE,
-        fontWeight: 'bold',
-        marginBottom: 10
-    },
-    textSmall: {
-        fontSize: FONT_SIZE_SMALL,
-        marginBottom: 5
-    },
-    chatButton: {
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: BUTTON_PADDING,
-        backgroundColor: '#007bff',
-        borderRadius: ITEM_BORDER_RADIUS,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
-    userInfo: {
-        flex: 1,
-        justifyContent: 'center'
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 15,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        alignSelf: 'center', // 모달을 가운데로 정렬합니다.
-        width: '90%', // 모달의 너비를 확장합니다.
-        height: '70%', // 모달의 최대 높이를 설정합니다.
-        justifyContent: 'space-between', // 모달 내부의 요소들을 세로 방향으로 가운데 정렬합니다.
-      },
-      modalHeader: {
-        fontSize: FONT_SIZE_LARGE,
-        fontWeight: 'bold',
-        width: '100%',
-        textAlign: 'left',
-        marginBottom: 10,
-      },
-      modalContainer: {
-        flex: 1, // 모달 컨테이너가 전체 화면을 차지하도록 설정
-        justifyContent: 'center', // 수직 방향으로 중앙 정렬
-        alignItems: 'center', // 가로 방향으로 중앙 정렬
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      },
-      input: {
-        width: '100%',
-        backgroundColor: "#fff",
-        marginBottom: 10,
-      },
-      saveButton: {
-        backgroundColor: "#007bff",
-        padding: 10,
-        borderRadius: 20,
-        marginTop: 10,
-        width: '100%', // 저장 버튼의 너비를 늘립니다.
-        alignItems: 'center', // 버튼 내부의 텍스트를 가운데로 정렬합니다.
-      },
-      saveButtonText: {
-        color: "white",
-        fontSize: FONT_SIZE_SMALL,
-        fontWeight: "bold",
-      },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    alignSelf: 'center', // 모달을 가운데로 정렬합니다.
+    width: '90%', // 모달의 너비를 확장합니다.
+    height: '70%', // 모달의 최대 높이를 설정합니다.
+    justifyContent: 'space-between', // 모달 내부의 요소들을 세로 방향으로 가운데 정렬합니다.
+  },
+  modalHeader: {
+    fontSize: FONT_SIZE_LARGE,
+    fontWeight: 'bold',
+    width: '100%',
+    textAlign: 'left',
+    marginBottom: 10,
+  },
+  modalContainer: {
+    flex: 1, // 모달 컨테이너가 전체 화면을 차지하도록 설정
+    justifyContent: 'center', // 수직 방향으로 중앙 정렬
+    alignItems: 'center', // 가로 방향으로 중앙 정렬
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  input: {
+    width: '100%',
+    backgroundColor: "#fff",
+    marginBottom: 10,
+  },
+  saveButton: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 20,
+    marginTop: 10,
+    width: '100%', // 저장 버튼의 너비를 늘립니다.
+    alignItems: 'center', // 버튼 내부의 텍스트를 가운데로 정렬합니다.
+  },
+  saveButtonText: {
+    color: "white",
+    fontSize: FONT_SIZE_SMALL,
+    fontWeight: "bold",
+  },
 
 });
 

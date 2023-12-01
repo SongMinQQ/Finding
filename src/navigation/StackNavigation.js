@@ -26,6 +26,10 @@ import FindPasswordEmail from '../Login/FindPasswordEmail';
 import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
 import SearchPage from '../MessageBoard/SearchPage';
 import ItemInfo from '../police/ItemInfo';
+import OpponentProfileTopTabNavigation from '../opponent/OpponentProfileTopTabNavigation';
+
+
+
 import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 import { useSelector } from 'react-redux';
@@ -143,6 +147,16 @@ const StackNavigation = () => {
                         headerBackTitleVisible: false,
                     }}
                 />
+                <Stack.Screen name="OpponentProfileTopTabNavigation" component={OpponentProfileTopTabNavigation} options={{
+                    headerTitle: '프로필',
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
+                    headerStyle: {
+                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
+                        elevation: 0, // 안드로이드에서의 shadow 없앰
+                        shadowOpacity: 0, // iOS에서의 shadow 없앰
+                    },
+                }} />
             </Stack.Group>
             {/* 프로필 페이지 그룹 */}
             <Stack.Group>

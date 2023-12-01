@@ -75,7 +75,7 @@ const Login = ({ navigation }) => {
   const [loginFail, setLoginFail] = useState(false);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'flex-start' }}>
       {loading && <LoadingSpinner/>}
       <View style={styles.flexbox}>
         <Image style={styles.image} source={require('../../img/loginIcon.png')} />
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingVertical: WINDOW_HEIGHT * 0.07,
+    paddingVertical: WINDOW_HEIGHT * 0.11,
   },
   container: {
     backgroundColor: "#fff",

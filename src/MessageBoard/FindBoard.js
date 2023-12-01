@@ -101,7 +101,12 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
                 <Text style={styles.itemName}>{item.title}</Text>
                 <Text style={styles.itemText}>{item.findLocation}</Text>
                 <Text style={styles.itemText}>{item.date.toDate().toLocaleDateString('ko-KR')}</Text>
-                <TouchableOpacity style={styles.itemUser} onPress={() => console.log(item.imageUrl)}>
+                <TouchableOpacity style={styles.itemUser} 
+                    onPress={() => navigation.navigate("OpponentProfileTopTabNavigation", {
+                        opponentUserID: item.uid,
+                        profileImage: item.profileImage,
+                        displayName: item.displayName,
+                    })}>
                     <Text>{item.displayName}</Text>
                 </TouchableOpacity>
             </View>
