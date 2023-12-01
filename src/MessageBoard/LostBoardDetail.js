@@ -35,39 +35,40 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
 
 const LostBoardDetail = ({ navigation: { navigate }, route }) => {
-    const theme = {
-        ...DefaultTheme,
-        myOwnProperty: true,
-        colors: {
-          ...DefaultTheme.colors,
-          primary: '#007bff', // 이거 바꾸면 됨
-        },
-      };
+  const theme = {
+    ...DefaultTheme,
+    myOwnProperty: true,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#007bff', // 이거 바꾸면 됨
+    },
+  };
 
-
-    const navigation = useNavigation();
-    const { loading } = useContext(LoadingContext);
-    const [findCount, setFindCount] = useState('');
-
-    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
-
-    const { spinner } = useContext(LoadingContext);
-
-
-    const [modalVisible, setModalVisible] = useState(false);
-
-    const openModal = () => {
-      setModalVisible(true);
-    };
+  const type = route.params.type;
   
-    const closeModal = () => {
-      setModalVisible(false);
-    };
-  
-    const handleReport = () => {
-      openModal();
-      // 여기에 원하는 로직을 추가합니다.
-    };
+  const navigation = useNavigation();
+  const { loading } = useContext(LoadingContext);
+  const [findCount, setFindCount] = useState('');
+
+  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+
+  const { spinner } = useContext(LoadingContext);
+
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleReport = () => {
+    openModal();
+    // 여기에 원하는 로직을 추가합니다.
+  };
   
     const [reportTitle, setReportTitle] = useState('');
     const [reportContent, setReportContent] = useState('');
@@ -85,7 +86,6 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     
 
     const findOrLost = "lost"
-    const userName = "홍길동"
 
     const deletePost = async (postId) => {
         try {
