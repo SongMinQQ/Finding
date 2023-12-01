@@ -24,11 +24,16 @@ const ProfileTopTabNavigation = ({ navigation: { navigate }, route }) => {
     const fetchUserCount = async () => {
         try {
             const userRef = doc(fireStoreDB, "users", uid);
-
             const userDoc = await getDoc(userRef);
 
-            const userFindCount = userDoc.data().foundItemsCount ? userDoc.data().foundItemsCount:0;
-            setFindCount(userFindCount);
+            if (userDoc.exists()) {
+                const userFindCount = userDoc.data().foundItemsCount;
+                setFindCount(userFindCount);
+            }else {
+                console.log("찾아준 횟수가 존재하지 않습니다.");
+                setFindCount(0);
+            }
+
         } catch (error) {
             console.error("Error fetching user posts: ", error);
         }

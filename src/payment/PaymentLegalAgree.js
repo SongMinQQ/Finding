@@ -40,11 +40,14 @@ const PaymentLegalAgree = ({ navigation: { navigate }, route }) => {
 
                 <View style={styles.legalSectionContainer}>
                     <ScrollView style={styles.legalSection}>
-                        <Text>법률 안내사항</Text>
+                        <Text style={styles.legalHeader}>사기와 공갈의 죄</Text>
+                        <Text style={styles.legalTitle}>347조(사기)</Text>
+                        <Text style={styles.legalContent}>①사람을 기망하여 재물의 교부를 받거나 재산상의 이익을 취득한 자는 10년 이하의 징역 또는 2천만원 이하의 벌금에 처한다. {`\n<개정 1995. 12. 29.>`}</Text>
+                        <Text style={styles.legalContent}>②전항의 방법으로 제삼자로 하여금 재물의 교부를 받게 하거나 재산상의 이익을 취득하게 한 때에도 전항의 형과 같다.</Text>
                     </ScrollView>
                 </View>
 
-                <LegalCheckBox
+                <LegalCheckBox 
                     label="정말 제 물건이 맞습니다."
                     value={isChecked1}
                     onChange={setChecked1}
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
     },
     legalSectionContainer: {
         width: '100%',
-        height: WINDOW_HEIGHT * 0.22, // 고정 높이를 설정
+        height: WINDOW_HEIGHT * 0.27, // 고정 높이를 설정
         paddingHorizontal: 15,
         marginBottom: 10, // 필요에 따라 추가
     },
@@ -111,7 +114,22 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#000000',
         borderRadius: 10,
-        padding: 15,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+    },
+    legalHeader: {
+        fontWeight: 'bold',
+        fontSize: WINDOW_HEIGHT * 0.022,
+        marginBottom: 15,
+    },
+    legalTitle: {
+        fontWeight: 'bold',
+        fontSize: WINDOW_HEIGHT * 0.017,
+        marginBottom: 10,
+    },
+    legalContent: {
+        fontSize: WINDOW_HEIGHT * 0.015,
+        marginBottom: 5,
     },
     findButton: {
         alignSelf: 'flex-end',
@@ -120,6 +138,7 @@ const styles = StyleSheet.create({
         height: WINDOW_HEIGHT * 0.07,
         justifyContent: 'center',
         alignItems: 'center',
+        marginRight: 10,
         borderRadius: WINDOW_HEIGHT * 0.01,
     },
     findButtonText: {

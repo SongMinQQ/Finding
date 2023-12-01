@@ -32,25 +32,19 @@ const ProfileGladMessage = () => {
     const fetchGladMessages = async () => {
         try {
             const userRef = doc(fireStoreDB, "users", uid); // UID는 현재 로그인한 사용자의 ID
-            console.log("감사 메시지 가져오기");
+
             const userDoc = await getDoc(userRef);
-            console.log("감사 메시지 가져오기 성공");
+
     
             if (userDoc.exists()) {
                 const gladMessages = userDoc.data().gladMessages; // 사용자의 감사 메시지 배열
                 if (gladMessages && Array.isArray(gladMessages)) {
                     setPosts(gladMessages);
-                    // gladMessages.forEach(messageObj => {
-                    //     console.log("displayName:", messageObj.displayName);
-                    //     console.log("message:", messageObj.message);
-                    //     console.log("profileImage:", messageObj.profileImage);
-                    //     console.log("uid:", messageObj.uid);
-                    // });
                 } else {
                     console.log("감사 메시지가 존재하지 않습니다.");
                 }
             } else {
-                console.log("사용자 문서가 존재하지 않습니다.");
+                console.log("유저 데이터가 존재하지 않습니다.");
             }
         } catch (error) {
             console.error("감사 메시지 가져오기 오류:", error);

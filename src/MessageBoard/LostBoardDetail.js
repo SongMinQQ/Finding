@@ -66,7 +66,6 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
   
     const handleReport = () => {
       openModal();
-      // 여기에 원하는 로직을 추가합니다.
     };
   
     const [reportTitle, setReportTitle] = useState('');
@@ -110,11 +109,22 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     const fetchUserCount = async () => {
         try {
             const userRef = doc(fireStoreDB, "users", route.params.sellUser);
-            console.log("글ID 가져오기");
+
             const userDoc = await getDoc(userRef);
-            console.log("글ID 가져오기 성공");
-            const userFindCount = userDoc.data().foundItemsCount ? userDoc.data().foundItemsCount:0;
-            setFindCount(userFindCount);
+
+            if (userDoc.exists()) {
+              const userFindCount = userDoc.data().foundItemsCount;
+              if(userFindCount){
+                setFindCount(userFindCount);
+              }else {
+                console.log("찾아준 횟수가 존재하지 않습니다.");
+                setFindCount(0);
+              }
+            }else {
+                console.log("찾아준 횟수가 존재하지 않습니다.");
+                setFindCount(0);
+            }
+
         } catch (error) {
             console.error("Error fetching user posts: ", error);
         }
@@ -182,7 +192,7 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
                             <FontAwesome name="dollar" size={ICON_AREA_LAYOUT_HEIGHT * 0.5} color={'#000'} />
                         </View>
 
-                        <Text style={styles.requireText}>{route.params.money}</Text>
+                        <Text style={styles.requireText}>{route.params.money}원</Text>
                     </View>
                     <View style={styles.requireInfoBox}>
                         <View style={styles.iconArea}>
