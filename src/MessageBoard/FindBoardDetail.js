@@ -13,7 +13,7 @@ import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc, getDocs } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 
