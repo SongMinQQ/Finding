@@ -17,14 +17,16 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.18;
 
 const ProfileEdit = ({navigation}) => {
-  const [newDisplayName, setNewDisplayName] = useState('');
-  const [selectImageUrl, setSelectImageUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.UID); // Current logged-in user's UID
   const displayName = useSelector((state) => state.displayName); // Current logged-in user's displayName
   const profileImg = useSelector((state) => state.profileImg); // Current logged-in user's profileImg
+  
+  const [newDisplayName, setNewDisplayName] = useState(displayName);
+  const [selectImageUrl, setSelectImageUrl] = useState(profileImg);
+  const [loading, setLoading] = useState(false);
+
+  
   const theme = {
     ...DefaultTheme,
     myOwnProperty: true,
