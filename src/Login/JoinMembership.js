@@ -100,8 +100,8 @@ export default function JoinMembership({ navigation }) {
     }
     else if (email.length < 6 || password.length < 6) {
       newError = '아이디와 비밀번호는 8자 이상이어야 합니다.';
-    } else if (email.length > 20 || password.length > 20) {
-      newError = '아이디와 비밀번호는 20자 이하여야 합니다.';
+    } else if (email.length > 30 || password.length > 30) {
+      newError = '아이디와 비밀번호는 30자 이하여야 합니다.';
     } else if (password !== confirmPassword) {
       newError = '비밀번호와 비밀번호 확인이 일치하지 않습니다.';
     } else {

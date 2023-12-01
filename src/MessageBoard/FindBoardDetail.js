@@ -83,10 +83,6 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     });
   }, [navigation]);
 
-  useEffect(() => {
-    console.log("useEffect테스트");
-}, [])
-
 
   const deletePost = async (postId) => {
     try {

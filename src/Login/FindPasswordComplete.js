@@ -16,7 +16,7 @@ const BUTTON_WIDTH = WINDOW_WIDTH * 0.35;
 // 버튼 텍스트 사이즈
 const BUTTON_TEXT_SIZE = WINDOW_HEIGHT * 0.02; 
 
-export default function JoinMembershipThirdScreen({ navigation }) {
+export default function FindPasswordComplete({ navigation }) {
 
   return (
     <View style={styles.container}>
@@ -24,7 +24,8 @@ export default function JoinMembershipThirdScreen({ navigation }) {
         <FontAwesome name="check-circle" size={ICON_CIRCLE_SIZE} color="#007bff" />
       </View>
 
-      <Text style={[styles.successMessage, { fontSize: MESSAGE_FONT_SIZE }]}>회원가입에 성공하였습니다!</Text>
+      <Text style={styles.successMessage}>{`비밀번호 재설정 이메일을\n보내드렸습니다.`}</Text>
+      <Text style={{fontSize: WINDOW_HEIGHT*0.02, textAlign: 'center'}}>{`받은 이메일을 통해 비밀번호 재설정을 하고\n로그인을 진행해주세요.`}</Text>
 
       <TouchableOpacity
         style={styles.backButton}
@@ -49,6 +50,9 @@ const styles = StyleSheet.create({
   successMessage: {
     fontWeight: 'bold',
     marginBottom: WINDOW_HEIGHT * 0.04,
+    fontSize: WINDOW_HEIGHT * 0.03,
+    alignItems: 'center',
+    textAlign: 'center',
   },
   backButton: {
     backgroundColor: '#007bff',
@@ -58,7 +62,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: WINDOW_HEIGHT * 0.02,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 15,
     borderRadius: WINDOW_HEIGHT * 0.01,
+    marginTop: 40,
   },
   backButtonText: {
     color: '#fff',
