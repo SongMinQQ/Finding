@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
-import { Image } from 'expo-image';
+import { Image } from "react-native-expo-image-cache";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -19,10 +19,11 @@ const ProfileGladMessage = () => {
     const [dialogVisible, setDialogVisible] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
-  
+
     const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
+    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
     const handleCardPress = (index) => {
         setSelectedMessage(index);
@@ -35,7 +36,7 @@ const ProfileGladMessage = () => {
 
             const userDoc = await getDoc(userRef);
 
-    
+
             if (userDoc.exists()) {
                 const gladMessages = userDoc.data().gladMessages; // 사용자의 감사 메시지 배열
                 if (gladMessages && Array.isArray(gladMessages)) {
@@ -69,20 +70,25 @@ const ProfileGladMessage = () => {
                 {posts.map((message, index) => (
                     <TouchableOpacity key={index} onPress={() => handleCardPress(message)}>
                         <View style={styles.card}>
-                            <Image
+                            {/* <Image
                                 source={ message.profileImage }
                                 style={styles.profileImage}
+                            /> */}
+                            <Image
+                                {...{ preview, uri: message.profileImage ? message.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+                                style={styles.profileImage}
+                                onError={(e) => console.log(e)}
                             />
-                                <View style={styles.messageContainer}>
-                                    <Text style={styles.itemName}>{message.displayName}</Text>
-                                    <Text
-                                        style={styles.messageText}
-                                        numberOfLines={2}
-                                        ellipsizeMode='tail'
-                                    >
-                                        {message.message}
-                                    </Text>
-                                </View>
+                            <View style={styles.messageContainer}>
+                                <Text style={styles.itemName}>{message.displayName}</Text>
+                                <Text
+                                    style={styles.messageText}
+                                    numberOfLines={2}
+                                    ellipsizeMode='tail'
+                                >
+                                    {message.message}
+                                </Text>
+                            </View>
                         </View>
                     </TouchableOpacity>
                 ))}
