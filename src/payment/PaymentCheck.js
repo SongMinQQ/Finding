@@ -260,7 +260,7 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                     />)}
                 <TouchableOpacity
                     style={styles.paymentButton}
-                    onPress={handlePayment(route.params.id)}
+                    onPress={handlePayment}
                 >
                     <Text style={styles.paymentButtonText}>결제하기</Text>
                 </TouchableOpacity>
