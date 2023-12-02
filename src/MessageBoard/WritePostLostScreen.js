@@ -128,15 +128,20 @@ const WritePostLostScreen = ({ navigation }) => {
 
         try {
             // 이미지를 Blob 형태로 변환
-            const response = await fetch(imageUri);
-            const blob = await response.blob();
+            if (imageUri) {
+                const response = await fetch(imageUri);
+                const blob = await response.blob();
 
-            // Blob을 Firebase Storage에 업로드
-            await uploadBytesResumable(storageRef, blob);
+                // Blob을 Firebase Storage에 업로드
+                await uploadBytesResumable(storageRef, blob);
 
-            // 업로드된 이미지의 URL 가져오기
-            const url = await getDownloadURL(storageRef);
-            return url;
+                // 업로드된 이미지의 URL 가져오기
+                const url = await getDownloadURL(storageRef);
+                return url;
+            } else {
+                return null;
+            }
+
         } catch (error) {
             console.error("Error uploading image: ", error);
             return null;
