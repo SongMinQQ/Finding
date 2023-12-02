@@ -88,15 +88,28 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     try {
       spinner.start();
       const postRef = doc(fireStoreDB, "findBoard", postId);
-      await deleteDoc(postRef);
+      const isDeletedDoc = await getDoc(postRef);
+      if(!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted){
 
-      const userRef = doc(fireStoreDB, "users", uid);
-      await updateDoc(userRef, {
-        findPosts: arrayRemove(postId)
-      });
-      console.log("Document successfully deleted: ", postId);
+        await updateDoc(postRef, {
+          isDeleted: true
+        });
+
+        const userRef = doc(fireStoreDB, "users", uid);
+        await updateDoc(userRef, {
+          findPosts: arrayRemove(postId)
+        });
+
+        console.log("게시글 삭제 성공: ", postId);
+
+      }else {
+        Alert.alert('이미 결제되었거나 삭제된 게시물입니다.');
+        navigation.navigate('Home');
+      }
+
+     
     } catch (error) {
-      console.error("Error removing document: ", error);
+      console.error("게시글 삭제 오류: ", error);
     } finally {
       spinner.stop();
       navigation.navigate('Home');
@@ -151,20 +164,27 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     }, [route.params])
   );
 
-  const handleFindPress = () => {
+  const handleFindPress = async () => {
     if (writerId != uid) {
-      navigation.navigate("PaymentLegalAgree", {
-        id: route.params.id,
-        imgURL: route.params.imgURL,
-        itemName: route.params.itemName,
-        location: route.params.location,
-        date: route.params.date,
-        tradeType: route.params.tradeType,
-        tradeLocation: route.params.tradeLocation,
-        displayName: route.params.displayName,
-        money: route.params.money,
-        sellUser: route.params.sellUser,
-      });
+      const postRef = doc(fireStoreDB, "findBoard", route.params.id);
+      const isDeletedDoc = await getDoc(postRef);
+      if(!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted){
+        navigation.navigate("PaymentLegalAgree", {
+          id: route.params.id,
+          imgURL: route.params.imgURL,
+          itemName: route.params.itemName,
+          location: route.params.location,
+          date: route.params.date,
+          tradeType: route.params.tradeType,
+          tradeLocation: route.params.tradeLocation,
+          displayName: route.params.displayName,
+          money: route.params.money,
+          sellUser: route.params.sellUser,
+        });
+      }else{
+        Alert.alert('이미 결제되었거나 삭제된 게시물입니다.')
+        navigation.navigate('Home');
+      }
     } else {
       deletePost(route.params.id);
     }

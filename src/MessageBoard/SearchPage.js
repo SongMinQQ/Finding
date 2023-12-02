@@ -14,7 +14,7 @@ import styled from 'styled-components';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
-const WINDOW_WIDTH =  Dimensions.get('window').width;
+const WINDOW_WIDTH = Dimensions.get('window').width;
 
 const BORDER_COLOR = '#F8F8F8';
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
@@ -28,7 +28,7 @@ const BoardSelectButton = styled.TouchableOpacity`
   background-color: ${props => props.boardKind};
   align-items: center;
   justify-content: center;
-  border-radius:  ${WINDOW_HEIGHT*0.03}px;
+  border-radius:  ${WINDOW_HEIGHT * 0.03}px;
 `;
 
 
@@ -38,7 +38,7 @@ const SearchPage = ({ navigation: { navigate }, route }) => {
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const [posts, setPosts] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState('findBoard');
-  const searchText = useSelector((state) => state.searchText); 
+  const searchText = useSelector((state) => state.searchText);
 
 
 
@@ -51,25 +51,48 @@ const SearchPage = ({ navigation: { navigate }, route }) => {
           onChangeText={setSearchQuery}
           returnKeyType="search"
           placeholderTextColor={"#DADADA"}
-      />
+        />
       ),
     });
   }, [navigation]);
 
 
-  
+
   const fetchDocs = async () => {
     try {
-      const q = query(collection(fireStoreDB, selectedBoard),  where('title', '==', searchQuery));
+      if (selectedBoard === 'findBoard') {
+        const q = query(collection(fireStoreDB, selectedBoard),
+          where('title', '==', searchQuery),
+          where("isDeleted", "==", false),
+          where("isPaied", "==", false),
+          orderBy("date", "desc")
+        );
 
-      // 생성된 쿼리를 사용하여 문서들을 가져옵니다.
-      const querySnapshot = await getDocs(q);
-      const fetchedPosts = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      console.log("검색 결과 가져옴");
-      setPosts(fetchedPosts);
+        // 생성된 쿼리를 사용하여 문서들을 가져옵니다.
+        const querySnapshot = await getDocs(q);
+        const fetchedPosts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        console.log("검색 결과 가져옴");
+        setPosts(fetchedPosts);
+      }else{
+        const q = query(collection(fireStoreDB, selectedBoard),
+          where('title', '==', searchQuery),
+          where("isDeleted", "==", false),
+          orderBy("date", "desc")
+        );
+
+        // 생성된 쿼리를 사용하여 문서들을 가져옵니다.
+        const querySnapshot = await getDocs(q);
+        const fetchedPosts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        console.log("검색 결과 가져옴");
+        setPosts(fetchedPosts);
+      }
+
     } catch (error) {
       console.error("Error fetching documents: ", error);
     }
@@ -77,10 +100,10 @@ const SearchPage = ({ navigation: { navigate }, route }) => {
 
   useEffect(() => {
     if (searchQuery) {
-      console.log("검색: "+searchQuery);
+      console.log("검색: " + searchQuery);
       fetchDocs();
     } else {
-      console.log("검색실패: "+searchQuery);
+      console.log("검색실패: " + searchQuery);
       setPosts([]);  // 검색어가 없을 때 결과 초기화
     }
   }, [searchQuery]);
@@ -121,16 +144,18 @@ const SearchPage = ({ navigation: { navigate }, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.boardSelectContainer}>
-        <BoardSelectButton boardKind={selectedBoard == "findBoard"? "#DADADA":"#fff"}
-          onPress={()=>{
+        <BoardSelectButton boardKind={selectedBoard == "findBoard" ? "#DADADA" : "#fff"}
+          onPress={() => {
             setSelectedBoard('findBoard')
-            console.log(searchText)}}>
+            console.log(searchText)
+          }}>
           <Text style={styles.boardSelectText}>습득 물건</Text>
         </BoardSelectButton>
-        <BoardSelectButton boardKind={selectedBoard == "findBoard"? "#fff":"#DADADA"}
-          onPress={()=>{
+        <BoardSelectButton boardKind={selectedBoard == "findBoard" ? "#fff" : "#DADADA"}
+          onPress={() => {
             setSelectedBoard('lostBoard')
-            console.log(searchText)}}>
+            console.log(searchText)
+          }}>
           <Text style={styles.boardSelectText}>분실 물건</Text>
         </BoardSelectButton>
       </View>
@@ -153,7 +178,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: WINDOW_HEIGHT*0.06,
+    height: WINDOW_HEIGHT * 0.06,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     marginVertical: 10,
@@ -165,8 +190,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#007bff",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius:  WINDOW_HEIGHT*0.03,
-  }, 
+    borderRadius: WINDOW_HEIGHT * 0.03,
+  },
   boardSelectText: {
     color: '#000',
     fontWeight: 'bold',

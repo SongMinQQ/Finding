@@ -53,7 +53,8 @@ const WritePostLostScreen = ({ navigation }) => {
         description: description,
         displayName: displayName,
         uid: uid,
-        profileImage: profileImage
+        profileImage: profileImage,
+        isDeleted: false,
     };
 
     const moneyList = [
@@ -154,9 +155,11 @@ const WritePostLostScreen = ({ navigation }) => {
                 imageUrl: firebaseImageUrl  // 이미지 URL 추가
             });
             console.log("Document written with ID: ", docRef.id);
-            
+
             const userRef = doc(fireStoreDB, "users", uid);
-            await setDoc(userRef, { lostPosts: arrayUnion(docRef.id) }, { merge: true });
+            await setDoc(userRef, {
+                lostPosts: arrayUnion(docRef.id)
+            }, { merge: true });
 
             console.log('글 작성 성공');
             navigation.navigate('Home');
@@ -171,7 +174,7 @@ const WritePostLostScreen = ({ navigation }) => {
 
     return (
         <>
-        {loading && <LoadingSpinner/>}
+            {loading && <LoadingSpinner />}
             <ScrollView style={styles.container}>
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>

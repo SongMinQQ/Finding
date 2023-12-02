@@ -55,7 +55,9 @@ const WritePostFindScreen = ({ navigation }) => {
         description: description,
         displayName: displayName,
         uid: uid,
-        profileImage: profileImage
+        profileImage: profileImage,
+        isDeleted: false,
+        isPaied: false,
     };
 
     const moneyList = [
@@ -126,27 +128,27 @@ const WritePostFindScreen = ({ navigation }) => {
         // 이미지 파일 이름 (예: image_12345.jpg)
         const fileName = `findboard_image_${new Date().getTime()}.jpg`;
         const storageRef = ref(storage, `findBoard/${fileName}`);
-      
-        try {
-          // 이미지를 Blob 형태로 변환
-          const response = await fetch(imageUri);
-          const blob = await response.blob();
-      
-          // Blob을 Firebase Storage에 업로드
-          await uploadBytesResumable(storageRef, blob);
-      
-          // 업로드된 이미지의 URL 가져오기
-          const url = await getDownloadURL(storageRef);
-          return url;
-        } catch (error) {
-          console.error("Error uploading image: ", error);
-          return null;
-        }
-      };
 
-    
+        try {
+            // 이미지를 Blob 형태로 변환
+            const response = await fetch(imageUri);
+            const blob = await response.blob();
+
+            // Blob을 Firebase Storage에 업로드
+            await uploadBytesResumable(storageRef, blob);
+
+            // 업로드된 이미지의 URL 가져오기
+            const url = await getDownloadURL(storageRef);
+            return url;
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+            return null;
+        }
+    };
+
+
     const { spinner } = useContext(LoadingContext);
-    
+
     const handleSubmit = async () => {
         try {
             spinner.start();
@@ -159,7 +161,9 @@ const WritePostFindScreen = ({ navigation }) => {
             console.log("Document written with ID: ", docRef.id);
 
             const userRef = doc(fireStoreDB, "users", uid);
-            await setDoc(userRef, { findPosts: arrayUnion(docRef.id) }, { merge: true });
+            await setDoc(userRef, {
+                findPosts: arrayUnion(docRef.id)
+            }, { merge: true });
 
             console.log('글 작성 성공');
             navigation.navigate('Home');
@@ -185,7 +189,7 @@ const WritePostFindScreen = ({ navigation }) => {
 
     return (
         <>
-            {loading && <LoadingSpinner/>}
+            {loading && <LoadingSpinner />}
             <ScrollView style={styles.container}>
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>
