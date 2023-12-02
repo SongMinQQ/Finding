@@ -269,9 +269,9 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
             <Text style={styles.textSmall}>찾아준 횟수: {findCount}번</Text>
           </View>
           {/* '채팅하기' 버튼 추가 */}
-          <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
+          {writerId != uid && <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
             <Text style={styles.buttonText}>채팅하기</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </TouchableOpacity>
       </View>
       <Modal
