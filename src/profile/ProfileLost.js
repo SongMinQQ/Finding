@@ -81,6 +81,7 @@ const ProfileLost = () => {
                             location: item.findLocation,
                             date: item.date.toDate().toLocaleDateString('ko-KR'),
                             displayName: item.displayName,
+                            sellUser: item.uid,
                             money: item.thankMoney,
                             tradeType: item.tradeType,
                             tradeLocation: item.tradeLocation,
