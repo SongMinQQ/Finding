@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 import PaymentMain from './PaymentMain';
@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { storage } from '../../FireBase/DB';
-import { doc, deleteDoc, updateDoc, collection, getDoc, arrayUnion, arrayRemove, addDoc, setDoc, FieldValue, increment   } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, collection, getDoc, arrayUnion, arrayRemove, addDoc, setDoc, FieldValue, increment } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -86,16 +86,19 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
     const deletePost = async (postId) => {
         try {
             const postRef = doc(fireStoreDB, "findBoard", postId);
-            await deleteDoc(postRef);
+
+            await updateDoc(postRef, {
+                isPaied: true
+            });
 
             const userRef = doc(fireStoreDB, "users", route.params.sellUser);
             await updateDoc(userRef, {
                 findPosts: arrayRemove(postId),
                 foundItemsCount: increment(1)
             });
-
             console.log("Document successfully deleted: ", postId);
-        } catch (error) {
+        }
+        catch (error) {
             console.error("Error removing document: ", error);
         }
     };
@@ -117,62 +120,73 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
     // 카드 사용 기한은 적절하게 넣어야 함. 막 20년, 78년 이런식으로 넣으면 안돌아감(CVC는 아무거나 가능)
     const handlePayment = async () => {
         try {
-            console.log('결제 세션 요청 시작');
-            let paymentTotalCost;
-            if (route.params.tradeType === '직거래') {
-                paymentTotalCost = route.params.money;
-            } else {
-                paymentTotalCost = route.params.money + deliveryCost;
-            }
-            const response = await fetch('https://neighbouring-dormouse-beakseok.koyeb.app/create-payment-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    key: `key_${new Date().getTime()}_${Math.random().toString(36).substr(2, 9)}`,
-                    itemName: `${route.params.itemName}`,
-                    findLocation: `${route.params.location}`,
-                    findDate: `${route.params.date}`,
-                    amount: `${paymentTotalCost}`,
-                    tradeType: `${route.params.tradeType}`,
-                    tradeLocation: `${route.params.tradeLocation}`,
-                    deliveryName: `${deliveryName}`,
-                    deliveryPhoneNum: `${deliveryPhoneNum}`,
-                    deliveryAddress: `${deliveryAddress}`,
-                    deliveryRequest: `${deliveryRequest}`,
-                    meetName: `${meetName}`,
-                    meetPhoneNum: `${meetPhoneNum}`,
-                    buyUser: `${uid}`,
-                    sellUSer: `${route.params.sellUser}`,
-                }),
-            });
-            const data = await response.json();
-            console.log('결제 세션 응답:', data);
-            if (data.clientSecret) {
-                console.log('결제 시트 초기화 시작');
-                const initResult = await initPaymentSheet({
-                    paymentIntentClientSecret: data.clientSecret,
-                    merchantDisplayName: 'finding',
-                });
-                console.log('결제 시트 초기화 결과:', initResult);
-                const { error } = await presentPaymentSheet();
-                console.log('결제 시트 표시 완료', error ? error : 'No error');
-                if (!error) {
-                    await fetchPaymentDetails(data.clientSecret.split('_secret')[0]);
-                    // navigate('PaymentFinish');
-                    deletePost(route.params.id);
-                    navigation.navigate("PaymentFinish", {
-                        itemName: route.params.itemName,
-                        displayName: route.params.displayName,
-                        sellUser: route.params.sellUser,
-                    })
+            const postRef = doc(fireStoreDB, "findBoard", route.params.id);
+            const isDeletedDoc = await getDoc(postRef);
+            if (!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted) {
+                console.log('결제 세션 요청 시작');
+                let paymentTotalCost;
+                if (route.params.tradeType === '직거래') {
+                    paymentTotalCost = route.params.money;
                 } else {
-                    console.log('결제 시트 오류:', error);
+                    paymentTotalCost = route.params.money + deliveryCost;
+                }
+                const response = await fetch('https://neighbouring-dormouse-beakseok.koyeb.app/create-payment-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        key: `key_${new Date().getTime()}_${Math.random().toString(36).substr(2, 9)}`,
+                        itemName: `${route.params.itemName}`,
+                        findLocation: `${route.params.location}`,
+                        findDate: `${route.params.date}`,
+                        amount: `${paymentTotalCost}`,
+                        tradeType: `${route.params.tradeType}`,
+                        tradeLocation: `${route.params.tradeLocation}`,
+                        deliveryName: `${deliveryName}`,
+                        deliveryPhoneNum: `${deliveryPhoneNum}`,
+                        deliveryAddress: `${deliveryAddress}`,
+                        deliveryRequest: `${deliveryRequest}`,
+                        meetName: `${meetName}`,
+                        meetPhoneNum: `${meetPhoneNum}`,
+                        buyUser: `${uid}`,
+                        sellUSer: `${route.params.sellUser}`,
+                    }),
+                });
+                const data = await response.json();
+                console.log('결제 세션 응답:', data);
+                if (data.clientSecret) {
+                    console.log('결제 시트 초기화 시작');
+                    const initResult = await initPaymentSheet({
+                        paymentIntentClientSecret: data.clientSecret,
+                        merchantDisplayName: 'finding',
+                    });
+                    console.log('결제 시트 초기화 결과:', initResult);
+                    const { error } = await presentPaymentSheet();
+                    console.log('결제 시트 표시 완료', error ? error : 'No error');
+                    if (!error) {
+                        await fetchPaymentDetails(data.clientSecret.split('_secret')[0]);
+                        // navigate('PaymentFinish');
+                        deletePost(route.params.id);
+                        navigation.navigate("PaymentFinish", {
+                            itemName: route.params.itemName,
+                            displayName: route.params.displayName,
+                            sellUser: route.params.sellUser,
+                        })
+                    } else {
+                        console.log('결제 시트 오류:', error);
+                    }
+                } else {
+                    console.error('결제 시트 초기화 실패', data.error);
                 }
             } else {
-                console.error('결제 시트 초기화 실패', data.error);
+                Alert.alert('이미 결제되었거나 삭제된 게시물입니다.');
+                navigation.navigate('Home');
             }
+
+
+
+
         } catch (error) {
             console.error('결제 요청 중 오류 발생:', error);
         }
@@ -246,7 +260,7 @@ const PaymentCheck = ({ navigation: { navigate }, route }) => {
                     />)}
                 <TouchableOpacity
                     style={styles.paymentButton}
-                    onPress={handlePayment}
+                    onPress={handlePayment(route.params.id)}
                 >
                     <Text style={styles.paymentButtonText}>결제하기</Text>
                 </TouchableOpacity>

@@ -90,13 +90,26 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     try {
       spinner.start();
       const postRef = doc(fireStoreDB, "lostBoard", postId);
-      await deleteDoc(postRef);
+      const isDeletedDoc = await getDoc(postRef);
+      if(!isDeletedDoc.data().isDeleted){
 
-      const userRef = doc(fireStoreDB, "users", uid);
-      await updateDoc(userRef, {
-        lostPosts: arrayRemove(postId)
-      });
-      console.log("Document successfully deleted: ", postId);
+        await updateDoc(postRef, {
+          isDeleted: true
+        });
+
+        const userRef = doc(fireStoreDB, "users", uid);
+        await updateDoc(userRef, {
+          lostPosts: arrayRemove(postId)
+        });
+
+        console.log("게시글 삭제 성공: ", postId);
+
+      }else {
+        Alert.alert('이미 삭제된 게시물입니다.');
+        navigation.navigate('Home');
+      }
+
+     
     } catch (error) {
       console.error("Error removing document: ", error);
     } finally {

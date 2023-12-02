@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
-import { Image } from "expo-image";
+//import { Image } from "expo-image";
+import { Image } from "react-native-expo-image-cache";
 import { useSelector } from "react-redux";
 
 // 창의 높이를 계산합니다.
@@ -18,9 +19,20 @@ const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; // 예: 전체 높이의 0.5
 // DetailMain 컴포넌트
 const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost, writerId }) => {
   const uid = useSelector((state) => state.UID);
+  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+
   return (
     <View style={styles.itemLayout}>
-      <Image source={imgURL} style={styles.itemImage} />
+      {/* <Image source={imgURL} style={styles.itemImage} /> */}
+      <Image
+        {...preview}
+        uri={imgURL ? imgURL.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a"}
+        style={styles.itemImage}
+        onError={(e) => {
+          console.log(e.nativeEvent.error);
+          console.log(imgURL);
+        }}
+      />
       <View style={styles.itemContent}>
         <Text style={styles.itemName}>{itemName}</Text>
         <Text style={styles.itemDetail}>
