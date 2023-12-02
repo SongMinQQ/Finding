@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Alert,
   Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
@@ -114,92 +116,94 @@ export default function JoinMembership({ navigation }) {
 
   return (
     <>
+
       <View style={styles.container}>
-
-        {/* 아이디 입력 */}
-        <View style={{ width: '100%' }}>
-          <View style={styles.textInputBox}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.textInputName}>이메일</Text>
-              <Text style={{ color: '#ff0000', fontWeight: 'bold' }}>*</Text>
-            </View>
-            <TextInput style={styles.input}
-              mode="outlined"
-              value={email}
-              placeholder="이메일 입력"
-              theme={theme}
-              placeholderTextColor={'#BDBDBD'}
-              autoCorrect={false}
-              keyboardType="email-address"
-              onChangeText={(text) => setEmail(text)}
-            />
-          </View>
-
-
-          {/* 비밀번호 입력 */}
-          <View style={styles.textInputBox}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.textInputName}>비밀번호</Text>
-              <Text style={{ color: '#ff0000', fontWeight: 'bold' }}>*</Text>
-            </View>
-            <TextInput style={styles.input}
-              mode="outlined"
-              value={password}
-              placeholder="비밀번호 입력"
-              theme={theme}
-              placeholderTextColor={'#BDBDBD'}
-              secureTextEntry={true}
-              autoCorrect={false}
-              onChangeText={(text) => setPassword(text)}
-            />
-
-            {/* 비밀번호 재확인 입력 */}
-            <TextInput style={styles.input}
-              mode="outlined"
-              value={confirmPassword}
-              placeholder="비밀번호 확인"
-              theme={theme}
-              placeholderTextColor={'#BDBDBD'}
-              secureTextEntry={true}
-              autoCorrect={false}
-              onChangeText={(text) => setConfirmPassword(text)}
-            />
-          </View>
-
-
-          {/*전화번호 입력 및 인증*/}
-          <View style={styles.textInputBox}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.textInputName}>전화번호</Text>
-              <Text style={{ color: '#ff0000', fontWeight: 'bold' }}>*</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <TextInput
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          {/* 아이디 입력 */}
+          <View style={{ width: '100%' }}>
+            <View style={styles.textInputBox}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.textInputName}>이메일</Text>
+                <Text style={{ color: '#ff0000', fontWeight: 'bold' }}>*</Text>
+              </View>
+              <TextInput style={styles.input}
                 mode="outlined"
-                style={[styles.input, { width: '65%' }]}
-                value={phoneNumber}
-                placeholder="휴대전화번호 입력"
-                placeholderTextColor={'#BDBDBD'}
+                value={email}
+                placeholder="이메일 입력"
                 theme={theme}
-                keyboardType="phone-pad"
-                onChangeText={(text) => setPhoneNumber(text)}
+                placeholderTextColor={'#BDBDBD'}
+                autoCorrect={false}
+                keyboardType="email-address"
+                onChangeText={(text) => setEmail(text)}
               />
-              <TouchableOpacity style={styles.verifyButton} onPress={handleVerification}>
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>인증번호 발송</Text>
-              </TouchableOpacity>
             </View>
-            <TextInput style={styles.input}
-              mode="outlined"
-              value={verificationCode}
-              placeholder="인증번호"
-              theme={theme}
-              placeholderTextColor={'#BDBDBD'}
-              secureTextEntry={true}
-              autoCorrect={false}
-              onChangeText={(text) => setVerificationCode(text)}
-            />
+
+
+            {/* 비밀번호 입력 */}
+            <View style={styles.textInputBox}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.textInputName}>비밀번호</Text>
+                <Text style={{ color: '#ff0000', fontWeight: 'bold' }}>*</Text>
+              </View>
+              <TextInput style={styles.input}
+                mode="outlined"
+                value={password}
+                placeholder="비밀번호 입력"
+                theme={theme}
+                placeholderTextColor={'#BDBDBD'}
+                secureTextEntry={true}
+                autoCorrect={false}
+                onChangeText={(text) => setPassword(text)}
+              />
+
+              {/* 비밀번호 재확인 입력 */}
+              <TextInput style={styles.input}
+                mode="outlined"
+                value={confirmPassword}
+                placeholder="비밀번호 확인"
+                theme={theme}
+                placeholderTextColor={'#BDBDBD'}
+                secureTextEntry={true}
+                autoCorrect={false}
+                onChangeText={(text) => setConfirmPassword(text)}
+              />
+            </View>
+
+
+            {/*전화번호 입력 및 인증*/}
+            <View style={styles.textInputBox}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.textInputName}>전화번호</Text>
+                <Text style={{ color: '#ff0000', fontWeight: 'bold' }}>*</Text>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TextInput
+                  mode="outlined"
+                  style={[styles.input, { width: '65%' }]}
+                  value={phoneNumber}
+                  placeholder="휴대전화번호 입력"
+                  placeholderTextColor={'#BDBDBD'}
+                  theme={theme}
+                  keyboardType="phone-pad"
+                  onChangeText={(text) => setPhoneNumber(text)}
+                />
+                <TouchableOpacity style={styles.verifyButton} onPress={handleVerification}>
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>인증번호 발송</Text>
+                </TouchableOpacity>
+              </View>
+              <TextInput style={styles.input}
+                mode="outlined"
+                value={verificationCode}
+                placeholder="인증번호"
+                theme={theme}
+                placeholderTextColor={'#BDBDBD'}
+                secureTextEntry={true}
+                autoCorrect={false}
+                onChangeText={(text) => setVerificationCode(text)}
+              />
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
 
 
         {/* 경고 메세지 및 회원가입 버튼 */}

@@ -87,6 +87,8 @@ const Login = ({ navigation }) => {
           mode="outlined"
           placeholder='아이디'
           onChangeText={_handleUserIDChange}
+          autoCorrect={false}
+          keyboardType="email-address"
           theme={theme}
         />
         <TextInput style={styles.inputView}
@@ -94,6 +96,7 @@ const Login = ({ navigation }) => {
           secureTextEntry={secureTextEntry} // IOS에서 글자 보이게 하면 한글 입력할 수 있게 바뀜(보완 필요)
           placeholder="비밀번호"
           onChangeText={_handleUserPWChange}
+          autoCorrect={false}
           theme={theme}
           right={
             <TextInput.Icon
