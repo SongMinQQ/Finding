@@ -15,7 +15,7 @@ import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import { auth } from '../../FireBase/DB';
-import { createUserWithEmailAndPassword, updateProfile  } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { collection, addDoc } from "firebase/firestore";
@@ -30,7 +30,7 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.18;
 
-export default function JoinMembershipSecondScreen({ navigation: {navigate}, route }) {
+export default function JoinMembershipSecondScreen({ navigation: { navigate }, route }) {
   const navigation = useNavigation();
 
   const { loading } = useContext(LoadingContext);
@@ -72,7 +72,7 @@ export default function JoinMembershipSecondScreen({ navigation: {navigate}, rou
     }
     console.log(result);
     // 이미지 업로드 결과 및 이미지 경로 업데이트
-    
+
     setImageUrl(result.assets[0].uri);
   };
 
@@ -81,19 +81,23 @@ export default function JoinMembershipSecondScreen({ navigation: {navigate}, rou
     // 이미지 파일 이름 (예: image_12345.jpg)
     const fileName = `profile_image_${new Date().getTime()}.jpg`;
     const storageRef = ref(storage, `profileImages/${fileName}`);
-  
+
     try {
       // 이미지를 Blob 형태로 변환
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+      if (imageUri) {
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
 
-      // Blob을 Firebase Storage에 업로드
-      await uploadBytesResumable(storageRef, blob);
+        // Blob을 Firebase Storage에 업로드
+        await uploadBytesResumable(storageRef, blob);
 
-      // 업로드된 이미지의 URL 가져오기
-      const url = await getDownloadURL(storageRef);
+        // 업로드된 이미지의 URL 가져오기
+        const url = await getDownloadURL(storageRef);
+        return url;
+      } else {
+        return null;
+      }
 
-      return url;
     } catch (error) {
       console.error("Error uploading image: ", error);
       return null;
@@ -120,23 +124,23 @@ export default function JoinMembershipSecondScreen({ navigation: {navigate}, rou
         const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
         await createUserWithEmailAndPassword(auth, route.params.email, route.params.password);
         updateProfile(auth.currentUser, {
-          displayName: name, 
+          displayName: name,
           photoURL: firebaseImageUrl,
           phoneNumber: route.params.phoneNumber,
         }).then(() => {
           // Profile updated!
           navigation.navigate("Join Membership Third");
         }).catch((error) => {
-          console.error("에러남ㅅㄱ: "+error)
+          console.error("에러남ㅅㄱ: " + error)
         });
       }
       setError(newError);
-    }catch (e) {
+    } catch (e) {
       console.log("Error adding document: ", e);
-    }finally {
+    } finally {
       spinner.stop();
     }
-    
+
 
   };
 
@@ -144,7 +148,7 @@ export default function JoinMembershipSecondScreen({ navigation: {navigate}, rou
 
   return (
     <View style={styles.container}>
-      {loading && <LoadingSpinner/>}
+      {loading && <LoadingSpinner />}
       <View style={{ width: '100%', alignItems: 'center' }}>
         <TouchableOpacity
           style={{ marginBottom: 20, position: 'relative' }}
@@ -218,14 +222,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    bottom: 0, 
-    right: 0, 
+    bottom: 0,
+    right: 0,
     width: PROFILE_IMAGE_SIZE * 0.31,
     height: PROFILE_IMAGE_SIZE * 0.31,
     borderWidth: 2,
     borderColor: '#fff',
-    backgroundColor: '#444444', 
-    borderRadius:  PROFILE_IMAGE_SIZE * 0.31 / 2, 
+    backgroundColor: '#444444',
+    borderRadius: PROFILE_IMAGE_SIZE * 0.31 / 2,
     padding: 5,
   },
   input: {

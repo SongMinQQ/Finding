@@ -16,17 +16,17 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.18;
 
-const ProfileEdit = ({navigation}) => {
+const ProfileEdit = ({ navigation }) => {
   const dispatch = useDispatch();
   const uid = useSelector((state) => state.UID); // Current logged-in user's UID
   const displayName = useSelector((state) => state.displayName); // Current logged-in user's displayName
   const profileImg = useSelector((state) => state.profileImg); // Current logged-in user's profileImg
-  
+
   const [newDisplayName, setNewDisplayName] = useState(displayName);
   const [selectImageUrl, setSelectImageUrl] = useState(profileImg);
   const [loading, setLoading] = useState(false);
 
-  
+
   const theme = {
     ...DefaultTheme,
     myOwnProperty: true,
@@ -58,7 +58,7 @@ const ProfileEdit = ({navigation}) => {
     }
     console.log(result);
     // 이미지 업로드 결과 및 이미지 경로 업데이트
-    
+
     setSelectImageUrl(result.assets[0].uri);
   };
 
@@ -66,44 +66,48 @@ const ProfileEdit = ({navigation}) => {
     // 이미지 파일 이름 (예: image_12345.jpg)
     const fileName = `profile_image_${new Date().getTime()}.jpg`;
     const storageRef = ref(storage, `profileImages/${fileName}`);
-  
+
     try {
       // 이미지를 Blob 형태로 변환
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+      if (imageUri) {
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
 
-      // Blob을 Firebase Storage에 업로드
-      await uploadBytesResumable(storageRef, blob);
+        // Blob을 Firebase Storage에 업로드
+        await uploadBytesResumable(storageRef, blob);
 
-      // 업로드된 이미지의 URL 가져오기
-      const url = await getDownloadURL(storageRef);
+        // 업로드된 이미지의 URL 가져오기
+        const url = await getDownloadURL(storageRef);
+        return url;
+      } else {
+        return null;
+      }
 
-      return url;
     } catch (error) {
       console.error("Error uploading image: ", error);
       return null;
     }
   };
 
-  const profileEdit = async() => {
-    try{
+  const profileEdit = async () => {
+    try {
       setLoading(true);
       const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
       await updateProfile(auth.currentUser, {
         displayName: newDisplayName,
         photoURL: firebaseImageUrl
       }).then(() => {
-        dispatch({type: 'SET_DISPLAYNAME', payload: newDisplayName});
-        dispatch({type: 'SET_PROFILE_IMG', payload: firebaseImageUrl});
-        navigation.navigate('Home',{
-          screen:'프로필'
+        dispatch({ type: 'SET_DISPLAYNAME', payload: newDisplayName });
+        dispatch({ type: 'SET_PROFILE_IMG', payload: firebaseImageUrl });
+        navigation.navigate('Home', {
+          screen: '프로필'
         })
       })
     }
-    catch(error) {
+    catch (error) {
       console.error(error);
     }
-    finally{
+    finally {
       setLoading(false);
     }
   }
@@ -184,14 +188,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    bottom: 0, 
-    right: 0, 
+    bottom: 0,
+    right: 0,
     width: PROFILE_IMAGE_SIZE * 0.31,
     height: PROFILE_IMAGE_SIZE * 0.31,
     borderWidth: 2,
     borderColor: '#fff',
-    backgroundColor: '#444444', 
-    borderRadius:  PROFILE_IMAGE_SIZE * 0.31 / 2, 
+    backgroundColor: '#444444',
+    borderRadius: PROFILE_IMAGE_SIZE * 0.31 / 2,
     padding: 5,
   },
   input: {
@@ -220,6 +224,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 5,
-},
+  },
 });
 export default ProfileEdit;

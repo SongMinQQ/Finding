@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, Button, RefreshControl } from 'react-native';
-import GladMessageDialog from './GladMessageDialog';
+import GladMessageDialog from '../profile/GladMessageDialog';
+
 import { useNavigation } from '@react-navigation/native';
+
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
@@ -15,15 +17,17 @@ const TEXT_SIZE_MEDIUM = WINDOW_HEIGHT * 0.022;
 const TEXT_SIZE_SMALL = WINDOW_HEIGHT * 0.012;
 
 
-const ProfileGladMessage = () => {
+const OpponentProfileGladMessage = ({ opponentUserID }) => {
+    const navigation = useNavigation();
+
     const [dialogVisible, setDialogVisible] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
-    const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+
 
     const handleCardPress = (index) => {
         setSelectedMessage(index);
@@ -32,7 +36,7 @@ const ProfileGladMessage = () => {
 
     const fetchGladMessages = async () => {
         try {
-            const userRef = doc(fireStoreDB, "users", uid); // UID는 현재 로그인한 사용자의 ID
+            const userRef = doc(fireStoreDB, "users", opponentUserID); // UID는 현재 로그인한 사용자의 ID
 
             const userDoc = await getDoc(userRef);
 
@@ -70,10 +74,6 @@ const ProfileGladMessage = () => {
                 {posts.map((message, index) => (
                     <TouchableOpacity key={index} onPress={() => handleCardPress(message)}>
                         <View style={styles.card}>
-                            {/* <Image
-                                source={ message.profileImage }
-                                style={styles.profileImage}
-                            /> */}
                             <Image
                                 {...{ preview, uri: message.profileImage ? message.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
                                 style={styles.profileImage}
@@ -149,4 +149,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ProfileGladMessage;
+export default OpponentProfileGladMessage;

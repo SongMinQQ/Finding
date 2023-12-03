@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
+
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
@@ -16,18 +18,17 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 const ITEM_TEXT_SIZE_LARGE = ITEM_SIZE * 0.15;
 const ITEM_TEXT_SIZE_SMALL = ITEM_SIZE * 0.12;
 
-const ProfileLost = () => {
+const OpponentProfileLost = ({ opponentUserID }) => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
-    const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
 
     const fetchUserPosts = async () => {
         try {
-            const userRef = doc(fireStoreDB, "users", uid); // UID는 현재 로그인한 사용자의 ID
+            const userRef = doc(fireStoreDB, "users", opponentUserID); // UID는 현재 로그인한 사용자의 ID
 
             const userDoc = await getDoc(userRef);
 
@@ -51,7 +52,7 @@ const ProfileLost = () => {
                 console.log("분실 물건 게시글이 없습니다.");
             }
         } catch (error) {
-            console.error("Error fetching user posts: ", error);
+            console.error("다른사람 프로필 분실물건 오류: ", error);
         }
     };
 
@@ -137,4 +138,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ProfileLost;
+export default OpponentProfileLost;

@@ -49,9 +49,12 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
 
     const fetchDocs = async () => {
         try {
-            const q = query(collection(fireStoreDB, "findBoard"), orderBy("date", "desc"));
+            const q = query(collection(fireStoreDB, "findBoard"), 
+                where("isDeleted", "==", false),
+                where("isPaied", "==", false),
+                orderBy("date", "desc")
+            );
         
-            // 생성된 쿼리를 사용하여 문서들을 가져옵니다.
             const querySnapshot = await getDocs(q);
             const fetchedPosts = querySnapshot.docs.map(doc => ({
                 id: doc.id,
@@ -64,11 +67,18 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
         }
     };
 
+    // useEffect(() => {
+    //     fetchDocs();
+    // }, [])
+
     useEffect(() => {
-        fetchDocs();
-    }, [])
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchDocs();
+        });
 
-
+        // 컴포넌트 언마운트 시 리스너 제거
+        return unsubscribe;
+    }, [navigation])
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -102,7 +112,12 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
                 <Text style={styles.itemName}>{item.title}</Text>
                 <Text style={styles.itemText}>{item.findLocation}</Text>
                 <Text style={styles.itemText}>{item.date.toDate().toLocaleDateString('ko-KR')}</Text>
-                <TouchableOpacity style={styles.itemUser} onPress={() => console.log(item.imageUrl)}>
+                <TouchableOpacity style={styles.itemUser} 
+                    onPress={() => navigation.navigate("OpponentProfileTopTabNavigation", {
+                        opponentUserID: item.uid,
+                        profileImage: item.profileImage,
+                        displayName: item.displayName,
+                    })}>
                     <Text>{item.displayName}</Text>
                 </TouchableOpacity>
             </View>

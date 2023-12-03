@@ -54,7 +54,8 @@ const WritePostLostScreen = ({ navigation, route }) => {
         description: description,
         displayName: displayName,
         uid: uid,
-        profileImage: profileImage
+        profileImage: profileImage,
+        isDeleted: false,
     };
 
     const moneyList = [
@@ -128,15 +129,20 @@ const WritePostLostScreen = ({ navigation, route }) => {
 
         try {
             // 이미지를 Blob 형태로 변환
-            const response = await fetch(imageUri);
-            const blob = await response.blob();
+            if (imageUri) {
+                const response = await fetch(imageUri);
+                const blob = await response.blob();
 
-            // Blob을 Firebase Storage에 업로드
-            await uploadBytesResumable(storageRef, blob);
+                // Blob을 Firebase Storage에 업로드
+                await uploadBytesResumable(storageRef, blob);
 
-            // 업로드된 이미지의 URL 가져오기
-            const url = await getDownloadURL(storageRef);
-            return url;
+                // 업로드된 이미지의 URL 가져오기
+                const url = await getDownloadURL(storageRef);
+                return url;
+            } else {
+                return null;
+            }
+
         } catch (error) {
             console.error("Error uploading image: ", error);
             return null;
@@ -155,9 +161,11 @@ const WritePostLostScreen = ({ navigation, route }) => {
                 imageUrl: firebaseImageUrl  // 이미지 URL 추가
             });
             console.log("Document written with ID: ", docRef.id);
-            
+
             const userRef = doc(fireStoreDB, "users", uid);
-            await setDoc(userRef, { lostPosts: arrayUnion(docRef.id) }, { merge: true });
+            await setDoc(userRef, {
+                lostPosts: arrayUnion(docRef.id)
+            }, { merge: true });
 
             console.log('글 작성 성공');
             navigation.navigate('Home');
@@ -193,7 +201,7 @@ const WritePostLostScreen = ({ navigation, route }) => {
 
     return (
         <>
-        {loading && <LoadingSpinner/>}
+            {loading && <LoadingSpinner />}
             <ScrollView style={styles.container}>
                 <View style={styles.mainSelectLayout}>
                     <TouchableOpacity onPress={uploadImage}>

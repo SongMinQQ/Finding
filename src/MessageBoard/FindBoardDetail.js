@@ -33,7 +33,7 @@ const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.03;
 const FONT_SIZE_MEDIUM = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.02;
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
-const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
+const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; 
 
 
 const FindBoardDetail = ({ navigation: { navigate }, route }) => {
@@ -89,7 +89,6 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
   const handleReport = () => {
     openModal();
-    // 여기에 원하는 로직을 추가합니다.
   };
 
   const [reportTitle, setReportTitle] = useState('');
@@ -121,19 +120,33 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     });
   }, [navigation]);
 
+
   const deletePost = async (postId) => {
     try {
       spinner.start();
       const postRef = doc(fireStoreDB, "findBoard", postId);
-      await deleteDoc(postRef);
+      const isDeletedDoc = await getDoc(postRef);
+      if(!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted){
 
-      const userRef = doc(fireStoreDB, "users", uid);
-      await updateDoc(userRef, {
-        findPosts: arrayRemove(postId)
-      });
-      console.log("Document successfully deleted: ", postId);
+        await updateDoc(postRef, {
+          isDeleted: true
+        });
+
+        const userRef = doc(fireStoreDB, "users", uid);
+        await updateDoc(userRef, {
+          findPosts: arrayRemove(postId)
+        });
+
+        console.log("게시글 삭제 성공: ", postId);
+
+      }else {
+        Alert.alert('이미 결제되었거나 삭제된 게시물입니다.');
+        navigation.navigate('Home');
+      }
+
+     
     } catch (error) {
-      console.error("Error removing document: ", error);
+      console.error("게시글 삭제 오류: ", error);
     } finally {
       spinner.stop();
       navigation.navigate('Home');
@@ -143,11 +156,23 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   const fetchUserCount = async () => {
     try {
       const userRef = doc(fireStoreDB, "users", route.params.sellUser);
-      console.log("글ID 가져오기");
+
       const userDoc = await getDoc(userRef);
-      console.log("글ID 가져오기 성공");
-      const userFindCount = userDoc.data().foundItemsCount;
-      setFindCount(userFindCount);
+
+
+      if (userDoc.exists()) {
+        const userFindCount = userDoc.data().foundItemsCount;
+        if(userFindCount){
+          setFindCount(userFindCount);
+        }else {
+          console.log("찾아준 횟수가 존재하지 않습니다.");
+          setFindCount(0);
+        }
+      }else {
+          console.log("유저 데이터가 존재하지 않습니다.");
+          setFindCount(0);
+      }
+
     } catch (error) {
       console.error("Error fetching user posts: ", error);
     }
@@ -176,20 +201,27 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     }, [route.params])
   );
 
-  const handleFindPress = () => {
+  const handleFindPress = async () => {
     if (writerId != uid) {
-      navigation.navigate("PaymentLegalAgree", {
-        id: route.params.id,
-        imgURL: route.params.imgURL,
-        itemName: route.params.itemName,
-        location: route.params.location,
-        date: route.params.date,
-        tradeType: route.params.tradeType,
-        tradeLocation: route.params.tradeLocation,
-        displayName: route.params.displayName,
-        money: route.params.money,
-        sellUser: route.params.sellUser,
-      });
+      const postRef = doc(fireStoreDB, "findBoard", route.params.id);
+      const isDeletedDoc = await getDoc(postRef);
+      if(!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted){
+        navigation.navigate("PaymentLegalAgree", {
+          id: route.params.id,
+          imgURL: route.params.imgURL,
+          itemName: route.params.itemName,
+          location: route.params.location,
+          date: route.params.date,
+          tradeType: route.params.tradeType,
+          tradeLocation: route.params.tradeLocation,
+          displayName: route.params.displayName,
+          money: route.params.money,
+          sellUser: route.params.sellUser,
+        });
+      }else{
+        Alert.alert('이미 결제되었거나 삭제된 게시물입니다.')
+        navigation.navigate('Home');
+      }
     } else {
       deletePost(route.params.id);
     }
@@ -302,7 +334,12 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           </View>
         </View>
         <Text style={styles.item}>{route.params.articleExplain}</Text>
-        <View style={styles.profileSection}>
+        <TouchableOpacity style={styles.profileSection}
+          onPress={() => navigation.navigate("OpponentProfileTopTabNavigation", {
+            opponentUserID: route.params.sellUser,
+            profileImage: route.params.profileImage,
+            displayName: route.params.displayName,
+        })}>
           <Image
             {...{ preview, uri: route.params.profileImage ? route.params.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
             style={styles.profileImage}
@@ -316,9 +353,8 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           {writerId != uid &&
           <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
             <Text style={styles.buttonText}>채팅하기</Text>
-          </TouchableOpacity>
-          }
-        </View>
+          </TouchableOpacity>}
+        </TouchableOpacity>
       </View>
       <Modal
         animationType="slide"
@@ -470,7 +506,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: WINDOW_HEIGHT*0.017,
     fontWeight: 'bold',
   },
   userInfo: {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 import { Image } from "react-native-expo-image-cache";
+
+import { useNavigation } from '@react-navigation/native';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -16,7 +17,7 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 const ITEM_TEXT_SIZE_LARGE = ITEM_SIZE * 0.15;
 const ITEM_TEXT_SIZE_SMALL = ITEM_SIZE * 0.12;
 
-const ProfileLost = () => {
+const OpponentProfileFind = ({ opponentUserID }) => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
@@ -24,19 +25,27 @@ const ProfileLost = () => {
     const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
+    // const findItemData = [...Array(20)].map((_, index) => ({
+    //     id: index,
+    //     imgURL: `https://picsum.photos/id/${index}/200/200`,
+    //     itemName: `물건 ${index + 1}`,
+    //     category: `전자기기`,
+    //     location: `위치 ${index + 1}`,
+    //     date: `2023-10-${index + 1}`
+    // }));
 
     const fetchUserPosts = async () => {
         try {
-            const userRef = doc(fireStoreDB, "users", uid); // UID는 현재 로그인한 사용자의 ID
+            const userRef = doc(fireStoreDB, "users", opponentUserID); // UID는 현재 로그인한 사용자의 ID
 
             const userDoc = await getDoc(userRef);
 
             if (userDoc.exists()) {
-                const userPostsIds = userDoc.data().lostPosts; // 사용자가 작성한 글 ID 목록
-                if (userPostsIds){
+                const userPostsIds = userDoc.data().findPosts; // 사용자가 작성한 글 ID 목록
+                if (userPostsIds) {
                     const postsData = [];
                     for (const postId of userPostsIds) {
-                        const postRef = doc(fireStoreDB, "lostBoard", postId);
+                        const postRef = doc(fireStoreDB, "findBoard", postId);
 
                         const postDoc = await getDoc(postRef);
 
@@ -48,10 +57,10 @@ const ProfileLost = () => {
                     setPosts(postsData); // 가져온 게시글 정보로 상태 업데이트
                 }
             } else {
-                console.log("분실 물건 게시글이 없습니다.");
+                console.log("습득 물건 게시글이 없습니다.");
             }
         } catch (error) {
-            console.error("Error fetching user posts: ", error);
+            console.error("다른사람 프로필 습득물건 오류: ", error);
         }
     };
 
@@ -64,7 +73,6 @@ const ProfileLost = () => {
         fetchUserPosts().then(() => setRefreshing(false));
     }, []);
 
-
     return (
         <ScrollView style={{ backgroundColor: '#fff' }}
             refreshControl={
@@ -75,7 +83,7 @@ const ProfileLost = () => {
                     <TouchableOpacity
                         key={item.id}
                         style={styles.item}
-                        onPress={() => navigation.navigate("LostBoardDetail", {
+                        onPress={() => navigation.navigate("FindBoardDetail", {
                             imgURL: item.imageUrl ? { uri: item.imageUrl } : { uri: 'https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a' },
                             itemName: item.title,
                             location: item.findLocation,
@@ -87,7 +95,9 @@ const ProfileLost = () => {
                             tradeLocation: item.tradeLocation,
                             articleExplain: item.description,
                             profileImage: item.profileImage,
+
                         })}>
+
                         <Image
                             {...{ preview, uri: item.imageUrl ? item.imageUrl : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
                             style={styles.itemImage}
@@ -95,7 +105,6 @@ const ProfileLost = () => {
                         />
                         <Text style={styles.itemName}>{item.title}</Text>
                         <Text style={styles.itemLocation}>{item.findLocation}</Text>
-
                     </TouchableOpacity>
                 ))}
             </View>
@@ -136,5 +145,4 @@ const styles = StyleSheet.create({
     }
 });
 
-
-export default ProfileLost;
+export default OpponentProfileFind;

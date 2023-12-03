@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { View, Text, StyleSheet } from 'react-native';
-import ProfileMain from '../profile/ProfileMain';
-import ProfileFind from '../profile/ProfileFind';
-import ProfileLost from '../profile/ProfileLost';
-import ProfileGladMessage from '../profile/ProfileGladMessage';
+
+import { useNavigation } from '@react-navigation/native';
+
+import OpponentProfileMain from './OpponentProfileMain';
+import OpponentProfileFind from './OpponentProfileFind';
+import OpponentProfileLost from './OpponentProfileLost';
+import OpponentProfileGladMessage from './OpponentProfileGladMessage';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc,getDoc } from "firebase/firestore";
@@ -14,16 +17,13 @@ import { useSelector } from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator();
 
-const ProfileTopTabNavigation = ({ navigation: { navigate }, route }) => {
-    const profileImage = useSelector((state) => state.profileImg);
-    const uid = useSelector((state) => state.UID);
-    const displayName = useSelector((state) => state.displayName);
-
+const OpponentProfileTopTabNavigation = ({ navigation: { navigate }, route }) => {
+    const navigation = useNavigation();
     const [findCount, setFindCount] = useState('');
 
     const fetchUserCount = async () => {
         try {
-            const userRef = doc(fireStoreDB, "users", uid);
+            const userRef = doc(fireStoreDB, "users", route.params.opponentUserID);
             const userDoc = await getDoc(userRef);
 
             if (userDoc.exists()) {
@@ -55,11 +55,11 @@ const ProfileTopTabNavigation = ({ navigation: { navigate }, route }) => {
     );
     return (
         <View style={styles.container}>
-            <ProfileMain name={displayName} imgURL={profileImage} findCount={findCount} />
+            <OpponentProfileMain name={route.params.displayName} imgURL={route.params.profileImage} findCount={findCount} />
             <Tab.Navigator>
-                <Tab.Screen name="습득 물건" component={ProfileFind} />
-                <Tab.Screen name="분실 물건" component={ProfileLost} />
-                <Tab.Screen name="감사 편지" component={ProfileGladMessage} />
+                <Tab.Screen name="습득 물건" children={() => <OpponentProfileFind opponentUserID={route.params.opponentUserID} />}/>
+                <Tab.Screen name="분실 물건" children={() => <OpponentProfileLost opponentUserID={route.params.opponentUserID} />}/>
+                <Tab.Screen name="감사 편지" children={() => <OpponentProfileGladMessage opponentUserID={route.params.opponentUserID} />}/>
             </Tab.Navigator>
         </View>
     );
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ProfileTopTabNavigation;
+export default OpponentProfileTopTabNavigation;

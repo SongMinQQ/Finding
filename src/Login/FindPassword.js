@@ -1,30 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
-import styled from 'styled-components';
-import FindPasswordEmail from './FindPasswordEmail';
-import FindPasswordPhoneNumber from './FindPasswordPhoneNumber';
+
+import { auth } from '../../FireBase/DB'; // Import the Firebase auth module
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
-const FindIdBox = styled.TouchableOpacity`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  background-color: ${props => props.findPW};
-  border-color: #EEEEEE;
-  border-top-width: 1px;
-  border-left-width: 1px;
-  border-right-width: ${props => props.isFirst ? '0px' : '1px'};
-`;
-const RowSelectText = styled.Text`
-  text-align: center;
-  color: ${props => props.findPW};
-  font-weight: bold;
-`;
 
 const FindPassword = ({ navigation }) => {
   // TextInput 클릭 시 테두리 색 변경하는 코드
@@ -36,27 +19,45 @@ const FindPassword = ({ navigation }) => {
       primary: '#007bff', // 이거 바꾸면 됨
     },
   }
-  const [findPW, setFindPW] = useState('Email');
+
+  const [userEmail, setUserEmail] = useState('');
+  const _handleUserEmailChange = text => {
+    setUserEmail(text);
+  }
+
+  const handlePasswordReset = async () => {
+    try {
+      await sendPasswordResetEmail(auth, userEmail);
+      navigation.navigate('FindPasswordComplete');
+      console.log(userEmail);
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+    }
+  };
+
 
   return (
     <View style={styles.flexbox}>
-      <View style={styles.rowSelectBox}>
-        <FindIdBox findPW={findPW === "Email" ? "#fff" : "#EEEEEE"} isFirst={true}
-          onPress={() => {
-            //navigation.navigate("Find Id Email")
-            setFindPW('Email');
-          }}>
-          <RowSelectText findPW={findPW === "Email" ? "#000" : "#DADADA"}>이메일로 찾기</RowSelectText>
-        </FindIdBox>
-        <FindIdBox findPW={findPW === "Email" ? "#EEEEEE" : "#fff"}
-          onPress={() => {
-            //navigation.navigate("Find Id PhoneNumber")
-            setFindPW('PhoneNum');
-          }}>
-          <RowSelectText findPW={findPW === "Email" ? "#DADADA" : "#000"}>핸드폰으로 찾기</RowSelectText>
-        </FindIdBox>
+
+      <View style={{width: '100%', alignItems: 'center'}}>
+        <View style={styles.columnSelectBox}>
+          <Text style={styles.headerText}>이메일을 입력해주세요.</Text>
+          <Text style={styles.titleText}>비밀번호 재설정 이메일을 보내드리겠습니다.</Text>
+        </View>
+        <TextInput style={styles.inputView}
+          mode="outlined"
+          placeholder='이메일'
+          keyboardType="email-address"
+          onChangeText={_handleUserEmailChange}
+          theme={theme}
+        />
       </View>
-        {findPW === 'Email' ? <FindPasswordEmail navigation={navigation} /> : <FindPasswordPhoneNumber  navigation={navigation}/>}
+
+
+      <TouchableOpacity style={styles.correctBtn}
+        onPress={handlePasswordReset}
+      ><Text style={{ fontWeight: 'bold', color: 'white' }}>비밀번호 재설정하기</Text>
+      </TouchableOpacity>
 
     </View>
 
@@ -71,16 +72,41 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "flex-start",
-    paddingVertical: WINDOW_HEIGHT * 0.04,
+    justifyContent: "space-between",
+    paddingVertical: WINDOW_HEIGHT * 0.03,
+    paddingBottom: 50,
   },
-  rowSelectBox: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
+  columnSelectBox: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     width: '90%',
     height: WINDOW_HEIGHT * 0.07,
+    marginBottom: 30,
+  },
+  headerText: {
+    fontSize: WINDOW_HEIGHT * 0.03,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  titleText: {
+    fontSize: WINDOW_HEIGHT * 0.02,
+  },
+  inputView: {
+    backgroundColor: "#fff",
+    width: "90%",
+    marginBottom: WINDOW_HEIGHT * 0.01,
   },
 
+  correctBtn: {
+    width: "90%",
+    borderRadius: 5,
+    height: WINDOW_HEIGHT * 0.06,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: WINDOW_HEIGHT * 0.02,
+    backgroundColor: "#007bff",
+  },
 
 
 });
