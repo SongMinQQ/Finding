@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "finding",
-    "slug": "finding",
-    "scheme": "finding",
+    "name": "Finding",
+    "slug": "Finding",
+    "scheme": "Finding",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./img/findingAndroidLogo.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./img/findingLogo.png",
