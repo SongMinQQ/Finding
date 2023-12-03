@@ -49,6 +49,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     articleExplain,
   } = route.params;
 
+
   const type = route.params.type;
 
   //글 작성자의 UID
@@ -138,6 +139,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
 
     } catch (error) {
+      console.log("postId: "+postId);
       console.error("게시글 삭제 오류: ", error);
     } finally {
       spinner.stop();
