@@ -77,6 +77,7 @@ const ProfileFind = () => {
                         key={item.id}
                         style={styles.item}
                         onPress={() => navigation.navigate("FindBoardDetail", {
+                            id: item.id,
                             imgURL: item.imageUrl ? { uri: item.imageUrl } : { uri: 'https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a' },
                             itemName: item.title,
                             location: item.findLocation,
@@ -88,6 +89,7 @@ const ProfileFind = () => {
                             tradeLocation: item.tradeLocation,
                             articleExplain: item.description,
                             profileImage: item.profileImage,
+                            type: "find",
 
                         })}>
 

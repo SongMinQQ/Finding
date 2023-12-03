@@ -1,15 +1,27 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
 import { fireStoreDB } from "../../FireBase/DB";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { Image } from "react-native-expo-image-cache";
+
+import { useContext } from 'react';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 const ChattingChannels = () => {
   const [chatRooms, setChatRooms] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const uid = useSelector((state) => state.UID);
   const navigation = useNavigation();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { loading } = useContext(LoadingContext);
+  const { spinner } = useContext(LoadingContext);
+
+  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
   const dispatch = useDispatch();
   const opponentDisplayName = useSelector((state) => state.opponentDisplayName);
@@ -18,6 +30,8 @@ const ChattingChannels = () => {
     const chatRoomsRef = collection(fireStoreDB, "channels");
     const q = query(chatRoomsRef, where(`participants.${uid}.uid`, "==", uid));
 
+    setIsLoading(true);
+    spinner.start();
     try {
       const querySnapshot = await getDocs(q);
       const fetchedChatRooms = querySnapshot.docs.map(doc => {
@@ -37,6 +51,9 @@ const ChattingChannels = () => {
       setChatRooms(fetchedChatRooms);
     } catch (error) {
       console.error("Error fetching chat rooms: ", error);
+    } finally {
+      setIsLoading(false);
+      spinner.stop();
     }
   };
 
@@ -59,20 +76,35 @@ const ChattingChannels = () => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.chatRoomContainer} onPress={() => { getOpponentDisplayName(item); goToChat(item); }}>
-      <Image source={item.otherUserProfileImage ? { uri: item.otherUserProfileImage } : { uri: require('../../img/defaultProfile.png') }} style={styles.profileImage} />
+      <Image
+        {...{ preview, uri: item.otherUserProfileImage ? item.otherUserProfileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+        style={styles.profileImage}
+        onError={(e) => console.log(e)}
+      />
       <Text style={styles.displayName}>{item.otherUserDisplayName}</Text>
     </TouchableOpacity>
+  );
+
+  const renderEmptyComponent = () => (
+    <View style={styles.emptyContainer}>
+      {loading && <LoadingSpinner />}
+      <Text style={styles.emptyText}>
+        {isLoading ? "채팅 정보 불러오는 중..." : "진행중인 채팅이 없습니다."}
+      </Text>
+    </View>
   );
 
   return (
     <FlatList
       style={{ backgroundColor: '#fff' }}
+      contentContainerStyle={{ flexGrow: 1 }}
       data={chatRooms}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
+      ListEmptyComponent={renderEmptyComponent}
     />
   );
 };
@@ -94,6 +126,15 @@ const styles = StyleSheet.create({
   },
   displayName: {
     fontSize: 18,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 20,
+    color: '#888888',
   },
 });
 export default ChattingChannels;

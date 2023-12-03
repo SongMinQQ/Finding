@@ -21,39 +21,30 @@ const BottomTabNavigation = ({ navigation: { navigate }, route }) => {
         console.log("검색 클릭");
         navigation.navigate("Search");
     }
-    useEffect(() => {
-        console.log("아이콘 띄우기");
-        navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity onPress={handleSearch}>
-                    <FontAwesome name="search" size={24} color="black" style={{ marginRight: 15 }} />
-                </TouchableOpacity>
-            )
-        });
-    }, [navigation]);
 
     return (
         <Tab.Navigator>
             <Tab.Screen name='게시판' component={MaterialTopTabNavigation} options={{
-                headerShown: false, //이거 없으면 헤더바가 생김여;;
+                headerRight: () => (
+                    <TouchableOpacity onPress={handleSearch}>
+                        <FontAwesome name="search" size={24} color="black" style={{ marginRight: 15 }} />
+                    </TouchableOpacity>
+                ),
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="file-find" size={size} color={color} />
                 ),
             }} />
             <Tab.Screen name='Lost112' component={PoliceFind} options={{
-                headerShown: false,
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="police-badge" size={size} color={color} />
                 ),
             }} />
             <Tab.Screen name="채팅" component={ChattingChannels} options={{
-                headerShown: false,
                 tabBarIcon: ({ color, size }) => (
                     <Entypo name="chat" size={size} color={color} />
                 ),
             }} />
             <Tab.Screen name="프로필" component={ProfileTopTabNavigation} options={{
-                headerShown: false,
                 tabBarIcon: ({ color, size }) => (
                     <FontAwesome5 name="user-alt" size={size} color={color} />
                 ),
