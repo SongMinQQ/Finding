@@ -10,7 +10,7 @@ import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 import { useFocusEffect } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import theme from '../PaperTheme';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc, getDocs } from "firebase/firestore";
@@ -33,7 +33,7 @@ const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.03;
 const FONT_SIZE_MEDIUM = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.02;
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
-const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; 
+const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006;
 
 
 const FindBoardDetail = ({ navigation: { navigate }, route }) => {
@@ -49,24 +49,16 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     articleExplain,
   } = route.params;
 
-  const theme = {
-    ...DefaultTheme,
-    myOwnProperty: true,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#007bff', // 이거 바꾸면 됨
-    },
-  };
   const type = route.params.type;
 
-    //글 작성자의 UID
-    const writerId = route.params.sellUser;
-    //현재 로그인한 사용자의 UID
-    const uid = useSelector((state) => state.UID);
-    //현재 로그인한 사용자의 닉네임
-    const displayName = useSelector((state) => state.displayName);
-    //현재 로그인한 사용자의 프로필 사진
-    const profileImg = useSelector((state) => state.profileImg);
+  //글 작성자의 UID
+  const writerId = route.params.sellUser;
+  //현재 로그인한 사용자의 UID
+  const uid = useSelector((state) => state.UID);
+  //현재 로그인한 사용자의 닉네임
+  const displayName = useSelector((state) => state.displayName);
+  //현재 로그인한 사용자의 프로필 사진
+  const profileImg = useSelector((state) => state.profileImg);
 
   const navigation = useNavigation();
   const { loading } = useContext(LoadingContext);
@@ -96,18 +88,18 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   // 네비게이션 헤더에 버튼 추가
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => ( uid != writerId ?
+      headerRight: () => (uid != writerId ?
         <TouchableOpacity onPress={handleReport}>
           <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
         </TouchableOpacity>
         :
-        <EditPostButton 
-          type={type} 
-          id={id} 
-          imgURL={imgURL} 
-          itemName={itemName} 
-          location={location} 
-          date={date} 
+        <EditPostButton
+          type={type}
+          id={id}
+          imgURL={imgURL}
+          itemName={itemName}
+          location={location}
+          date={date}
           money={money}
           tradeType={tradeType}
           tradeLocation={tradeLocation}
@@ -126,7 +118,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       spinner.start();
       const postRef = doc(fireStoreDB, "findBoard", postId);
       const isDeletedDoc = await getDoc(postRef);
-      if(!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted){
+      if (!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted) {
 
         await updateDoc(postRef, {
           isDeleted: true
@@ -139,12 +131,12 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
         console.log("게시글 삭제 성공: ", postId);
 
-      }else {
+      } else {
         Alert.alert('이미 결제되었거나 삭제된 게시물입니다.');
         navigation.navigate('Home');
       }
 
-     
+
     } catch (error) {
       console.error("게시글 삭제 오류: ", error);
     } finally {
@@ -162,15 +154,15 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
       if (userDoc.exists()) {
         const userFindCount = userDoc.data().foundItemsCount;
-        if(userFindCount){
+        if (userFindCount) {
           setFindCount(userFindCount);
-        }else {
+        } else {
           console.log("찾아준 횟수가 존재하지 않습니다.");
           setFindCount(0);
         }
-      }else {
-          console.log("유저 데이터가 존재하지 않습니다.");
-          setFindCount(0);
+      } else {
+        console.log("유저 데이터가 존재하지 않습니다.");
+        setFindCount(0);
       }
 
     } catch (error) {
@@ -180,12 +172,13 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
   const handleSave = async () => {
     const reportRef = doc(fireStoreDB, "findBoardReport", route.params.id);
-    await setDoc(reportRef, { 
+    await setDoc(reportRef, {
       reportInfo: arrayUnion({
         reportUser: uid,
         reportTitle: reportTitle,
         reportContent: reportContent,
-    }) }, { merge: true });
+      })
+    }, { merge: true });
 
     setModalVisible(false);
   };
@@ -205,7 +198,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     if (writerId != uid) {
       const postRef = doc(fireStoreDB, "findBoard", route.params.id);
       const isDeletedDoc = await getDoc(postRef);
-      if(!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted){
+      if (!isDeletedDoc.data().isPaied && !isDeletedDoc.data().isDeleted) {
         navigation.navigate("PaymentLegalAgree", {
           id: route.params.id,
           imgURL: route.params.imgURL,
@@ -218,7 +211,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           money: route.params.money,
           sellUser: route.params.sellUser,
         });
-      }else{
+      } else {
         Alert.alert('이미 결제되었거나 삭제된 게시물입니다.')
         navigation.navigate('Home');
       }
@@ -228,35 +221,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
 
   };
 
-  // const handleChatPress = (writerId, uid) => {
 
-  // const handleChatPress = async () => {
-  //   // 채팅방 ID를 생성하기 위해 두 사용자의 ID를 정렬합니다.
-  //   const chatRoomId = [writerId, uid].sort().join('_');
-
-  //   // Firestore에서 새로운 채팅방 문서를 생성합니다.
-  //   const chatRoomRef = await addDoc(collection(fireStoreDB, "channels"), {
-  //     // 채팅방에 필요한 초기 데이터를 설정합니다.
-  //     chatRoomId: chatRoomId, // Unique identifier for the chat room
-  //     participants: {
-  //       [uid]: {
-  //         uid: uid,
-  //         displayName: displayName, // Display name of the current user
-  //         profileImage: profileImg, // Profile image of the current user
-  //       },
-  //       [writerId]: {
-  //         uid: writerId,
-  //         displayName: route.params.writerDisplayName, // Display name of the writer
-  //         profileImage: route.params.writerProfileImage, // Profile image of the writer
-  //       }
-  //     },
-  //     createdAt: new Date(), // 채팅방 생성 시간
-  //     // 기타 채팅방에 필요한 데이터를 추가할 수 있습니다.
-  //   });
-  //     navigation.navigate('Home', {
-  //     screen: '채팅',
-  //   })
-  // };
   const handleChatPress = async () => {
     // Create a unique chat room ID using both user IDs
     const chatRoomId = [writerId, uid].sort().join('_');
@@ -339,7 +304,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
             opponentUserID: route.params.sellUser,
             profileImage: route.params.profileImage,
             displayName: route.params.displayName,
-        })}>
+          })}>
           <Image
             {...{ preview, uri: route.params.profileImage ? route.params.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
             style={styles.profileImage}
@@ -351,9 +316,9 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           </View>
           {/* '채팅하기' 버튼 추가 */}
           {writerId != uid &&
-          <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
-            <Text style={styles.buttonText}>채팅하기</Text>
-          </TouchableOpacity>}
+            <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
+              <Text style={styles.buttonText}>채팅하기</Text>
+            </TouchableOpacity>}
         </TouchableOpacity>
       </View>
       <Modal
@@ -506,7 +471,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: WINDOW_HEIGHT*0.017,
+    fontSize: WINDOW_HEIGHT * 0.017,
     fontWeight: 'bold',
   },
   userInfo: {

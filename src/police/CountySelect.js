@@ -281,8 +281,8 @@ const CountySelect = (props) => {
                 value={props.county}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false}
-                placeholder={{ label: "도시를 선택하세요", value: null }} 
-                
+                placeholder={{ label: "도시를 선택하세요", value: null }}
+
             />
         </View>
     );
@@ -302,7 +302,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: 'gray',
         borderRadius: 4,
         color: 'black',
-        paddingRight: 30, 
+        paddingRight: 30,
     },
     inputAndroid: {
         fontSize: 16,
@@ -312,7 +312,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, 
+        paddingRight: 30,
     },
 });
 export default CountySelect;

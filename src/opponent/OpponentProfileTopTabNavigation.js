@@ -12,7 +12,7 @@ import OpponentProfileLost from './OpponentProfileLost';
 import OpponentProfileGladMessage from './OpponentProfileGladMessage';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc,getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator();
@@ -28,12 +28,12 @@ const OpponentProfileTopTabNavigation = ({ navigation: { navigate }, route }) =>
 
             if (userDoc.exists()) {
                 const userFindCount = userDoc.data().foundItemsCount;
-                if(userFindCount){
+                if (userFindCount) {
                     setFindCount(userFindCount);
-                }else{
+                } else {
                     setFindCount(0);
                 }
-            }else {
+            } else {
                 console.log("찾아준 횟수가 존재하지 않습니다.");
                 setFindCount(0);
             }
@@ -57,9 +57,9 @@ const OpponentProfileTopTabNavigation = ({ navigation: { navigate }, route }) =>
         <View style={styles.container}>
             <OpponentProfileMain name={route.params.displayName} imgURL={route.params.profileImage} findCount={findCount} />
             <Tab.Navigator>
-                <Tab.Screen name="습득 물건" children={() => <OpponentProfileFind opponentUserID={route.params.opponentUserID} />}/>
-                <Tab.Screen name="분실 물건" children={() => <OpponentProfileLost opponentUserID={route.params.opponentUserID} />}/>
-                <Tab.Screen name="감사 편지" children={() => <OpponentProfileGladMessage opponentUserID={route.params.opponentUserID} />}/>
+                <Tab.Screen name="습득 물건" children={() => <OpponentProfileFind opponentUserID={route.params.opponentUserID} />} />
+                <Tab.Screen name="분실 물건" children={() => <OpponentProfileLost opponentUserID={route.params.opponentUserID} />} />
+                <Tab.Screen name="감사 편지" children={() => <OpponentProfileGladMessage opponentUserID={route.params.opponentUserID} />} />
             </Tab.Navigator>
         </View>
     );

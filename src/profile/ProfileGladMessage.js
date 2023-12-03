@@ -70,10 +70,6 @@ const ProfileGladMessage = () => {
                 {posts.map((message, index) => (
                     <TouchableOpacity key={index} onPress={() => handleCardPress(message)}>
                         <View style={styles.card}>
-                            {/* <Image
-                                source={ message.profileImage }
-                                style={styles.profileImage}
-                            /> */}
                             <Image
                                 {...{ preview, uri: message.profileImage ? message.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
                                 style={styles.profileImage}

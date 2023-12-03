@@ -9,7 +9,7 @@ import ProfileLost from '../profile/ProfileLost';
 import ProfileGladMessage from '../profile/ProfileGladMessage';
 
 import { fireStoreDB } from '../../FireBase/DB';
-import { doc,getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator();
@@ -28,12 +28,12 @@ const ProfileTopTabNavigation = ({ navigation: { navigate }, route }) => {
 
             if (userDoc.exists()) {
                 const userFindCount = userDoc.data().foundItemsCount;
-                if(userFindCount){
+                if (userFindCount) {
                     setFindCount(userFindCount);
-                }else{
+                } else {
                     setFindCount(0);
                 }
-            }else {
+            } else {
                 console.log("찾아준 횟수가 존재하지 않습니다.");
                 setFindCount(0);
             }

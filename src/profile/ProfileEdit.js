@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import theme from '../PaperTheme';
 import { Image } from 'expo-image';
 import { useDispatch, useSelector } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -25,16 +25,6 @@ const ProfileEdit = ({ navigation }) => {
   const [newDisplayName, setNewDisplayName] = useState(displayName);
   const [selectImageUrl, setSelectImageUrl] = useState(profileImg);
   const [loading, setLoading] = useState(false);
-
-
-  const theme = {
-    ...DefaultTheme,
-    myOwnProperty: true,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#007bff',
-    },
-  };
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 

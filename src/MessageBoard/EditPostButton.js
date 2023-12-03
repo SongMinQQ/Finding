@@ -10,11 +10,11 @@ const EditPostButton = (props) => {
 
     const {
         type,
-        id, 
-        imgURL, 
-        itemName, 
-        location, 
-        date, 
+        id,
+        imgURL,
+        itemName,
+        location,
+        date,
         money,
         tradeType,
         tradeLocation,
@@ -26,8 +26,8 @@ const EditPostButton = (props) => {
 
     const editPost = () => {
         if (type === 'find') {
-            navigation.navigate("WritePostFindScreen",{
-                id : id,
+            navigation.navigate("WritePostFindScreen", {
+                id: id,
                 imgURL: imgURL,
                 itemName: itemName,
                 location: location,
@@ -42,8 +42,8 @@ const EditPostButton = (props) => {
                 edit: edit,
             });
         } else if (type === 'lost') {
-            navigation.navigate("WritePostLostScreen",{
-                id : id,
+            navigation.navigate("WritePostLostScreen", {
+                id: id,
                 imgURL: imgURL,
                 itemName: itemName,
                 location: location,

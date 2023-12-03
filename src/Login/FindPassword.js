@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions
+} from 'react-native';
 
-import { auth } from '../../FireBase/DB'; // Import the Firebase auth module
+import { TextInput } from 'react-native-paper';
+import theme from '../PaperTheme';
+
+import { auth } from '../../FireBase/DB';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 
 const FindPassword = ({ navigation }) => {
-  // TextInput 클릭 시 테두리 색 변경하는 코드
-  const theme = {
-    ...DefaultTheme,
-    myOwnProperty: true,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#007bff', // 이거 바꾸면 됨
-    },
-  }
+
 
   const [userEmail, setUserEmail] = useState('');
   const _handleUserEmailChange = text => {
@@ -39,7 +38,7 @@ const FindPassword = ({ navigation }) => {
   return (
     <View style={styles.flexbox}>
 
-      <View style={{width: '100%', alignItems: 'center'}}>
+      <View style={{ width: '100%', alignItems: 'center' }}>
         <View style={styles.columnSelectBox}>
           <Text style={styles.headerText}>이메일을 입력해주세요.</Text>
           <Text style={styles.titleText}>비밀번호 재설정 이메일을 보내드리겠습니다.</Text>

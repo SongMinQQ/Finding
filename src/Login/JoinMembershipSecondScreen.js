@@ -4,45 +4,42 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   Dimensions,
 } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
+
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
+
 import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import theme from '../PaperTheme';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import { auth } from '../../FireBase/DB';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
-import { fireStoreDB } from '../../FireBase/DB';
-import { collection, addDoc } from "firebase/firestore";
-
 import { storage } from '../../FireBase/DB';
-import { ref, uploadBytes, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 import { useContext } from 'react';
 import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 
-const WINDOW_HEIGHT = Dimensions.get('window').height;
 
+
+const WINDOW_HEIGHT = Dimensions.get('window').height;
 const PROFILE_IMAGE_SIZE = WINDOW_HEIGHT * 0.18;
 
+
+
 export default function JoinMembershipSecondScreen({ navigation: { navigate }, route }) {
+
   const navigation = useNavigation();
 
   const { loading } = useContext(LoadingContext);
+  const { spinner } = useContext(LoadingContext);
 
-  const theme = {
-    ...DefaultTheme,
-    myOwnProperty: true,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#007bff',
-    },
-  };
 
   // 이름
   const [name, setName] = useState('');   // 이름
@@ -105,34 +102,29 @@ export default function JoinMembershipSecondScreen({ navigation: { navigate }, r
   };
 
 
-  const userData = {
-    email: route.params.email,
-    // password: route.params.password,
-    phoneNumber: route.params.phoneNumber,
-  }
   // 회원가입 버튼을 눌렀을 때의 처리
-  const { spinner } = useContext(LoadingContext);
   const handleSignup = async () => {
     let newError = '';
     try {
       spinner.start();
       if (!name) {
         newError = '닉네임을 입력해주세요.';
-      } else if (name.length < 3) {
-        newError = '닉네임을 3글자 이상 입력해주세요.';
+      } else if (name.length < 2) {
+        newError = '닉네임을 2글자 이상 입력해주세요.';
       } else {
         const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
         await createUserWithEmailAndPassword(auth, route.params.email, route.params.password);
+
         updateProfile(auth.currentUser, {
           displayName: name,
           photoURL: firebaseImageUrl,
           phoneNumber: route.params.phoneNumber,
         }).then(() => {
-          // Profile updated!
           navigation.navigate("Join Membership Third");
         }).catch((error) => {
           console.error("에러남ㅅㄱ: " + error)
         });
+
       }
       setError(newError);
     } catch (e) {
@@ -140,7 +132,6 @@ export default function JoinMembershipSecondScreen({ navigation: { navigate }, r
     } finally {
       spinner.stop();
     }
-
 
   };
 

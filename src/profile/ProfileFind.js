@@ -25,14 +25,6 @@ const ProfileFind = () => {
     const uid = useSelector((state) => state.UID);
     const [posts, setPosts] = useState([]);
 
-    // const findItemData = [...Array(20)].map((_, index) => ({
-    //     id: index,
-    //     imgURL: `https://picsum.photos/id/${index}/200/200`,
-    //     itemName: `물건 ${index + 1}`,
-    //     category: `전자기기`,
-    //     location: `위치 ${index + 1}`,
-    //     date: `2023-10-${index + 1}`
-    // }));
 
     const fetchUserPosts = async () => {
         try {
@@ -42,6 +34,7 @@ const ProfileFind = () => {
 
             if (userDoc.exists()) {
                 const userPostsIds = userDoc.data().findPosts; // 사용자가 작성한 글 ID 목록
+                
                 if (userPostsIds) {
                     const postsData = [];
                     for (const postId of userPostsIds) {

@@ -1,11 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useContext, useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text, Button, Dimensions, StyleSheet } from 'react-native';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
-import { Image } from 'expo-image';
+import React, { useContext, useState } from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  Dimensions,
+  StyleSheet
+} from 'react-native';
+
 import { TextInput } from 'react-native-paper';
+import theme from '../PaperTheme';
+
+import { Image } from 'expo-image';
+
 import { auth } from '../../FireBase/DB';
 import { signInWithEmailAndPassword } from "firebase/auth";
+
 import { LoadingContext } from '../Loading/LoadingContext';
 import { useDispatch } from 'react-redux';
 import LoadingSpinner from '../Loading/LoadingSpinner';
@@ -16,15 +25,6 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const { loading } = useContext(LoadingContext);
 
-  // TextInput 클릭 시 테두리 색 변경하는 코드
-  const theme = {
-    ...DefaultTheme,
-    myOwnProperty: true,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#007bff', // 이거 바꾸면 됨
-    },
-  };
 
   //로딩화면 구현을 위한 context 가져오기
   const { spinner } = useContext(LoadingContext);
@@ -32,7 +32,8 @@ const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       spinner.start();
-      const userCredential = await signInWithEmailAndPassword(auth, userID, userPW);
+      await signInWithEmailAndPassword(auth, userID, userPW);
+
       const user = auth.currentUser;
       dispatch({ type: 'SET_DISPLAYNAME', payload: user.displayName });
       dispatch({ type: 'SET_PROFILE_IMG', payload: user.photoURL });
@@ -113,8 +114,8 @@ const Login = ({ navigation }) => {
         </TouchableOpacity>
         <View style={styles.signBox}>
 
-          <View style={[styles.signButtonContainer,{justifyContent: 'flex-end'}]}>
-            <TouchableOpacity 
+          <View style={[styles.signButtonContainer, { justifyContent: 'flex-end' }]}>
+            <TouchableOpacity
               onPress={() => { navigation.navigate("Join Membership") }}>
               <Text style={{ fontWeight: 'bold' }}>회원가입</Text>
             </TouchableOpacity>
@@ -122,8 +123,8 @@ const Login = ({ navigation }) => {
 
           <View style={styles.divider} />
 
-          <View style={[styles.signButtonContainer,{justifyContent: 'flex-start'}]}>
-            <TouchableOpacity 
+          <View style={[styles.signButtonContainer, { justifyContent: 'flex-start' }]}>
+            <TouchableOpacity
               onPress={() => navigation.navigate("Find Password")}>
               <Text style={{ fontWeight: 'bold' }}>비밀번호 재설정</Text>
             </TouchableOpacity>

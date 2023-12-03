@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal } from 'rea
 import PickerSelect from 'react-native-picker-select';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import theme from '../PaperTheme';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // 저장
@@ -63,15 +63,6 @@ const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.006;
 const BUTTON_PADDING = WINDOW_HEIGHT * 0.01;
 
 const DeliveryInfo = ({ deliveryName, setDeliveryName, deliveryPhoneNum, setDeliveryPhoneNum, deliveryAddress, setDeliveryAddress, thankCost, deliveryCost, setDeliveryRequest }) => {
-
-    const theme = {
-        ...DefaultTheme,
-        myOwnProperty: true,
-        colors: {
-            ...DefaultTheme.colors,
-            primary: '#007bff', // 이거 바꾸면 됨
-        },
-    };
 
 
     const handlePhoneNumChange = (text) => {

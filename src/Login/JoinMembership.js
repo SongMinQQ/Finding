@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
-  Button,
   TouchableOpacity,
   StyleSheet,
   Alert,
@@ -10,25 +9,28 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+
 import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import theme from '../PaperTheme';
 
 import { auth } from '../../FireBase/DB';
 import { app } from '../../FireBase/DB';
-import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
+
+import { signInWithCredential, deleteUser, PhoneAuthProvider } from 'firebase/auth';
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+
+import { useContext } from 'react';
+import { LoadingContext } from '../Loading/LoadingContext';
+import LoadingSpinner from '../Loading/LoadingSpinner';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 export default function JoinMembership({ navigation }) {
-  const theme = {
-    ...DefaultTheme,
-    myOwnProperty: true,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#007bff',
-    },
-  };
+
+
+  const { loading } = useContext(LoadingContext);
+
+  const { spinner } = useContext(LoadingContext);
 
   // 사용자 입력값
   const [email, setEmail] = useState('');   // 이메일
@@ -38,13 +40,7 @@ export default function JoinMembership({ navigation }) {
   const [error, setError] = useState(null);   // 에러 메시지 
 
 
-  const [isVerificated, setIsVerificated] = useState(false);
-
   const recaptchaVerifier = React.useRef(null);
-  const firebaseConfig = app ? app.options : undefined;
-
-  const [message, showMessage] = React.useState();
-  const attemptInvisibleVerification = false;
 
   const [isSend, setIsSend] = useState(false);
   const [verificationId, setVerificationId] = useState('');
@@ -69,7 +65,14 @@ export default function JoinMembership({ navigation }) {
   // 인증 코드 확인 함수
   const verifyPhoneNumber = async () => {
     try {
+      spinner.start();
       const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
+
+      // Firebase에 인증 요청
+      const userCredential = await signInWithCredential(auth, credential);
+
+      // 인증 성공 후 즉시 계정 삭제 처리
+      await deleteUser(userCredential.user);
 
       navigation.navigate("Join Membership Second", {
         email: email,
@@ -77,12 +80,15 @@ export default function JoinMembership({ navigation }) {
         phoneNumber: phoneNumber,
       });
     } catch (err) {
-      Alert.alert('인증 실패: ' + err);
+      Alert.alert('잘못된 인증번호입니다. 다시 시도해주세요.');
+      console.log('휴대폰 인증 오류: ' + err)
+    } finally {
+      spinner.stop();
     }
   };
 
 
-  // 전화번호 인증 임시 코드
+  // 전화번호 전송 버튼 실행 함수
   const handleVerification = () => {
     if (!isSend) {
       sendVerificationCode();
@@ -94,21 +100,27 @@ export default function JoinMembership({ navigation }) {
 
 
 
-  // 정보 입력 완료 함수 (아이디 길이 말고 이메일 형식 지키라고 경고하도록 수정 필요)
+  // 정보 입력 완료 함수
   const handleSignup = () => {
     let newError = '';
+    // 이메일 형식을 검증하는 정규 표현식
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!email || !password || !confirmPassword) {
       newError = '입력이 안된 값이 있습니다.';
     }
-    else if (email.length < 6 || password.length < 6) {
-      newError = '아이디와 비밀번호는 8자 이상이어야 합니다.';
-    } else if (email.length > 30 || password.length > 30) {
-      newError = '아이디와 비밀번호는 30자 이하여야 합니다.';
+    else if (!emailRegex.test(email)) {
+      newError = '유효한 이메일 형식이 아닙니다.';
+    } else if (password.length < 6) {
+      newError = '비밀번호는 6자 이상이어야 합니다.';
+    } else if (password.length > 40) {
+      newError = '비밀번호는 40자 이하여야 합니다.';
     } else if (password !== confirmPassword) {
       newError = '비밀번호와 비밀번호 확인이 일치하지 않습니다.';
+    } else if (!isSend) {
+      newError = '휴대폰 인증을 완료해주세요.';
     } else {
       verifyPhoneNumber();
-
     }
 
     setError(newError);
@@ -116,10 +128,10 @@ export default function JoinMembership({ navigation }) {
 
   return (
     <>
-
       <View style={styles.container}>
+        {loading && <LoadingSpinner />}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          {/* 아이디 입력 */}
+          {/* 이메일 입력 */}
           <View style={{ width: '100%' }}>
             <View style={styles.textInputBox}>
               <View style={{ flexDirection: 'row' }}>

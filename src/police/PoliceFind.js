@@ -107,7 +107,7 @@ const PoliceFind = ({ navigation }) => {
                             <Text>등록 일자 : {data.lstYmd}</Text>
                         </View>
                     </TouchableOpacity>))
-                    : 
+                    :
                     <View>
                         <Text>검색 결과가 없습니다.</Text>
                     </View>}

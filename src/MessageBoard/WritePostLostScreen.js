@@ -3,7 +3,6 @@ import { View, Text, Button, StyleSheet, ScrollView, Dimensions, TouchableOpacit
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -37,11 +36,11 @@ const WritePostLostScreen = ({ navigation, route }) => {
     const [title, setTitle] = useState(route.params?.itemName || '');
     const [findLocation, setFindLocation] = useState(route.params?.location || '');
     const [date, setDate] = useState(null);
-    
+
     const [thankMoney, setThankMoney] = useState('');
     const [tradeType, setTradeType] = useState('');
     const [tradeLocation, setTradeLocation] = useState(route.params?.tradeLocation || '');
-    
+
     const [description, setDescription] = useState(route.params?.articleExplain || '');
 
     const postContent = {
@@ -178,22 +177,22 @@ const WritePostLostScreen = ({ navigation, route }) => {
 
     };
 
-    const editPost = async() => {
-        try{
+    const editPost = async () => {
+        try {
             spinner.start();
             const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
 
             const docRef = doc(fireStoreDB, "lostBoard", route.params.id);
             await updateDoc(docRef, {
-            ...postContent,
-            imageUrl: firebaseImageUrl
+                ...postContent,
+                imageUrl: firebaseImageUrl
             });
             navigation.navigate('Home');
         }
-        catch(error){
+        catch (error) {
             console.error('수정실패' + error);
         }
-        finally{
+        finally {
             spinner.stop();
         }
     }
