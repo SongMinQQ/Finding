@@ -65,13 +65,10 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
   const [findCount, setFindCount] = useState('');
 
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
-  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
   const { spinner } = useContext(LoadingContext);
-  const { spinner } = useContext(LoadingContext);
 
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
