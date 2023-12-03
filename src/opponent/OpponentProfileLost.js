@@ -94,8 +94,8 @@ const OpponentProfileLost = ({ opponentUserID }) => {
                             style={styles.itemImage}
                             onError={(e) => console.log(e)}
                         />
-                        <Text style={styles.itemName}>{item.title}</Text>
-                        <Text style={styles.itemLocation}>{item.findLocation}</Text>
+                        <Text style={styles.itemName} numberOfLines={1}>{item.title}</Text>
+                        <Text style={styles.itemLocation} numberOfLines={1}>{item.findLocation}</Text>
 
                     </TouchableOpacity>
                 ))}

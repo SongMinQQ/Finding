@@ -85,8 +85,8 @@ const LostBoard = () => {
                 onError={(e) => console.log(e)}
             />
             <View style={styles.textContainer}>
-                <Text style={styles.itemName}>{item.title}</Text>
-                <Text style={styles.itemText}>{item.findLocation}</Text>
+                <Text style={styles.itemName} numberOfLines={1}>{item.title}</Text>
+                <Text style={styles.itemText} numberOfLines={1}>{item.findLocation}</Text>
                 <Text style={styles.itemText}>{item.date.toDate().toLocaleDateString('ko-KR')}</Text>
                 <TouchableOpacity style={styles.itemUser}
                     onPress={() => navigation.navigate("OpponentProfileTopTabNavigation", {
