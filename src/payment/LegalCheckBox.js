@@ -4,9 +4,9 @@ import Checkbox from 'expo-checkbox';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 // 체크박스 높이
-const MIN_HEIGHT = WINDOW_HEIGHT * 0.075; 
+const MIN_HEIGHT = WINDOW_HEIGHT * 0.075;
 // 폰트 사이즈
-const FONT_SIZE = WINDOW_HEIGHT * 0.02; 
+const FONT_SIZE = WINDOW_HEIGHT * 0.02;
 
 const LegalCheckBox = ({ label, value, onChange }) => {
   return (
@@ -15,7 +15,7 @@ const LegalCheckBox = ({ label, value, onChange }) => {
       <Checkbox
         value={value}
         onValueChange={onChange}
-        color={value ? '#007bff' : undefined} 
+        color={value ? '#007bff' : undefined}
       />
     </View>
   );

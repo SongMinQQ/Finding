@@ -10,7 +10,7 @@ import { LoadingContext } from '../Loading/LoadingContext';
 import LoadingSpinner from '../Loading/LoadingSpinner';
 import { useFocusEffect } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
-import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
+import theme from '../PaperTheme';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc, getDocs } from "firebase/firestore";
@@ -32,21 +32,14 @@ const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.03;
 const FONT_SIZE_MEDIUM = WINDOW_HEIGHT * 0.025;
 const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.02;
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
-const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; 
+const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006;
 
 
 const LostBoardDetail = ({ navigation: { navigate }, route }) => {
-  const theme = {
-    ...DefaultTheme,
-    myOwnProperty: true,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: '#007bff', // 이거 바꾸면 됨
-    },
-  };
-  useEffect(() => {
-    console.log(route);
-  })
+
+  // useEffect(() => {
+  //   console.log(route);
+  // })
   const type = route.params.type;
   const {
     id,
@@ -59,7 +52,7 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     tradeLocation,
     articleExplain,
   } = route.params;
-  
+
   const navigation = useNavigation();
   const { loading } = useContext(LoadingContext);
   const [findCount, setFindCount] = useState('');
@@ -83,46 +76,46 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
     openModal();
     // 여기에 원하는 로직을 추가합니다.
   };
-  
-    const [reportTitle, setReportTitle] = useState('');
-    const [reportContent, setReportContent] = useState('');
-    // 네비게이션 헤더에 버튼 추가
-    useEffect(() => {
-      navigation.setOptions({
-        headerRight: () => ( uid != writerId ?
-          <TouchableOpacity onPress={handleReport}>
-            <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
-          </TouchableOpacity>
-          :
-          <EditPostButton 
-            type={type} 
-            id={id} 
-            imgURL={imgURL} 
-            itemName={itemName} 
-            location={location} 
-            date={date} 
-            money={money}
-            tradeType={tradeType}
-            tradeLocation={tradeLocation}
-            articleExplain={articleExplain}
-            displayName={route.params.displayName}
-            profileImage={route.params.profileImage}
-            sellUser={route.params.sellUser}
-          />
-        )
-      });
-    }, [navigation]);
+
+  const [reportTitle, setReportTitle] = useState('');
+  const [reportContent, setReportContent] = useState('');
+  // 네비게이션 헤더에 버튼 추가
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (uid != writerId ?
+        <TouchableOpacity onPress={handleReport}>
+          <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
+        </TouchableOpacity>
+        :
+        <EditPostButton
+          type={type}
+          id={id}
+          imgURL={imgURL}
+          itemName={itemName}
+          location={location}
+          date={date}
+          money={money}
+          tradeType={tradeType}
+          tradeLocation={tradeLocation}
+          articleExplain={articleExplain}
+          displayName={route.params.displayName}
+          profileImage={route.params.profileImage}
+          sellUser={route.params.sellUser}
+        />
+      )
+    });
+  }, [navigation]);
 
 
 
-    const findOrLost = "lost"
+  const findOrLost = "lost"
 
   const deletePost = async (postId) => {
     try {
       spinner.start();
       const postRef = doc(fireStoreDB, "lostBoard", postId);
       const isDeletedDoc = await getDoc(postRef);
-      if(!isDeletedDoc.data().isDeleted){
+      if (!isDeletedDoc.data().isDeleted) {
 
         await updateDoc(postRef, {
           isDeleted: true
@@ -135,12 +128,12 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
 
         console.log("게시글 삭제 성공: ", postId);
 
-      }else {
+      } else {
         Alert.alert('이미 삭제된 게시물입니다.');
         navigation.navigate('Home');
       }
 
-     
+
     } catch (error) {
       console.error("Error removing document: ", error);
     } finally {
@@ -211,40 +204,40 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
   //현재 로그인한 사용자의 프로필 사진
   const profileImg = useSelector((state) => state.profileImg);
 
-    const handleChatPress = async () => {
-      // Create a unique chat room ID using both user IDs
-      const chatRoomId = [writerId, uid].sort().join('_');
-  
-      // Check if the chat room already exists
-      const chatRoomQuery = query(collection(fireStoreDB, "channels"), where("chatRoomId", "==", chatRoomId));
-      const querySnapshot = await getDocs(chatRoomQuery);
-  
-      // Proceed to create a new chat room only if it doesn't exist
-      if (querySnapshot.empty) {
-        // Firestore document for the chat room
-        await addDoc(collection(fireStoreDB, "channels"), {
-          chatRoomId: chatRoomId, // Unique identifier for the chat room
-          participants: {
-            [uid]: {
-              uid: uid,
-              displayName: displayName, // Display name of the current user
-              profileImage: profileImg, // Profile image of the current user
-            },
-            [writerId]: {
-              uid: writerId,
-              displayName: route.params.displayName, // Display name of the writer
-              profileImage: route.params.profileImage, // Profile image of the writer
-            }
+  const handleChatPress = async () => {
+    // Create a unique chat room ID using both user IDs
+    const chatRoomId = [writerId, uid].sort().join('_');
+
+    // Check if the chat room already exists
+    const chatRoomQuery = query(collection(fireStoreDB, "channels"), where("chatRoomId", "==", chatRoomId));
+    const querySnapshot = await getDocs(chatRoomQuery);
+
+    // Proceed to create a new chat room only if it doesn't exist
+    if (querySnapshot.empty) {
+      // Firestore document for the chat room
+      await addDoc(collection(fireStoreDB, "channels"), {
+        chatRoomId: chatRoomId, // Unique identifier for the chat room
+        participants: {
+          [uid]: {
+            uid: uid,
+            displayName: displayName, // Display name of the current user
+            profileImage: profileImg, // Profile image of the current user
           },
-          createdAt: new Date(), // Timestamp when the chat room is created
-        });
-      }
-  
-      // Navigate to the chat screen with the chatRoomId
-      navigation.navigate('Home', {
-        screen: '채팅',
+          [writerId]: {
+            uid: writerId,
+            displayName: route.params.displayName, // Display name of the writer
+            profileImage: route.params.profileImage, // Profile image of the writer
+          }
+        },
+        createdAt: new Date(), // Timestamp when the chat room is created
       });
-    };
+    }
+
+    // Navigate to the chat screen with the chatRoomId
+    navigation.navigate('Home', {
+      screen: '채팅',
+    });
+  };
 
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
@@ -455,7 +448,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: WINDOW_HEIGHT*0.017,
+    fontSize: WINDOW_HEIGHT * 0.017,
     fontWeight: 'bold',
   },
   userInfo: {

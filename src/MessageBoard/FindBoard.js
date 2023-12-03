@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { FlatList, View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl  } from 'react-native';
+import { FlatList, View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import WriteButton from './WriteButton';
 import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
-import { collection,  query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { Image } from "react-native-expo-image-cache";
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -44,17 +44,17 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
-   
+
     const [posts, setPosts] = useState([]);
 
     const fetchDocs = async () => {
         try {
-            const q = query(collection(fireStoreDB, "findBoard"), 
+            const q = query(collection(fireStoreDB, "findBoard"),
                 where("isDeleted", "==", false),
                 where("isPaied", "==", false),
                 orderBy("date", "desc")
             );
-        
+
             const querySnapshot = await getDocs(q);
             const fetchedPosts = querySnapshot.docs.map(doc => ({
                 id: doc.id,
@@ -104,7 +104,7 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
                 type: "find",
             })}>
             <Image
-                {...{preview, uri: item.imageUrl ? item.imageUrl:"https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a"}}
+                {...{ preview, uri: item.imageUrl ? item.imageUrl : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
                 style={styles.itemImage}
                 onError={(e) => console.log(e)}
             />
@@ -112,7 +112,7 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
                 <Text style={styles.itemName}>{item.title}</Text>
                 <Text style={styles.itemText}>{item.findLocation}</Text>
                 <Text style={styles.itemText}>{item.date.toDate().toLocaleDateString('ko-KR')}</Text>
-                <TouchableOpacity style={styles.itemUser} 
+                <TouchableOpacity style={styles.itemUser}
                     onPress={() => navigation.navigate("OpponentProfileTopTabNavigation", {
                         opponentUserID: item.uid,
                         profileImage: item.profileImage,
@@ -125,17 +125,17 @@ const FindBoard = ({ navigation: { navigate }, route }) => {
     );
 
     return (
-        <View style={{flex: 1, backgroundColor:'#fff'}}>
-        <FlatList
-            data={posts}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-        />
-        <WriteButton type="find" />
-    </View>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+            <FlatList
+                data={posts}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+            />
+            <WriteButton type="find" />
+        </View>
     );
 };
 

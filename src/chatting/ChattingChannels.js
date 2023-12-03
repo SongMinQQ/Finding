@@ -12,7 +12,7 @@ const ChattingChannels = () => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
-  const opponentDisplayName = useSelector((state) => state.opponentDisplayName); 
+  const opponentDisplayName = useSelector((state) => state.opponentDisplayName);
 
   const fetchChatRooms = async () => {
     const chatRoomsRef = collection(fireStoreDB, "channels");
@@ -53,13 +53,13 @@ const ChattingChannels = () => {
     fetchChatRooms().then(() => setRefreshing(false));
   }, []);
 
-  const getOpponentDisplayName = (item) =>{
-    dispatch({type: 'SET_OPPONENT_DISPLAYNAME', payload: item.otherUserDisplayName});
+  const getOpponentDisplayName = (item) => {
+    dispatch({ type: 'SET_OPPONENT_DISPLAYNAME', payload: item.otherUserDisplayName });
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.chatRoomContainer} onPress={() => {getOpponentDisplayName(item); goToChat(item);}}>
-      <Image source={item.otherUserProfileImage ? { uri: item.otherUserProfileImage } : { uri : require('../../img/defaultProfile.png')}} style={styles.profileImage} />
+    <TouchableOpacity style={styles.chatRoomContainer} onPress={() => { getOpponentDisplayName(item); goToChat(item); }}>
+      <Image source={item.otherUserProfileImage ? { uri: item.otherUserProfileImage } : { uri: require('../../img/defaultProfile.png') }} style={styles.profileImage} />
       <Text style={styles.displayName}>{item.otherUserDisplayName}</Text>
     </TouchableOpacity>
   );

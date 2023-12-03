@@ -33,7 +33,7 @@ const ProfileLost = () => {
 
             if (userDoc.exists()) {
                 const userPostsIds = userDoc.data().lostPosts; // 사용자가 작성한 글 ID 목록
-                if (userPostsIds){
+                if (userPostsIds) {
                     const postsData = [];
                     for (const postId of userPostsIds) {
                         const postRef = doc(fireStoreDB, "lostBoard", postId);

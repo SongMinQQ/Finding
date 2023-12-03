@@ -31,33 +31,33 @@ const BottomTabNavigation = ({ navigation: { navigate }, route }) => {
             )
         });
     }, [navigation]);
-    
+
     return (
         <Tab.Navigator>
             <Tab.Screen name='게시판' component={MaterialTopTabNavigation} options={{
                 headerShown: false, //이거 없으면 헤더바가 생김여;;
-                tabBarIcon: ( { color, size } ) => (
+                tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="file-find" size={size} color={color} />
-                  ),
-            }}/>
+                ),
+            }} />
             <Tab.Screen name='Lost112' component={PoliceFind} options={{
                 headerShown: false,
-                tabBarIcon: ( { color, size } ) => (
+                tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="police-badge" size={size} color={color} />
-                  ),
-            }}/>
+                ),
+            }} />
             <Tab.Screen name="채팅" component={ChattingChannels} options={{
                 headerShown: false,
-                tabBarIcon: ( { color, size } ) => (
+                tabBarIcon: ({ color, size }) => (
                     <Entypo name="chat" size={size} color={color} />
-                  ),
-            }}/>
+                ),
+            }} />
             <Tab.Screen name="프로필" component={ProfileTopTabNavigation} options={{
                 headerShown: false,
-                tabBarIcon: ( { color, size } ) => (
+                tabBarIcon: ({ color, size }) => (
                     <FontAwesome5 name="user-alt" size={size} color={color} />
-                  ),
-            }}/>
+                ),
+            }} />
         </Tab.Navigator>
     );
 };

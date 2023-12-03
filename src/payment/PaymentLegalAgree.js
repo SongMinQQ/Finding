@@ -25,7 +25,7 @@ const PaymentLegalAgree = ({ navigation: { navigate }, route }) => {
 
     const allChecked = isChecked1 && isChecked2 && isChecked3;
     return (
-        <ScrollView style={{backgroundColor: '#fff'}}>
+        <ScrollView style={{ backgroundColor: '#fff' }}>
             <View style={styles.container}>
                 <Text style={styles.headerText}>
                     {displayName} 님의 물건이{'\n'}
@@ -47,7 +47,7 @@ const PaymentLegalAgree = ({ navigation: { navigate }, route }) => {
                     </ScrollView>
                 </View>
 
-                <LegalCheckBox 
+                <LegalCheckBox
                     label="정말 제 물건이 맞습니다."
                     value={isChecked1}
                     onChange={setChecked1}

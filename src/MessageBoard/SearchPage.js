@@ -8,7 +8,6 @@ import { fireStoreDB } from '../../FireBase/DB';
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -76,7 +75,7 @@ const SearchPage = ({ navigation: { navigate }, route }) => {
         }));
         console.log("검색 결과 가져옴");
         setPosts(fetchedPosts);
-      }else{
+      } else {
         const q = query(collection(fireStoreDB, selectedBoard),
           where('title', '==', searchQuery),
           where("isDeleted", "==", false),

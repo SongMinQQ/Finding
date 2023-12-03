@@ -31,7 +31,7 @@ const ItemInfo = ({ route }) => {
         console.log("lstFilePathImg: " + detailInfo.lstFilePathImg);
     }, []);
     return (
-        <ScrollView style={{backgroundColor: '#fff'}}>
+        <ScrollView style={{ backgroundColor: '#fff' }}>
             <View style={styles.container}>
 
                 <Image source={{ uri: detailInfo.lstFilePathImg }} style={styles.articleImg} />
@@ -51,7 +51,7 @@ const ItemInfo = ({ route }) => {
                     <View style={styles.articleLine} />
                     <Text style={styles.articleText}>{detailInfo.lstYmd}</Text>
                 </View>
-                
+
                 <View style={styles.articleRow}>
                     <Text style={styles.articleKind}>관할관서</Text>
                     <View style={styles.articleLine} />

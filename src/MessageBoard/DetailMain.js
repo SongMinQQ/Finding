@@ -1,20 +1,25 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
-//import { Image } from "expo-image";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 import { Image } from "react-native-expo-image-cache";
 import { useSelector } from "react-redux";
 
-// 창의 높이를 계산합니다.
+
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 
-// 반응형 레이아웃을 위한 상대적 단위
+
 const ITEM_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.2;
 const ITEM_IMAGE_SIZE = ITEM_LAYOUT_HEIGHT * 0.8;
-const BORDER_RADIUS = WINDOW_HEIGHT * 0.01; // 예: 전체 높이의 0.5%
-const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.03; // 예: 전체 높이의 2%
-const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.017; // 예: 전체 높이의 1.5%
-const BUTTON_PADDING = WINDOW_HEIGHT * 0.01; // 예: 전체 높이의 1%
-const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.006; // 예: 전체 높이의 0.5%
+const BORDER_RADIUS = WINDOW_HEIGHT * 0.01;
+const FONT_SIZE_LARGE = WINDOW_HEIGHT * 0.03;
+const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.017;
+const BUTTON_PADDING = WINDOW_HEIGHT * 0.01;
+const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.006;
 
 // DetailMain 컴포넌트
 const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost, writerId }) => {
@@ -57,15 +62,6 @@ const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost, wri
               <Text style={styles.findButtonText}>글 삭제</Text>
             </View>)
         })()}
-        {/* {findOrLost === "find" ? (
-          <TouchableOpacity style={styles.findButton} onPress={onPress}>
-            <Text style={styles.findButtonText}>{writerId != uid ? "물건 찾기":"글 삭제"}</Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={[styles.findButton,{backgroundColor: '#fff'}]}>
-            <Text style={styles.findButtonText}>글 삭제</Text>
-          </View>
-        )} */}
       </View>
     </View>
   );

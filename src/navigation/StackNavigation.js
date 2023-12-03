@@ -1,33 +1,34 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useContext, useRef } from 'react';
-import { View, StyleSheet, TextInput, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
+
+import BottomTabNavigation from './BottomTabNavigation';
+
 import Chatting from '../chatting/Chatting';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+
 import Login from '../Login/Login';
+import FindPassword from '../Login/FindPassword';
+import FindPasswordComplete from '../Login/FindPasswordComplete';
+
 import JoinMembership from '../Login/JoinMembership';
 import JoinMembershipSecondScreen from '../Login/JoinMembershipSecondScreen';
 import JoinMembershipThirdScreen from '../Login/JoinMembershipThirdScreen';
-import FindId from '../Login/FindId';
-import FindPassword from '../Login/FindPassword';
-import MaterialTopTabNavigation from './MaterialTopTabNavigation';
-import PoliceFind from '../police/PoliceFind';
-import BottomTabNavigation from './BottomTabNavigation';
-import ProfileEdit from '../profile/ProfileEdit';
+
 import FindBoardDetail from '../MessageBoard/FindBoardDetail';
 import LostBoardDetail from '../MessageBoard/LostBoardDetail';
+import SearchPage from '../MessageBoard/SearchPage';
+
+import ProfileEdit from '../profile/ProfileEdit';
+import OpponentProfileTopTabNavigation from '../opponent/OpponentProfileTopTabNavigation';
+
 import PaymentLegalAgree from '../payment/PaymentLegalAgree';
 import PaymentCheck from '../payment/PaymentCheck';
 import PaymentFinish from '../payment/PaymentFinish';
+
 import WritePostFindScreen from '../MessageBoard/WritePostFindScreen';
 import WritePostLostScreen from '../MessageBoard/WritePostLostScreen';
-import FindIdEmail from '../Login/FindIdEmail';
-import FindIdPhoneNumber from '../Login/FindIdPhoneNumber';
-import FindPasswordEmail from '../Login/FindPasswordEmail';
-import FindPasswordPhoneNumber from '../Login/FindPasswordPhoneNumber';
-import SearchPage from '../MessageBoard/SearchPage';
+
 import ItemInfo from '../police/ItemInfo';
-import OpponentProfileTopTabNavigation from '../opponent/OpponentProfileTopTabNavigation';
-import FindPasswordComplete from '../Login/FindPasswordComplete';
 
 
 
@@ -73,16 +74,7 @@ const StackNavigation = () => {
                 <Stack.Screen name="Join Membership Third" component={JoinMembershipThirdScreen} options={{
                     headerShown: false
                 }} />
-                <Stack.Screen name="Find Id" component={FindId} options={{
-                    headerTitle: '아이디 찾기',
-                    headerTintColor: 'black',
-                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
-                    headerStyle: {
-                        borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
-                        elevation: 0, // 안드로이드에서의 shadow 없앰
-                        shadowOpacity: 0, // iOS에서의 shadow 없앰
-                    },
-                }} />
+
                 <Stack.Screen name="Find Password" component={FindPassword} options={{
                     headerTitle: '비밀번호 재설정',
                     headerTintColor: 'black',
@@ -101,7 +93,7 @@ const StackNavigation = () => {
             <Stack.Group>
                 <Stack.Screen name="Home" component={BottomTabNavigation} options={{
                     title: 'Finding',
-                    headerLeft: null, 
+                    headerLeft: null,
                 }} />
                 <Stack.Screen name="FindBoardDetail" component={FindBoardDetail} options={{
                     headerTitle: '습득 물건',
@@ -173,7 +165,7 @@ const StackNavigation = () => {
                         elevation: 0, // 안드로이드에서의 shadow 없앰
                         shadowOpacity: 0, // iOS에서의 shadow 없앰
                     },
-                }}/>
+                }} />
             </Stack.Group>
             {/* 결제 페이지 그룹 */}
             <Stack.Group>
@@ -237,7 +229,7 @@ const styles = StyleSheet.create({
     icons: {
         marginRight: 10,
     },
-    
+
 });
 
 export default StackNavigation;

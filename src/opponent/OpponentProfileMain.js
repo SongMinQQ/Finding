@@ -15,7 +15,7 @@ const PROFILE_IMAGE_MARGIN_RIGHT = windowHeight * 0.02;
 const FONT_SIZE_MEDIUM = windowHeight * 0.028;
 const FONT_SIZE_SMALL = windowHeight * 0.02;
 
-const OpponentProfileMain = ({name, imgURL, findCount}) => {
+const OpponentProfileMain = ({ name, imgURL, findCount }) => {
     const navigation = useNavigation();
 
     return (
