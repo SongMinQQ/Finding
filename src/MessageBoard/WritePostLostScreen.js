@@ -12,7 +12,7 @@ import PickerSelect from 'react-native-picker-select';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { storage } from '../../FireBase/DB';
-import { doc, collection, arrayUnion, addDoc, setDoc } from "firebase/firestore";
+import { doc, collection, arrayUnion, addDoc, setDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useSelector } from 'react-redux';
 import { useContext } from 'react';
@@ -24,24 +24,25 @@ const WINDOW_HEIGHT = Dimensions.get('window').height;
 const MAIN_SELECT_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.18;
 const ICON_AREA_LAYOUT_HEIGHT = WINDOW_HEIGHT * 0.1;
 
-const WritePostLostScreen = ({ navigation }) => {
+const WritePostLostScreen = ({ navigation, route }) => {
     // redux값 받아오기
     const displayName = useSelector((state) => state.displayName);
     const uid = useSelector((state) => state.UID);
     const profileImage = useSelector((state) => state.profileImg);
 
+    const edit = route.params?.edit ? route.params.edit : false;
+
     const { loading } = useContext(LoadingContext);
 
-    const [title, setTitle] = useState('');
-    const [findLocation, setFindLocation] = useState('');
+    const [title, setTitle] = useState(route.params?.itemName || '');
+    const [findLocation, setFindLocation] = useState(route.params?.location || '');
     const [date, setDate] = useState(null);
-
-
+    
     const [thankMoney, setThankMoney] = useState('');
     const [tradeType, setTradeType] = useState('');
-    const [tradeLocation, setTradeLocation] = useState('');
-
-    const [description, setDescription] = useState('');
+    const [tradeLocation, setTradeLocation] = useState(route.params?.tradeLocation || '');
+    
+    const [description, setDescription] = useState(route.params?.articleExplain || '');
 
     const postContent = {
         title: title,
@@ -177,6 +178,27 @@ const WritePostLostScreen = ({ navigation }) => {
 
     };
 
+    const editPost = async() => {
+        try{
+            spinner.start();
+            const firebaseImageUrl = await uploadImageToFirebase(selectImageUrl);
+
+            const docRef = doc(fireStoreDB, "lostBoard", route.params.id);
+            await updateDoc(docRef, {
+            ...postContent,
+            imageUrl: firebaseImageUrl
+            });
+            navigation.navigate('Home');
+        }
+        catch(error){
+            console.error('수정실패' + error);
+        }
+        finally{
+            spinner.stop();
+        }
+    }
+
+
     return (
         <>
             {loading && <LoadingSpinner />}
@@ -282,7 +304,7 @@ const WritePostLostScreen = ({ navigation }) => {
                     activeOutlineColor="#000"
                 />
 
-                <TouchableOpacity style={styles.completeButton} onPress={handleSubmit}>
+                <TouchableOpacity style={styles.completeButton} onPress={edit ? editPost : handleSubmit}>
                     <Text style={{ fontWeight: 'bold', color: "#fff", fontSize: WINDOW_HEIGHT * 0.017 }}>글 작성 완료</Text>
                 </TouchableOpacity>
                 {Platform.OS === 'ios' ? <DateTimePickerModal

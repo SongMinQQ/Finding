@@ -15,6 +15,7 @@ import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc, getDocs } from "firebase/firestore";
 import { useSelector } from 'react-redux';
+import EditPostButton from './EditPostButton';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -36,6 +37,18 @@ const ITEM_BORDER_RADIUS = WINDOW_HEIGHT * 0.006;
 
 
 const FindBoardDetail = ({ navigation: { navigate }, route }) => {
+  const {
+    id,
+    imgURL,
+    itemName,
+    location,
+    date,
+    money,
+    tradeType,
+    tradeLocation,
+    articleExplain,
+  } = route.params;
+
   const theme = {
     ...DefaultTheme,
     myOwnProperty: true,
@@ -44,8 +57,16 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       primary: '#007bff', // 이거 바꾸면 됨
     },
   };
+  const type = route.params.type;
 
-
+    //글 작성자의 UID
+    const writerId = route.params.sellUser;
+    //현재 로그인한 사용자의 UID
+    const uid = useSelector((state) => state.UID);
+    //현재 로그인한 사용자의 닉네임
+    const displayName = useSelector((state) => state.displayName);
+    //현재 로그인한 사용자의 프로필 사진
+    const profileImg = useSelector((state) => state.profileImg);
 
   const navigation = useNavigation();
   const { loading } = useContext(LoadingContext);
@@ -75,10 +96,26 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
   // 네비게이션 헤더에 버튼 추가
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
+      headerRight: () => ( uid != writerId ?
         <TouchableOpacity onPress={handleReport}>
           <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
         </TouchableOpacity>
+        :
+        <EditPostButton 
+          type={type} 
+          id={id} 
+          imgURL={imgURL} 
+          itemName={itemName} 
+          location={location} 
+          date={date} 
+          money={money}
+          tradeType={tradeType}
+          tradeLocation={tradeLocation}
+          articleExplain={articleExplain}
+          displayName={route.params.displayName}
+          profileImage={route.params.profileImage}
+          sellUser={route.params.sellUser}
+        />
       )
     });
   }, [navigation]);
@@ -190,14 +227,7 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
     }
 
   };
-  //글 작성자의 UID
-  const writerId = route.params.sellUser;
-  //현재 로그인한 사용자의 UID
-  const uid = useSelector((state) => state.UID);
-  //현재 로그인한 사용자의 닉네임
-  const displayName = useSelector((state) => state.displayName);
-  //현재 로그인한 사용자의 프로필 사진
-  const profileImg = useSelector((state) => state.profileImg);
+
   // const handleChatPress = (writerId, uid) => {
 
   // const handleChatPress = async () => {
@@ -261,6 +291,10 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
       screen: '채팅',
     });
   };
+
+  const editPost = () => {
+    navigation.navigate('')
+  }
   return (
     <ScrollView style={{ backgroundColor: '#fff' }}>
       <View style={styles.container}>
@@ -316,7 +350,8 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
             <Text style={styles.textSmall}>찾아준 횟수: {findCount}번</Text>
           </View>
           {/* '채팅하기' 버튼 추가 */}
-          {writerId != uid && <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
+          {writerId != uid &&
+          <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
             <Text style={styles.buttonText}>채팅하기</Text>
           </TouchableOpacity>}
         </TouchableOpacity>
