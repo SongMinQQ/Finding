@@ -1,6 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useContext, useRef } from 'react';
-import { StyleSheet } from 'react-native';
 
 import BottomTabNavigation from './BottomTabNavigation';
 
@@ -92,8 +91,7 @@ const StackNavigation = () => {
             {/* 메인 페이지 그룹 */}
             <Stack.Group>
                 <Stack.Screen name="Home" component={BottomTabNavigation} options={{
-                    title: 'Finding',
-                    headerLeft: null,
+                    headerShown: false,
                 }} />
                 <Stack.Screen name="FindBoardDetail" component={FindBoardDetail} options={{
                     headerTitle: '습득 물건',
@@ -208,7 +206,9 @@ const StackNavigation = () => {
             </Stack.Group>
             <Stack.Group>
                 <Stack.Screen name="Chatting" component={Chatting} options={{
-                    headerTitle: opponentDisplayName,
+                    headerTitle: opponentDisplayName, 
+                    headerTintColor: 'black',
+                    headerBackTitleVisible: false, // 뒤로가기 버튼 옆의 텍스트를 표시하지 않음
                     headerStyle: {
                         borderBottomWidth: 0, // 헤더바의 하단 border를 없앰
                         elevation: 0, // 안드로이드에서의 shadow 없앰
@@ -220,16 +220,5 @@ const StackNavigation = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    headerRight: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    icons: {
-        marginRight: 10,
-    },
-
-});
 
 export default StackNavigation;
