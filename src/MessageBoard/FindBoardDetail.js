@@ -15,7 +15,7 @@ import { MD3LightTheme as DefaultTheme, } from 'react-native-paper';
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, deleteDoc, updateDoc, collection, arrayUnion, arrayRemove, query, where, getDoc, addDoc, setDoc, getDocs } from "firebase/firestore";
 import { useSelector } from 'react-redux';
-import EditProfileButton from './EditProfileButton';
+import EditPostButton from './EditPostButton';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -37,6 +37,18 @@ const ITEM_BORDER_RADIUS = ITEM_SIZE * 0.08;
 
 
 const FindBoardDetail = ({ navigation: { navigate }, route }) => {
+  const {
+    id,
+    imgURL,
+    itemName,
+    location,
+    date,
+    money,
+    tradeType,
+    tradeLocation,
+    articleExplain,
+  } = route.params;
+
   const theme = {
     ...DefaultTheme,
     myOwnProperty: true,
@@ -90,7 +102,21 @@ const FindBoardDetail = ({ navigation: { navigate }, route }) => {
           <FontAwesome name="exclamation-triangle" size={24} color="black" style={{ marginRight: 15 }} />
         </TouchableOpacity>
         :
-        <EditProfileButton type={type}/>
+        <EditPostButton 
+          type={type} 
+          id={id} 
+          imgURL={imgURL} 
+          itemName={itemName} 
+          location={location} 
+          date={date} 
+          money={money}
+          tradeType={tradeType}
+          tradeLocation={tradeLocation}
+          articleExplain={articleExplain}
+          displayName={route.params.displayName}
+          profileImage={route.params.profileImage}
+          sellUser={route.params.sellUser}
+        />
       )
     });
   }, [navigation]);
