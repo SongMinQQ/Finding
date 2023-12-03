@@ -6,6 +6,7 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { EvilIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
+import { keys } from '../../key/keyCollection';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const ITEM_SIZE = WINDOW_HEIGHT * 0.15;
@@ -33,7 +34,7 @@ const PoliceFind = ({ navigation }) => {
 
     const search = async () => {
         const reqUrl = "https://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccTpNmCstdyPlace";
-        const key = "AyubNIaSXmtsRH6lOKHbuLlh8x6KqA4zoQfyNVcQ1lRTV8IMnkd7MCaUDNGYgEwlAciphXq1EWORmpQkOISXSg%3D%3D";
+        const key = keys.apiKey;
         const param = {
             LST_PLACE: `${selectedCity} ${selectedCounty}`,
             LST_PRDT_NM: searchText,

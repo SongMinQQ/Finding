@@ -2,9 +2,10 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { keys } from "../key/keyCollection";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC2c4TvcuJi6e5kGFHYf-3CVhHqgN8EyWM",
+  apiKey: keys.firebaseKey,
   authDomain: "finding-e15ab.firebaseapp.com",
   projectId: "finding-e15ab",
   storageBucket: "finding-e15ab.appspot.com",
