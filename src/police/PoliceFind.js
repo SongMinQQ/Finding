@@ -72,29 +72,27 @@ const PoliceFind = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.search}>
-                <View style={styles.row}>
-                    <CitySelect changeFunction={cityChange} city={selectedCity} />
-                    <CountySelect changeFunction={countyChange} county={selectedCounty} city={selectedCity} />
-                </View>
-                <View style={styles.row}>
-                    <TextInput
-                        style={styles.searchInput}
-                        value={searchText}
-                        onChangeText={setSearchText}
-                        placeholder="찾을 물건명을 입력하세요"
-                        placeholderTextColor={'#585858'}
-                    />
-                    <TouchableOpacity onPress={search}>
-                        <EvilIcons name="search" size={WINDOW_HEIGHT * 0.05} color="black" />
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.row}>
+                <CitySelect changeFunction={cityChange} city={selectedCity} />
+                <CountySelect changeFunction={countyChange} county={selectedCounty} city={selectedCity} />
+            </View>
+            <View style={styles.row}>
+                <TextInput
+                    style={styles.searchInput}
+                    value={searchText}
+                    onChangeText={setSearchText}
+                    placeholder="찾을 물건명을 입력하세요"
+                    placeholderTextColor={'#585858'}
+                />
+                <TouchableOpacity onPress={search}>
+                    <EvilIcons name="search" size={WINDOW_HEIGHT * 0.05} color="black" />
+                </TouchableOpacity>
             </View>
             {loading &&
                 <View style={styles.overlay}>
                     <ActivityIndicator size="large" color="#0000ff" />
                 </View>}
-            <ScrollView>
+            <ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
                 {searchResult.length > 0 ? searchResult.map((data, index) => (
                     <TouchableOpacity key={index}
                         style={styles.resultView}
@@ -109,8 +107,8 @@ const PoliceFind = ({ navigation }) => {
                         </View>
                     </TouchableOpacity>))
                     :
-                    <View>
-                        <Text>검색 결과가 없습니다.</Text>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 20, color: '#888888', }}>검색 결과가 없습니다.</Text>
                     </View>}
             </ScrollView>
         </View>
