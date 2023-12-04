@@ -82,7 +82,7 @@ const Login = ({ navigation }) => {
         <Image style={styles.image} source={require('../../img/loginIcon.png')} />
         {/* 임시 로고(이미지로 만들 경우 교체해야 함) */}
         <Text style={styles.logoText}>Finding</Text>
-        <Text style={[styles.logoText, { fontSize: WINDOW_HEIGHT * 0.017, marginBottom: WINDOW_HEIGHT * 0.05 }]}>나의 분실물을 찾아라!</Text>
+        <Text style={[styles.logoText, { fontSize: WINDOW_HEIGHT * 0.017, marginBottom: WINDOW_HEIGHT * 0.08 }]}>나의 분실물을 찾아라!</Text>
 
         <TextInput style={styles.inputView}
           mode="outlined"

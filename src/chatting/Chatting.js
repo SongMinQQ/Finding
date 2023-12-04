@@ -1,9 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { InputToolbar, Send, GiftedChat } from 'react-native-gifted-chat';
 import { collection, doc, addDoc, onSnapshot, orderBy, serverTimestamp, query } from 'firebase/firestore';
 import { fireStoreDB } from '../../FireBase/DB';
 import { useSelector } from 'react-redux';
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Chatting = ({ route }) => {
   //메세지들이 저장되는 state
@@ -59,16 +61,69 @@ const Chatting = ({ route }) => {
 
     return () => unsubscribe();
   }, [chatRoomId]);
+
+  const renderInputToolbar = (props) => {
+    // 원하는 스타일을 여기에 정의하세요
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={{
+          borderTopWidth: 0,
+          borderRadius: 10,
+          marginTop: 20,
+          marginHorizontal: 10,
+          backgroundColor: '#f0f0f0',
+          // 여기에 더 많은 스타일을 추가할 수 있습니다.
+        }}
+        textInputStyle={{
+          paddingTop: 6,
+          paddingBottom: 6,
+          textAlignVertical: 'center',
+        }}
+      />
+    );
+  };
+
+  const renderSend = (props) => {
+    return (
+      <Send
+        {...props}
+        containerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignSelf: 'center',
+          marginRight: 10,
+        }}>
+        <View style={styles.sendButton}>
+          <Ionicons name="send" size={25} color="#007bff" />
+        </View>
+      </Send>
+    );
+  };
+
   //messages는 메세지를 렌더링. onSend는 사용자가 메세지를 보내는 동작을 할때 수행. _id는 현재 로그인된 유저 uid를 redux에서 받아옴. 공식문서 참조
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <GiftedChat
         messages={messages}
         onSend={messages => onSend(messages)}
         user={{ _id: uid }}
+        renderInputToolbar={renderInputToolbar}
+        renderSend={renderSend}
       />
-    </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  sendButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendText: {
+    color: '#007bff',
+    fontWeight: 'bold'
+  },
+});
 
 export default Chatting;
