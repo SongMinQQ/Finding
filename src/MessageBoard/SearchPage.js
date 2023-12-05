@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { FlatList, View, Text, TextInput, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { FlatList, View, Text, TextInput, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { Image } from "react-native-expo-image-cache";
+import { Image } from '@rneui/themed';
 
 import { fireStoreDB } from '../../FireBase/DB';
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
@@ -34,7 +34,7 @@ const BoardSelectButton = styled.TouchableOpacity`
 const SearchPage = ({ navigation: { navigate }, route }) => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
-  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+  
   const [posts, setPosts] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState('findBoard');
   const searchText = useSelector((state) => state.searchText);
@@ -124,10 +124,15 @@ const SearchPage = ({ navigation: { navigate }, route }) => {
         profileImage: item.profileImage,
         sellUser: item.uid,
       })}>
-      <Image
+      {/* <Image
         {...{ preview, uri: item.imageUrl ? item.imageUrl : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
         style={styles.itemImage}
         onError={(e) => console.log(e)}
+      /> */}
+      <Image
+        source={{ uri: item.imageUrl ? item.imageUrl : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
+        containerStyle={styles.itemImage}
+        PlaceholderContent={<ActivityIndicator style={styles.itemImage}/>}
       />
       <View style={styles.textContainer}>
         <Text style={styles.itemName} numberOfLines={1}>{item.title}</Text>

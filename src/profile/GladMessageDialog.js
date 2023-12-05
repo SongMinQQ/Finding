@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, Modal, Button } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, Modal, Button, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { Image } from "react-native-expo-image-cache";
+import { Image } from '@rneui/themed';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -14,7 +14,7 @@ const TEXT_SIZE_LARGE = DIALOG_HEIGHT * 0.042;
 const TEXT_SIZE_MEDIUM = DIALOG_HEIGHT * 0.032;
 
 const GladMessageDialog = ({ visible, onClose, message, userName, lostArticle, profileImage }) => {
-    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+    
 
     return (
         <Modal
@@ -28,10 +28,6 @@ const GladMessageDialog = ({ visible, onClose, message, userName, lostArticle, p
                     <View style={styles.dialogHeader}>
                         <View style={styles.dialogProfileContainer}>
                             {/* <Image
-                                    source={ profileImage }
-                                    style={styles.dialogProfileImage}
-                                /> */}
-                            <Image
                                 {...preview}
                                 uri={profileImage ? profileImage.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}
                                 style={styles.dialogProfileImage}
@@ -39,6 +35,11 @@ const GladMessageDialog = ({ visible, onClose, message, userName, lostArticle, p
                                     console.log(e.nativeEvent.error);
                                     console.log(imgURL);
                                 }}
+                            /> */}
+                            <Image
+                                source={{ uri: profileImage ? profileImage.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+                                containerStyle={styles.dialogProfileImage}
+                                PlaceholderContent={<ActivityIndicator style={styles.dialogProfileImage}/>}
                             />
                             <Text style={styles.dialogUsername}>{userName}</Text>
                         </View>

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, Alert, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Alert, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import DetailMain from './DetailMain';
-import { Image } from "react-native-expo-image-cache";
+import { Image } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -57,7 +57,7 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
   const { loading } = useContext(LoadingContext);
   const [findCount, setFindCount] = useState('');
 
-  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+  
 
   const { spinner } = useContext(LoadingContext);
 
@@ -221,12 +221,14 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
           [uid]: {
             uid: uid,
             displayName: displayName, // Display name of the current user
-            profileImage: profileImg, // Profile image of the current user
+            profileImage: profileImg != null ? profileImg : 'https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6'
+            
           },
           [writerId]: {
             uid: writerId,
             displayName: route.params.displayName, // Display name of the writer
-            profileImage: route.params.profileImage, // Profile image of the writer
+            profileImage: route.params.profileImage != null ? route.params.profileImage : 'https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6'
+            
           }
         },
         createdAt: new Date(), // Timestamp when the chat room is created
@@ -283,10 +285,11 @@ const LostBoardDetail = ({ navigation: { navigate }, route }) => {
             profileImage: route.params.profileImage,
             displayName: route.params.displayName,
           })}>
+
           <Image
-            {...{ preview, uri: route.params.profileImage ? route.params.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
-            style={styles.profileImage}
-            onError={(e) => console.log(e)}
+            source={{ uri: route.params.profileImage ? route.params.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+            containerStyle={styles.profileImage}
+            PlaceholderContent={<ActivityIndicator style={styles.profileImage}/>}
           />
           <View style={styles.userInfo}>
             <Text style={styles.textMedium}>{route.params.displayName}</Text>

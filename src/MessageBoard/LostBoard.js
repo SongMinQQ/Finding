@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { FlatList, View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { FlatList, View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import WriteButton from './WriteButton';
 import { fireStoreDB } from '../../FireBase/DB';
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
-import { Image } from "react-native-expo-image-cache";
+import { Image } from '@rneui/themed';
 
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -17,7 +17,7 @@ const FONT_SIZE_TEXT = WINDOW_HEIGHT * 0.019;
 const LostBoard = () => {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
-    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+    
 
 
 
@@ -79,11 +79,13 @@ const LostBoard = () => {
                 sellUser: item.uid,
                 type: "lost",
             })}>
+
             <Image
-                {...{ preview, uri: item.imageUrl ? item.imageUrl : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
-                style={styles.itemImage}
-                onError={(e) => console.log(e)}
+                source={{ uri: item.imageUrl ? item.imageUrl : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
+                containerStyle={styles.itemImage}
+                PlaceholderContent={<ActivityIndicator style={styles.itemImage}/>}
             />
+
             <View style={styles.textContainer}>
                 <Text style={styles.itemName} numberOfLines={1}>{item.title}</Text>
                 <Text style={styles.itemText} numberOfLines={1}>{item.findLocation}</Text>
