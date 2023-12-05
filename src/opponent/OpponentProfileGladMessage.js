@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, Button, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Modal, Button, RefreshControl, ActivityIndicator } from 'react-native';
 import GladMessageDialog from '../profile/GladMessageDialog';
 
 import { useNavigation } from '@react-navigation/native';
@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fireStoreDB } from '../../FireBase/DB';
 import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from 'react-redux';
-import { Image } from "react-native-expo-image-cache";
+import { Image } from '@rneui/themed';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -26,7 +26,7 @@ const OpponentProfileGladMessage = ({ opponentUserID }) => {
 
     const [posts, setPosts] = useState([]);
 
-    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+    
 
 
     const handleCardPress = (index) => {
@@ -74,10 +74,15 @@ const OpponentProfileGladMessage = ({ opponentUserID }) => {
                 {posts.map((message, index) => (
                     <TouchableOpacity key={index} onPress={() => handleCardPress(message)}>
                         <View style={styles.card}>
-                            <Image
+                            {/* <Image
                                 {...{ preview, uri: message.profileImage ? message.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
                                 style={styles.profileImage}
                                 onError={(e) => console.log(e)}
+                            /> */}
+                            <Image
+                                source={{ uri: message.profileImage ? message.profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+                                containerStyle={styles.profileImage}
+                                PlaceholderContent={<ActivityIndicator style={styles.profileImage}/>}
                             />
                             <View style={styles.messageContainer}>
                                 <Text style={styles.itemName}>{message.displayName}</Text>

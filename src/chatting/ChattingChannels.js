@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, RefreshControl, ActivityIndicator } from "react-native";
 import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
 import { fireStoreDB } from "../../FireBase/DB";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { Image } from "react-native-expo-image-cache";
+import { Image } from '@rneui/themed';
 
 import { useContext } from 'react';
 import { LoadingContext } from '../Loading/LoadingContext';
@@ -21,7 +21,7 @@ const ChattingChannels = () => {
   const { loading } = useContext(LoadingContext);
   const { spinner } = useContext(LoadingContext);
 
-  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+  
 
   const dispatch = useDispatch();
   const opponentDisplayName = useSelector((state) => state.opponentDisplayName);
@@ -77,9 +77,9 @@ const ChattingChannels = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.chatRoomContainer} onPress={() => { getOpponentDisplayName(item); goToChat(item); }}>
       <Image
-        {...{ preview, uri: item.otherUserProfileImage ? item.otherUserProfileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
-        style={styles.profileImage}
-        onError={(e) => console.log(e)}
+        source={{ uri: item.otherUserProfileImage ? item.otherUserProfileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6" }}
+        containerStyle={styles.profileImage}
+        PlaceholderContent={<ActivityIndicator style={styles.profileImage}/>}
       />
       <Text style={styles.displayName}>{item.otherUserDisplayName}</Text>
     </TouchableOpacity>

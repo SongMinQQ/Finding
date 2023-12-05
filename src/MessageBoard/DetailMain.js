@@ -4,9 +4,10 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
-import { Image } from "react-native-expo-image-cache";
+import { Image } from '@rneui/themed';
 import { useSelector } from "react-redux";
 
 
@@ -24,12 +25,11 @@ const BUTTON_BORDER_RADIUS = WINDOW_HEIGHT * 0.006;
 // DetailMain 컴포넌트
 const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost, writerId }) => {
   const uid = useSelector((state) => state.UID);
-  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+  
 
   return (
     <View style={styles.itemLayout}>
-      {/* <Image source={imgURL} style={styles.itemImage} /> */}
-      <Image
+      {/* <Image
         {...preview}
         uri={imgURL ? imgURL.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a"}
         style={styles.itemImage}
@@ -37,6 +37,11 @@ const DetailMain = ({ imgURL, itemName, location, date, onPress, findOrLost, wri
           console.log(e.nativeEvent.error);
           console.log(imgURL);
         }}
+      /> */}
+      <Image
+        source={{ uri: imgURL ? imgURL.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
+        containerStyle={styles.itemImage}
+        PlaceholderContent={<ActivityIndicator style={styles.itemImage}/>}
       />
       <View style={styles.itemContent}>
         <Text style={styles.itemName}>{itemName}</Text>

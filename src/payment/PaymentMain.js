@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Image } from "react-native-expo-image-cache";
+import { View, Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import { Image } from '@rneui/themed';
 // 창의 높이를 계산합니다.
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
@@ -14,12 +14,12 @@ const FONT_SIZE_SMALL = WINDOW_HEIGHT * 0.017;
 
 // PaymentMain 컴포넌트
 const PaymentMain = ({ imgURL, itemName, location, date }) => {
-  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+  
 
   return (
     <View style={{ alignSelf: 'flex-start' }}>
       <View style={styles.itemLayout}>
-        <Image
+        {/* <Image
           {...preview}
           uri={imgURL ? imgURL.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a"}
           style={styles.itemImage}
@@ -27,7 +27,13 @@ const PaymentMain = ({ imgURL, itemName, location, date }) => {
             console.log(e.nativeEvent.error);
             console.log(imgURL);
           }}
+        /> */}
+        <Image
+          source={{ uri: imgURL ? imgURL.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultPost.png?alt=media&token=8e3077f3-62e5-4786-8cc2-729d01d41e8a" }}
+          containerStyle={styles.itemImage}
+          PlaceholderContent={<ActivityIndicator style={styles.itemImage}/>}
         />
+
         <View style={styles.itemContent}>
           <Text style={styles.itemName}>{itemName}</Text>
           <Text style={styles.itemDetail}>{`획득지역: ${location}`}</Text>
