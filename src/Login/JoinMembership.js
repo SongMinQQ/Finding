@@ -16,7 +16,7 @@ import theme from '../PaperTheme';
 import { auth } from '../../FireBase/DB';
 import { app } from '../../FireBase/DB';
 
-import { signInWithCredential, deleteUser, PhoneAuthProvider, RecaptchaVerifier  } from 'firebase/auth';
+import { signInWithCredential, deleteUser, PhoneAuthProvider } from 'firebase/auth';
 // import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
 import { useContext } from 'react';
@@ -52,7 +52,7 @@ export default function JoinMembership({ navigation }) {
       const phoneProvider = new PhoneAuthProvider(auth);
       const verificationId = await phoneProvider.verifyPhoneNumber(
         "+82" + phoneNumber,
-        new RecaptchaVerifier(auth, 'recaptcha-container', {}),
+        recaptchaVerifier.current
       );
       setVerificationId(verificationId);
       Alert.alert('인증번호 전송 성공');

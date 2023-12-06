@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Finding",
+    "name": "finding",
     "slug": "Finding",
-    "scheme": "Finding",
+    "scheme": "finding",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./img/findingAndroidLogo.png",
@@ -15,14 +15,17 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "jsEngine": "hermes",
     "ios": {
+      "jsEngine": "jsc",
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./img/findingLogo.png",
         "backgroundColor": "#0f2890"
-      }
+      },
+      "package": "com.smksmk.Finding"
     },
     "web": {
       "favicon": "./img/findingLogo.png"
@@ -43,6 +46,17 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "696e84a5-23bb-4264-9a11-605b2b43e45b"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/696e84a5-23bb-4264-9a11-605b2b43e45b"
+    }
   }
 }
