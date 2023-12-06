@@ -2,14 +2,14 @@ import axios from 'axios';
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { keys } from '../../key/keyCollection';
+// import { keys } from '../../key/keyCollection';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 
 const ItemInfo = ({ route }) => {
     const [detailInfo, setDetailInfo] = useState([]);
     const url = "https://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsDetailInfo"
-    const key = keys.apiKey;
+    const key = 'AyubNIaSXmtsRH6lOKHbuLlh8x6KqA4zoQfyNVcQ1lRTV8IMnkd7MCaUDNGYgEwlAciphXq1EWORmpQkOISXSg%3D%3D';
     const param = {
         ATC_ID: route.params.atcId,
     };
