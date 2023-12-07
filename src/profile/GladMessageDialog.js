@@ -33,7 +33,7 @@ const GladMessageDialog = ({ visible, onClose, message, userName, lostArticle, p
                                 /> */}
                             <Image
                                 {...preview}
-                                uri={profileImage ? profileImage.uri : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}
+                                uri={profileImage ? profileImage : "https://firebasestorage.googleapis.com/v0/b/finding-e15ab.appspot.com/o/images%2FdefaultProfile.png?alt=media&token=233e2813-bd18-4335-86a6-c11f92c96fc6"}
                                 style={styles.dialogProfileImage}
                                 onError={(e) => {
                                     console.log(e.nativeEvent.error);
