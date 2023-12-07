@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-// import { keys } from "../key/keyCollection";
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { keys } from "../key/keyCollection";
 
 const firebaseConfig = {
   // apiKey: keys.firebaseKey,
@@ -15,11 +16,14 @@ const firebaseConfig = {
   measurementId: "G-DX7MTGPNDG"
 };
 
-// 파이어베이스 연결
+// 파이어베이스 앱 초기화
 export const app = initializeApp(firebaseConfig);
-// 유저 데이터 연결
-export const auth = getAuth(app);
-// 게시글 데이터 연결
+
+// AsyncStorage를 사용한 Firebase 인증 초기화
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+});
+
+// Firestore 및 Storage 인스턴스 초기화
 export const fireStoreDB = getFirestore(app);
-// 이미지 데이터 연결
 export const storage = getStorage(app);
