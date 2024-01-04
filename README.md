@@ -76,7 +76,7 @@
   </tr>
 </table>
 
-<table style="table-layout: fixed; width: 100%;">
+<table table-layout= "fixed" width = "100%">
   <tr>
     <th width= "14%">게시판</th>
     <th width= "14%">상세보기</th>
