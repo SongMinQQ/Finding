@@ -22,7 +22,7 @@
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름5"></td>
   </tr>
   <tr>
-    <td>@SongMinQQ</td>
+    <td><a href="https://github.com/SongMinQQ">@SongMinQQ</a></td>
     <td>@githubid2</td>
     <td>@Cityll</td>
     <td>@githubid4</td>
