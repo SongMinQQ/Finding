@@ -4,6 +4,12 @@
   <img src="https://github.com/SongMinQQ/Finding/assets/107177636/5fb73a1b-83e9-472f-b4e8-00a4dc5501ac" width="300" height="300"/>
 </div>
 
+## Teams
+
+| Command    | Description                                    |
+| ---------- | ---------------------------------------------- |
+| git status | List all new or modified files                 |
+| git diff   | Show file differences that haven't been staged |
 
 # 프로젝트 시작 전 읽어주세요
 
