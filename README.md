@@ -77,14 +77,6 @@
 </table>
 
 <table>
-  <img src="https://github.com/SongMinQQ/Finding/assets/50363541/6032a086-c7df-46e3-8b25-73007de21178"
-<img src="https://github.com/SongMinQQ/Finding/assets/50363541/4cbceb46-5ce9-4d62-8a59-03ab6a73e2d7"
-<img src="https://github.com/SongMinQQ/Finding/assets/50363541/ffdf6479-b4e9-438c-bf34-d77dcc3b1a22"
-<img src="https://github.com/SongMinQQ/Finding/assets/50363541/73df794f-9154-4153-96af-2d23d95d2ae7"
-<img src="https://github.com/SongMinQQ/Finding/assets/50363541/ee0f3510-0d42-4699-ba74-79b4bc7a68e6"
-<img src="https://github.com/SongMinQQ/Finding/assets/50363541/e47512ae-f4fe-49c3-87fc-e0a62a5c0e40"
-<img src="https://github.com/SongMinQQ/Finding/assets/50363541/39e48a32-66c2-46cc-8201-215b97d821d2"
-
   <tr>
     <th>게시판</th>
     <th>상세보기</th>
