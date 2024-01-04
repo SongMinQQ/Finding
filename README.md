@@ -31,11 +31,11 @@
     <th>이름5</th>
   </tr>
   <tr>
-    <td><img src="https://avatars.githubusercontent.com/u/107177636?s=400&v=4" width="150" height="150" alt="송민규"></td>
-    <td><img src="https://avatars.githubusercontent.com/u/50363541?v=4" width="150" height="150" alt="강민석"></td>
-    <td><img src="https://avatars.githubusercontent.com/u/133865673?s=400&v=4" width="150" height="150" alt="이지예"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름4"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름5"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/107177636?s=400&v=4" width="121" height="245" alt="송민규"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/50363541?v=4" width="121" height="245" alt="강민석"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/133865673?s=400&v=4" width="121" height="245" alt="이지예"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="121" height="245" alt="이름4"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="121" height="245" alt="이름5"></td>
   </tr>
   <tr>
     <td><a href="https://github.com/SongMinQQ">@SongMinQQ</a></td>
