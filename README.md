@@ -31,11 +31,11 @@
     <th>이름5</th>
   </tr>
   <tr>
-    <td><img src="https://avatars.githubusercontent.com/u/107177636?s=400&v=4" width="121" height="245" alt="송민규"></td>
-    <td><img src="https://avatars.githubusercontent.com/u/50363541?v=4" width="121" height="245" alt="강민석"></td>
-    <td><img src="https://avatars.githubusercontent.com/u/133865673?s=400&v=4" width="121" height="245" alt="이지예"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="121" height="245" alt="이름4"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="121" height="245" alt="이름5"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/107177636?s=400&v=4" width="150" height="150" alt="송민규"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/50363541?v=4" width="150" height="150" alt="강민석"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/133865673?s=400&v=4" width="150" height="150" alt="이지예"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름4"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름5"></td>
   </tr>
   <tr>
     <td><a href="https://github.com/SongMinQQ">@SongMinQQ</a></td>
@@ -63,10 +63,10 @@
     <th>Room</th>
   </tr>
   <tr>
-    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/a3a9d7eb-85cc-4370-8799-40578c8291c6" alt="Home" width="150" height="150"></td>
-    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/7d4c1c44-efc2-4ea7-896f-986f486ba0df" alt="Forest" width="150" height="150"></td>
-    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/0b35b70d-734a-4da5-8ab9-d2785be4bcdd" alt="Store" width="150" height="150"></td>
-    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/618ada0f-2f68-46c7-9cda-52dfe44142b0" alt="Room" width="150" height="150"></td>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/a3a9d7eb-85cc-4370-8799-40578c8291c6" alt="Home" width="121" height="245"></td>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/7d4c1c44-efc2-4ea7-896f-986f486ba0df" alt="Forest" width="121" height="245"></td>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/0b35b70d-734a-4da5-8ab9-d2785be4bcdd" alt="Store" width="121" height="245"></td>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/618ada0f-2f68-46c7-9cda-52dfe44142b0" alt="Room" width="121" height="245"></td>
   </tr>
   <tr>
     <td>오우스스 농사 가능</td>
