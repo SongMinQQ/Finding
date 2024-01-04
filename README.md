@@ -6,7 +6,7 @@
 
 ## Teams
 
-| 송민규 | 강민석 | 이름3 | 이름4 | 이름5 |
+| 송민규 | 강민석 | 이지예 | 이름4 | 이름5 |
 |-------|-------|-------|-------|-------|
 | ![https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f](https://avatars.githubusercontent.com/u/107177636?s=400&v=4) |![](https://avatars.githubusercontent.com/u/50363541?v=4) | ![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) |![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) | ![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) |
 | @SongMinQQ | @githubid2 | @githubid3 | @githubid4 | @githubid5 |
