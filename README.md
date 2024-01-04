@@ -78,13 +78,13 @@
 
 <table style="table-layout: fixed; width: 100%;">
   <tr>
-    <th style="width: 14%;">게시판</th>
-    <th style="width: 14%;">상세보기</th>
-    <th style="width: 14%;">법률 동의</th>
-    <th style="width: 14%;">결제 정보</th>
-    <th style="width: 14%;">결제 진행</th>
-    <th style="width: 14%;">결제 완료</th>
-    <th style="width: 14%;">감사 메세지 작성</th>
+    <th width= "14%">게시판</th>
+    <th width= "14%">상세보기</th>
+    <th width= "14%">법률 동의</th>
+    <th width= "14%">결제 정보</th>
+    <th width= "14%">결제 진행</th>
+    <th width= "14%">결제 완료</th>
+    <th width= "14%">감사 메세지 작성</th>
   </tr>
   <tr>
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/6032a086-c7df-46e3-8b25-73007de21178" alt="게시판" width="121" height="245"></td>
