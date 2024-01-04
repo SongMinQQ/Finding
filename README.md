@@ -10,7 +10,28 @@
 - 프로젝트 기간 : 2023.09.27 ~ 2023.12.06
 
 ## Tech
-Frontend :
+#### Frontend
+<div style={display:flex; gap:50px;}>
+  <img src="https://img.shields.io/badge/react_native-61DAFB.svg?style=flat&logo=react&logoColor=white">
+  <img src="https://img.shields.io/badge/expo-1C1E24?style=flat&logo=expo&logoColor=#D04A37">
+  <img src="https://img.shields.io/badge/Redux-764ABC?style=flat&logo=Redux&logoColor=purple">
+</div>
+
+#### Backend
+<div style={display:flex; gap:50px;}>
+  <img src="https://img.shields.io/badge/express.js-%23404d59.svg?style=flat&logo=express&logoColor=%2361DAFB">
+  <img src="https://img.shields.io/badge/stripe-008CDD?style=flat&logo=stripe&logoColor=white">
+</div>
+
+#### DB
+<div style={display:flex; gap:50px;}>
+  <img src="https://img.shields.io/badge/firebase-FFCA28?style=flat&logo=firebase&logoColor=white">
+</div>
+
+#### Tool
+<div style={display:flex; gap:50px;}>
+  <img src="https://img.shields.io/badge/github-181717?style=flat&logo=github&logoColor=white">
+</div>
 
 ## Teams
 
