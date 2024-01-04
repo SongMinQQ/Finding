@@ -24,7 +24,7 @@
   <tr>
     <td><a href="https://github.com/SongMinQQ">@SongMinQQ</a></td>
     <td>@githubid2</td>
-    <td><<a href="https://github.com/Cityll">@Cityll</a></td>
+    <td><a href="https://github.com/Cityll">@Cityll</a></td>
     <td>@githubid4</td>
     <td>@githubid5</td>
   </tr>
