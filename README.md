@@ -8,8 +8,9 @@
 
 | Team Leader    | Members                                |
 | ---------- | ---------------------------------------------- |
-| SongMinQQ | kang-min-seok                 ||
-| git diff   | Show file differences that haven't been staged |
+| SongMinQQ | kang-min-seok                 |cityll|
+| git diff   |  ||
+|||
 # 프로젝트 시작 전 읽어주세요
 
 clone 명령어 ```gh repo clone SongMinQQ/Finding```
