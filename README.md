@@ -6,7 +6,7 @@
 
 ## Teams
 
-| Team Leader    | Members                                |
+| Team Leader    | Member1|Menber2|
 | ---------- | ---------------------------------------------- |
 | SongMinQQ | kang-min-seok |cityll|
 |깃허브프로필|깃허브프로필|깃허브프로필|
