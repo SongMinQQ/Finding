@@ -69,13 +69,49 @@
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/4d934515-9918-41ff-9221-593f790c0d84" alt="회원가입 완료" width="121" height="245"></td>
   </tr>
   <tr>
-    <td>오우스스 농사 가능</td>
-    <td>수풀, 두더지 잡기</td>
-    <td>물품 판매 및 구매</td>
-    <td>게임 저장 가능</td>
+    <td>로그인, 회원가입, 비번찾기</td>
+    <td>이메일, 비번, 전화번호</td>
+    <td>프로필 이미지, 닉네임</td>
+    <td>가입 완료</td>
   </tr>
-  <!-- 추가 이미지와 텍스트 행은 예시 이미지에 기반하여 추가될 수 있습니다. 
-  아래 행은 당신이 추가적으로 제공해야 할 정보를 바탕으로 완성해야 합니다. -->
+</table>
+
+<table>
+  <img src="https://github.com/SongMinQQ/Finding/assets/50363541/6032a086-c7df-46e3-8b25-73007de21178"
+<img src="https://github.com/SongMinQQ/Finding/assets/50363541/4cbceb46-5ce9-4d62-8a59-03ab6a73e2d7"
+<img src="https://github.com/SongMinQQ/Finding/assets/50363541/ffdf6479-b4e9-438c-bf34-d77dcc3b1a22"
+<img src="https://github.com/SongMinQQ/Finding/assets/50363541/73df794f-9154-4153-96af-2d23d95d2ae7"
+<img src="https://github.com/SongMinQQ/Finding/assets/50363541/ee0f3510-0d42-4699-ba74-79b4bc7a68e6"
+<img src="https://github.com/SongMinQQ/Finding/assets/50363541/e47512ae-f4fe-49c3-87fc-e0a62a5c0e40"
+<img src="https://github.com/SongMinQQ/Finding/assets/50363541/39e48a32-66c2-46cc-8201-215b97d821d2"
+
+  <tr>
+    <th>게시판</th>
+    <th>상세보기</th>
+    <th>법률 동의</th>
+    <th>결제 정보</th>
+    <th>결제 진행</th>
+    <th>결제 완료</th>
+    <th>감사 메세지 작성</th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/6032a086-c7df-46e3-8b25-73007de21178" alt="게시판" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/4cbceb46-5ce9-4d62-8a59-03ab6a73e2d7" alt="상세보기" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/ffdf6479-b4e9-438c-bf34-d77dcc3b1a22" alt="법률 동의" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/73df794f-9154-4153-96af-2d23d95d2ae7" alt="결제 정보" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/ee0f3510-0d42-4699-ba74-79b4bc7a68e6" alt="결제 진행" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/e47512ae-f4fe-49c3-87fc-e0a62a5c0e40" alt="결제 완료" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/39e48a32-66c2-46cc-8201-215b97d821d2" alt="감사 메세지 작성" width="121" height="245"></td>
+  </tr>
+  <tr>
+    <td>습득, 분실 게시판</td>
+    <td>물품 정보 상세보기</td>
+    <td>구매 전 법률 동의</td>
+    <td>결제 정보 입력</td>
+    <td>stripe 결제 진행</td>
+    <td>결제 성공 페이지</td>
+    <td>찾아준 유저에게 감사메세지 작성</td>
+  </tr>
 </table>
 
 
