@@ -62,10 +62,6 @@
     <th>회원가입2</th>
     <th>회원가입 완료</th>
   </tr>
-  <img src="https://github.com/SongMinQQ/Finding/assets/50363541/2bf0ec49-8b1a-48f2-b83d-f2374c09cccd"
- <img src="https://github.com/SongMinQQ/Finding/assets/50363541/a6ae399e-4eb0-469d-bb6a-16b980919c96"
-<img src="https://github.com/SongMinQQ/Finding/assets/50363541/4d934515-9918-41ff-9221-593f790c0d84"
-
   <tr>
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/9eac208e-7c48-4b27-a46e-e1d650aa6714" alt="로그인" width="121" height="245"></td>
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/2bf0ec49-8b1a-48f2-b83d-f2374c09cccd" alt="회원가입1" width="121" height="245"></td>
