@@ -57,17 +57,20 @@
 ### 이미지 바꿔야해용
 <table>
   <tr>
-    <th>Home</th>
-    <th>Forest</th>
-    <th>Store</th>
-    <th>Room</th>
+    <th>로그인</th>
+    <th>회원가입1</th>
+    <th>회원가입2</th>
+    <th>회원가입 완료</th>
   </tr>
-  
+  <img src="https://github.com/SongMinQQ/Finding/assets/50363541/2bf0ec49-8b1a-48f2-b83d-f2374c09cccd"
+ <img src="https://github.com/SongMinQQ/Finding/assets/50363541/a6ae399e-4eb0-469d-bb6a-16b980919c96"
+<img src="https://github.com/SongMinQQ/Finding/assets/50363541/4d934515-9918-41ff-9221-593f790c0d84"
+
   <tr>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/9eac208e-7c48-4b27-a46e-e1d650aa6714" alt="Home" width="121" height="245"></td>
-    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/7d4c1c44-efc2-4ea7-896f-986f486ba0df" alt="Forest" width="121" height="245"></td>
-    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/0b35b70d-734a-4da5-8ab9-d2785be4bcdd" alt="Store" width="121" height="245"></td>
-    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/618ada0f-2f68-46c7-9cda-52dfe44142b0" alt="Room" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/9eac208e-7c48-4b27-a46e-e1d650aa6714" alt="로그인" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/2bf0ec49-8b1a-48f2-b83d-f2374c09cccd" alt="회원가입1" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a6ae399e-4eb0-469d-bb6a-16b980919c96" alt="회원가입2" width="121" height="245"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/4d934515-9918-41ff-9221-593f790c0d84" alt="회원가입 완료" width="121" height="245"></td>
   </tr>
   <tr>
     <td>오우스스 농사 가능</td>
