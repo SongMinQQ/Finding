@@ -6,12 +6,36 @@
 
 ## Teams
 
-| 송민규 | 강민석 | 이지예 | 이름4 | 이름5 |
-|-------|-------|-------|-------|-------|
-| ![https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f](https://avatars.githubusercontent.com/u/107177636?s=400&v=4) |![](https://avatars.githubusercontent.com/u/50363541?v=4) |![https://avatars.githubusercontent.com/u/133865673?s=400&v=4](https://avatars.githubusercontent.com/u/133865673?v=4)|![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) | ![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) |
-| @SongMinQQ | @githubid2 | @Cityll | @githubid4 | @githubid5 |
-| 학교 소속1 | 학교 소속2 | 학교 소속3 | 학교 소속4 | 학교 소속5 |
-
+<table>
+  <tr>
+    <th>송민규</th>
+    <th>강민석</th>
+    <th>이지예</th>
+    <th>이름4</th>
+    <th>이름5</th>
+  </tr>
+  <tr>
+    <td><img src="https://avatars.githubusercontent.com/u/107177636?s=400&v=4" width="150" height="150" alt="송민규"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/50363541?v=4" width="150" height="150" alt="강민석"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/133865673?s=400&v=4" width="150" height="150" alt="이지예"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름4"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름5"></td>
+  </tr>
+  <tr>
+    <td>@SongMinQQ</td>
+    <td>@githubid2</td>
+    <td>@Cityll</td>
+    <td>@githubid4</td>
+    <td>@githubid5</td>
+  </tr>
+  <tr>
+    <td>학교 소속1</td>
+    <td>학교 소속2</td>
+    <td>학교 소속3</td>
+    <td>학교 소속4</td>
+    <td>학교 소속5</td>
+  </tr>
+</table>
 
 
 # 프로젝트 시작 전 읽어주세요
