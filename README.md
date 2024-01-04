@@ -6,11 +6,12 @@
 
 ## Teams
 
-| Team Leader    | Members|
-| ---------- | ---------------------------------------------- |------|
-| SongMinQQ | kang-min-seok |cityll|
-|깃허브프로필|깃허브프로필|깃허브프로필|
-|역할|역할|역할|
+| 이름1 | 이름2 | 이름3 | 이름4 | 이름5 |
+|-------|-------|-------|-------|-------|
+| ![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) | ![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) | ![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) |![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) | ![KakaoTalk_20230922_145726067](https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f) |
+| @githubid1 | @githubid2 | @githubid3 | @githubid4 | @githubid5 |
+| 학교 소속1 | 학교 소속2 | 학교 소속3 | 학교 소속4 | 학교 소속5 |
+
 # 프로젝트 시작 전 읽어주세요
 
 clone 명령어 ```gh repo clone SongMinQQ/Finding```
