@@ -4,6 +4,11 @@
   <img src="https://github.com/SongMinQQ/Finding/assets/107177636/5fb73a1b-83e9-472f-b4e8-00a4dc5501ac" width="300" height="300"/>
 </div>
 
+## Summary
+
+- 프로젝트명 : 분실물 찾기 플랫폼 Finding
+- 프로젝트 기간 : 2023.09.27 ~ 2023.12.06
+
 ## Teams
 
 <table>
