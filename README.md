@@ -39,25 +39,28 @@
 
 ## 어플 구현 화면
 ### 이미지 바꿔야해용
-<p align="center">
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/a3a9d7eb-85cc-4370-8799-40578c8291c6" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/7d4c1c44-efc2-4ea7-896f-986f486ba0df" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/0b35b70d-734a-4da5-8ab9-d2785be4bcdd" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/618ada0f-2f68-46c7-9cda-52dfe44142b0" width="200"/>
-</p>
-<p align="center">
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/a3a9d7eb-85cc-4370-8799-40578c8291c6" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/7d4c1c44-efc2-4ea7-896f-986f486ba0df" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/0b35b70d-734a-4da5-8ab9-d2785be4bcdd" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/618ada0f-2f68-46c7-9cda-52dfe44142b0" width="200"/>
-</p>
-<p align="center">
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/a3a9d7eb-85cc-4370-8799-40578c8291c6" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/7d4c1c44-efc2-4ea7-896f-986f486ba0df" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/0b35b70d-734a-4da5-8ab9-d2785be4bcdd" width="200"/>
-  <img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/618ada0f-2f68-46c7-9cda-52dfe44142b0" width="200"/>
-</p>
-
+<table>
+  <tr>
+    <th>Home</th>
+    <th>Forest</th>
+    <th>Store</th>
+    <th>Room</th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/a3a9d7eb-85cc-4370-8799-40578c8291c6" alt="Home" width="150" height="150"></td>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/7d4c1c44-efc2-4ea7-896f-986f486ba0df" alt="Forest" width="150" height="150"></td>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/0b35b70d-734a-4da5-8ab9-d2785be4bcdd" alt="Store" width="150" height="150"></td>
+    <td><img src="https://github.com/kang-min-seok/Webtoon_daBom/assets/50363541/618ada0f-2f68-46c7-9cda-52dfe44142b0" alt="Room" width="150" height="150"></td>
+  </tr>
+  <tr>
+    <td>오우스스 농사 가능</td>
+    <td>수풀, 두더지 잡기, 낚시 미니게임 입장 가능</td>
+    <td>물품 판매 및 구매 가능</td>
+    <td>게임 저장 가능</td>
+  </tr>
+  <!-- 추가 이미지와 텍스트 행은 예시 이미지에 기반하여 추가될 수 있습니다. 
+  아래 행은 당신이 추가적으로 제공해야 할 정보를 바탕으로 완성해야 합니다. -->
+</table>
 
 
 
