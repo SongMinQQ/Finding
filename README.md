@@ -63,10 +63,10 @@
     <th width="25%">회원가입 완료</th>
   </tr>
   <tr>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/9eac208e-7c48-4b27-a46e-e1d650aa6714" alt="로그인" width="121" height="245" display= "block" margin-left= "auto" margin-right= "auto"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/2bf0ec49-8b1a-48f2-b83d-f2374c09cccd" alt="회원가입1" width="121" height="245" display= "block" margin-left= "auto" margin-right= "auto"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a6ae399e-4eb0-469d-bb6a-16b980919c96" alt="회원가입2" width="121" height="245" display= "block" margin-left= "auto" margin-right= "auto"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/4d934515-9918-41ff-9221-593f790c0d84" alt="회원가입 완료" width="121" height="245" display= "block" margin-left= "auto" margin-right= "auto"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/9eac208e-7c48-4b27-a46e-e1d650aa6714" alt="로그인" width="121" height="245" margin= "0 auto"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/2bf0ec49-8b1a-48f2-b83d-f2374c09cccd" alt="회원가입1" width="121" height="245" margin= "0 auto"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a6ae399e-4eb0-469d-bb6a-16b980919c96" alt="회원가입2" width="121" height="245" margin= "0 auto"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/4d934515-9918-41ff-9221-593f790c0d84" alt="회원가입 완료" width="121" height="245" margin= "0 auto"></td>
   </tr>
   <tr>
     <td>로그인, 회원가입, 비번찾기</td>
