@@ -8,9 +8,9 @@
 
 | Team Leader    | Members                                |
 | ---------- | ---------------------------------------------- |
-| SongMinQQ | kang-min-seok                 |cityll|
-| git diff   |  ||
-|||
+| SongMinQQ | kang-min-seok |cityll|
+|깃허브프로필|깃허브프로필|깃허브프로필|
+|역할|역할|역할|
 # 프로젝트 시작 전 읽어주세요
 
 clone 명령어 ```gh repo clone SongMinQQ/Finding```
