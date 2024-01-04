@@ -9,6 +9,9 @@
 - 프로젝트명 : 분실물 찾기 플랫폼 Finding
 - 프로젝트 기간 : 2023.09.27 ~ 2023.12.06
 
+## Tech
+Frontend :
+
 ## Teams
 
 <table>
