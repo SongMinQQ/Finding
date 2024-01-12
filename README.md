@@ -70,7 +70,7 @@
 </table>
 
 
-## 습득, 분실물 커뮤니티
+### 습득, 분실물 커뮤니티
 <table table-layout= "fixed" width = "100%">
   <tr>
     <th width= "25%">게시판</th>
@@ -92,7 +92,7 @@
   </tr>
 </table>
 
-## 결제
+### 결제
 <table table-layout= "fixed" width = "100%">
   <tr>
     <th width= "25%">법률 동의</th>
@@ -114,7 +114,7 @@
   </tr>
 </table>
 
-## Lost112
+### Lost112
 <table table-layout= "fixed" width = "100%">
   <tr>
     <th width= "35%">Lost112 습득물 목록</th>
@@ -130,7 +130,7 @@
   </tr>
 </table>
 
-## 실시간 채팅
+### 실시간 채팅
 <table table-layout= "fixed" width = "100%">
   <tr>
     <th width= "35%">채팅방</th>
@@ -146,7 +146,7 @@
   </tr>
 </table>
 
-## 프로필
+### 프로필
 <table table-layout= "fixed" width = "100%">
   <tr>
     <th width= "33%">프로필 페이지1</th>
