@@ -27,22 +27,22 @@
     <th>송민규</th>
     <th>강민석</th>
     <th>이지예</th>
-    <th>이름4</th>
-    <th>이름5</th>
+    <th>김동현</th>
+    <th>김선영</th>
   </tr>
   <tr>
-    <td><img src="https://avatars.githubusercontent.com/u/107177636?s=400&v=4" width="150" height="150" alt="송민규"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/107177636?v=4" width="150" height="150" alt="송민규"></td>
     <td><img src="https://avatars.githubusercontent.com/u/50363541?v=4" width="150" height="150" alt="강민석"></td>
-    <td><img src="https://avatars.githubusercontent.com/u/133865673?s=400&v=4" width="150" height="150" alt="이지예"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름4"></td>
-    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/a093e8be-540e-46a1-ab6e-80897c7a655f" width="150" height="150" alt="이름5"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/133865673?v=4" width="150" height="150" alt="이지예"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/148032523?v=4" width="150" height="150" alt="김동현"></td>
+    <td><img src="https://avatars.githubusercontent.com/u/101615063?v=4" width="150" height="150" alt="김선영"></td>
   </tr>
   <tr>
     <td><a href="https://github.com/SongMinQQ">@SongMinQQ</a></td>
     <td><a href="https://github.com/kang-min-seok">@kang-min-seok</a></td>
     <td><a href="https://github.com/Cityll">@Cityll</a></td>
-    <td>@githubid4</td>
-    <td>@githubid5</td>
+    <td><a href="https://github.com/pca468">@pca468</a></td>
+    <td><a href="https://github.com/heroinesy">@heroinesy</a></td>
   </tr>
 </table>
 
