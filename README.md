@@ -76,16 +76,19 @@
     <th width= "33%">게시판</th>
     <th width= "33%">물품 검색</th>
     <th width= "33%">상세보기</th>
+    <th width= "33%">글 작성</th>
   </tr>
   <tr>
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/6032a086-c7df-46e3-8b25-73007de21178" alt="게시판" width="150" height="305"></td>
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/4276c68b-36e6-4b5b-9553-378b91f7f487" alt="물품 검색" width="150" height="305"></td>
     <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/4cbceb46-5ce9-4d62-8a59-03ab6a73e2d7" alt="상세보기" width="150" height="305"></td>
+    <td><img src="https://github.com/SongMinQQ/Finding/assets/50363541/1e8a0d4f-d3d0-4f5e-9530-aa45b9ac37e5" alt="글 작성" width="150" height="305"></td>
   </tr>
   <tr>
     <td>습득, 분실 게시판</td>
     <td>물품 검색</td>
     <td>물품 정보 상세보기</td>
+    <td>게시판 글 작성</td>
   </tr>
 </table>
 
